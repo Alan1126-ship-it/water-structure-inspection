@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>特定水保區水工構造物巡檢表</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap');
-
     :root {
       --canvas-warm: #fcf9f2;
       --card-linen: rgba(255, 253, 248, 0.94);
@@ -21,15 +19,19 @@
       --paint-b: #c8963e;
       --paint-c: #c25b3e;
       --paint-d: #9e2a2b;
-      --font-serif-tc: 'Noto Serif TC', 'Songti TC', 'MingLiU', serif;
+      /* 全面改為微軟正黑體 */
+      --font-main: "Microsoft JhengHei", "微軟正黑體", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * { 
+      box-sizing: border-box; 
+      font-family: var(--font-main) !important;
+    }
 
     body {
       background-color: var(--canvas-warm);
       color: var(--oil-ink);
-      font-family: var(--font-serif-tc);
+      font-family: var(--font-main);
       margin: 0;
       padding: 20px 14px 80px 14px;
       line-height: 1.65;
@@ -41,7 +43,7 @@
       background-attachment: fixed;
     }
 
-    /* 需求 4：全站登入遮罩 */
+    /* 全站登入遮罩 */
     #globalAuthOverlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(43, 35, 30, 0.88); backdrop-filter: blur(8px);
@@ -61,7 +63,7 @@
 
     .painting-header { text-align: center; margin-bottom: 24px; }
     .painting-title {
-      font-size: 1.7rem; font-weight: 700; letter-spacing: 2px;
+      font-size: 1.7rem; font-weight: 700; letter-spacing: 1px;
       color: #322924; margin: 0 0 6px 0; text-shadow: 1px 1px 0px var(--highlight-sun);
     }
 
@@ -72,7 +74,7 @@
     }
     .imp-tab-btn {
       flex: 1; background: transparent; border: none; padding: 12px;
-      border-radius: 10px; font-family: var(--font-serif-tc); font-size: 0.96rem;
+      border-radius: 10px; font-size: 0.96rem;
       font-weight: 700; color: #6a5d52; cursor: pointer; transition: all 0.3s ease;
     }
     .imp-tab-btn.active {
@@ -90,7 +92,7 @@
     .imp-palette-btn {
       background: var(--card-linen); color: #3b3026;
       border: 1px solid rgba(160, 145, 125, 0.4); padding: 7px 16px;
-      border-radius: 20px; font-size: 0.86rem; font-family: var(--font-serif-tc);
+      border-radius: 20px; font-size: 0.86rem;
       font-weight: 700; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.06);
     }
 
@@ -120,7 +122,7 @@
     label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.92rem; color: #4b3e34; }
     input[type="text"], input[type="date"], input[type="password"], select, textarea {
       width: 100%; padding: 11px 14px; border: 1px solid #dcd3c3; border-radius: 8px;
-      font-size: 0.95rem; font-family: var(--font-serif-tc); background: #faf7f0; color: var(--oil-ink);
+      font-size: 0.95rem; background: #faf7f0; color: var(--oil-ink);
       outline: none;
     }
     input:focus, select:focus, textarea:focus {
@@ -147,7 +149,6 @@
     .rating-C { background: var(--paint-c); }
     .rating-D { background: var(--paint-d); }
 
-    /* 評級說明彈窗細項樣式 */
     .rating-info-btn {
       display: inline-flex; justify-content: center; align-items: center;
       width: 20px; height: 20px; border-radius: 50%; background: #c8963e;
@@ -168,7 +169,7 @@
     .bottom-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
     .btn-action {
       flex: 1; min-width: 140px; padding: 14px 10px; border: none; border-radius: 10px;
-      font-family: var(--font-serif-tc); font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
       text-align: center; color: #fff; box-shadow: 0 4px 12px var(--oil-shadow);
     }
     .btn-save { background: #557862; }
@@ -185,7 +186,7 @@
     }
     .btn-secondary {
       background: #e8ded1; color: #43372c; border: none; padding: 8px 18px;
-      border-radius: 8px; font-weight: 700; font-family: var(--font-serif-tc); cursor: pointer;
+      border-radius: 8px; font-weight: 700; cursor: pointer;
     }
 
     #fullscreenViewer {
@@ -206,7 +207,7 @@
 </head>
 <body>
 
-<!-- 需求 4：全域登入檢核視窗 (未登入無法看到內容) -->
+<!-- 全域登入檢核視窗 -->
 <div id="globalAuthOverlay">
   <div class="auth-card">
     <h2 style="margin-top:0; color:#382c23; font-size:1.35rem;">🔐 水工設施巡檢系統登入</h2>
@@ -225,12 +226,12 @@
 
 <div class="oil-gallery-frame">
 
-  <!-- 需求 6, 7：大標題修改，移除英文 -->
+  <!-- 大標題 -->
   <div class="painting-header">
     <h1 class="painting-title">特定水保區水工構造物巡檢表</h1>
   </div>
 
-  <!-- 需求 8, 9：按鍵名稱修改 -->
+  <!-- 分頁切換鈕 -->
   <div class="imp-nav-ribbon">
     <button class="imp-tab-btn active" onclick="switchMainTab('surveyTab')">🎨 現場勘查表</button>
     <button class="imp-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 後台總覽</button>
@@ -239,7 +240,6 @@
   <!-- ================= 分頁 1：現場勘查表 ================= -->
   <div id="surveyTab" class="tab-content active">
 
-    <!-- 需求 11, 12：按鍵名稱修改 -->
     <div class="imp-utility-bar">
       <span style="font-weight: 700; color: #4a3e35; font-size: 0.9rem;">🖌️ 現場調查輔助工具</span>
       <div style="display:flex; gap: 8px;">
@@ -248,13 +248,13 @@
       </div>
     </div>
 
-    <!-- 需求 17：回溯重點標題修改 -->
+    <!-- 前次重點回溯框 -->
     <div class="oil-alert-plaque" id="historyAlertBox">
       <div style="font-weight: bold; color: #9c6c18; margin-bottom: 4px;">⚠️ 前次五年通檢重點回溯：</div>
       <div id="historyAlertContent"></div>
     </div>
 
-    <!-- 需求 13：狀態文字修改 -->
+    <!-- 狀態暫存文字 -->
     <div style="display:flex; justify-content:space-between; font-size:0.84rem; color:#786d63; margin-bottom:12px; padding:0 6px;">
       <span id="saveStatus">💾 已於 -- 暫存</span>
       <span id="currentEditingIndicator" style="font-weight:bold; color:#754a6c;">📝 繪製新構造物紀錄</span>
@@ -267,7 +267,6 @@
         <button type="button" class="imp-palette-btn" style="padding:4px 10px; font-size:0.8rem;" onclick="fetchCurrentGPS()">📍 擷取現場 GPS</button>
       </div>
 
-      <!-- 需求 13：溪流選單支援後台新增 -->
       <div class="form-group">
         <label>調查溪流：<span style="color:var(--highlight-vermilion);">*</span></label>
         <div class="choice-grid" id="streamOptionContainer"></div>
@@ -320,7 +319,7 @@
       </div>
     </div>
 
-    <!-- 面板 2：現況損壞檢核 (動態選填備註) -->
+    <!-- 面板 2：現況損壞檢核 -->
     <div class="oil-section-panel">
       <div class="panel-brush-title">■ 現況損壞與功能檢核 (點選展開備註欄位)</div>
 
@@ -405,7 +404,7 @@
       </div>
     </div>
 
-    <!-- 面板 3：評級與建議 (需求 14：評級旁加！說明) -->
+    <!-- 面板 3：評級與建議 -->
     <div class="oil-section-panel">
       <div class="panel-brush-title">
         <div style="display:flex; align-items:center;">
@@ -433,13 +432,13 @@
       </div>
     </div>
 
-    <!-- 面板 4：照片採集 (需求 15) -->
+    <!-- 面板 4：照片採集 (已修改全景照片標題) -->
     <div class="oil-section-panel">
       <div class="panel-brush-title">■ 現場照片採集 (點擊全螢幕手勢放大)</div>
 
       <div class="photo-category">
         <div class="photo-cat-header">
-          <div style="font-weight:700; color:#3b3026;">📸 類別一：全景照片 (含上下游水系)</div>
+          <div style="font-weight:700; color:#3b3026;">📸 類別一：全景照片 (含上下游水，並標示出水流方向)</div>
           <div>
             <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('panorama', true)">📷 手機現拍</button>
             <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('panorama', false)">🖼️ 相簿選取</button>
@@ -485,7 +484,7 @@
       <input type="file" id="albumInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelected(this)">
     </div>
 
-    <!-- 需求 16：底部僅保留存檔與同步按鈕 -->
+    <!-- 底部操作列 -->
     <div class="bottom-actions">
       <button type="button" class="btn-action btn-save" onclick="saveCurrentStructure()">💾 存檔並填下一座</button>
       <button type="button" class="btn-action btn-sync" onclick="syncCurrentToCloud()">☁️ 同步本座至雲端</button>
@@ -495,7 +494,6 @@
 
   <!-- ================= 分頁 2：後台總覽 ================= -->
   <div id="adminTab" class="tab-content">
-    <!-- 需求 2：隱藏 9999 密碼文字 -->
     <div id="adminAuthBox" class="oil-section-panel" style="max-width: 440px; margin: 40px auto; text-align: center;">
       <h3 style="color:#382c23; margin-top:0;">🔒 管理員驗證</h3>
       <p style="font-size:0.9rem; color:#786d63;">請輸入管理員通行密碼：</p>
@@ -508,12 +506,11 @@
         <h2 style="font-size: 1.25rem; margin: 0; color: #382c23;">📊 全區水工構造物體檢成果庫</h2>
         <div style="display:flex; gap:8px;">
           <button type="button" class="imp-palette-btn" onclick="fetchCloudData()">🔄 刷新雲端資料</button>
-          <!-- 需求 3：修改密碼 -->
           <button type="button" class="imp-palette-btn" style="background:#f0e6d2;" onclick="openChangePwdModal()">🔑 修改管理密碼</button>
         </div>
       </div>
 
-      <!-- 需求 13：後台溪流選單管理卡片 -->
+      <!-- 溪流管理卡片 -->
       <div class="oil-section-panel" style="padding: 16px; margin-bottom: 18px; background:#fffcf5;">
         <div style="font-weight:bold; margin-bottom:8px; color:#4a3e35;">⚙️ 調查溪流清單管理 (即時連動前台選單)：</div>
         <div style="display:flex; gap:8px; margin-bottom:10px;">
@@ -557,7 +554,7 @@
 
 </div>
 
-<!-- 需求 14：評級詳細說明彈窗 (點擊驚嘆號開啟) -->
+<!-- 評級詳細說明彈窗 -->
 <div class="modal-backdrop" id="ratingDetailModal">
   <div class="modal" style="max-width: 600px;">
     <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">ℹ️ 水工構造物體檢評級 (A/B/C/D) 詳細判定準則</div>
@@ -589,7 +586,7 @@
   </div>
 </div>
 
-<!-- 需求 3：修改管理員密碼彈窗 -->
+<!-- 修改管理員密碼彈窗 -->
 <div class="modal-backdrop" id="changePwdModal">
   <div class="modal" style="max-width: 400px; text-align: center;">
     <h3 style="color:#382c23; margin-top:0;">🔑 修改管理員登入密碼</h3>
@@ -605,7 +602,7 @@
   </div>
 </div>
 
-<!-- 需求 10, 18：前期歷史構造物清冊彈窗 -->
+<!-- 前期歷史構造物清冊彈窗 -->
 <div class="modal-backdrop" id="historyModal">
   <div class="modal">
     <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📖 前期歷史構造物清冊</div>
@@ -624,7 +621,7 @@
   </div>
 </div>
 
-<!-- 需求 1, 12：已調查構造物彈窗 (含刪除按鈕) -->
+<!-- 已調查構造物彈窗 -->
 <div class="modal-backdrop" id="localListModal">
   <div class="modal">
     <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📋 已調查構造物</div>
@@ -638,12 +635,11 @@
   </div>
 </div>
 
-<!-- 需求 16：檢視詳情彈窗 (包含 CSV 與 體檢卡 匯出按鈕) -->
+<!-- 檢視詳情彈窗 -->
 <div class="modal-backdrop" id="detailModal">
   <div class="modal">
     <div id="detailModalTitle" style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">構造物體檢完整細項</div>
     <div id="detailModalBody"></div>
-    <!-- 需求 16：將匯出單座按鍵移到這裡 -->
     <div style="display:flex; gap:8px; margin-top:16px; border-top:1px solid #ebd9c2; padding-top:12px; flex-wrap:wrap;">
       <button type="button" class="imp-palette-btn" style="background:#f4eee2;" onclick="exportDetailCurrentCSV()">📊 匯出此座 CSV</button>
       <button type="button" class="imp-palette-btn" style="background:#f4eee2;" onclick="exportDetailCurrentHTML()">📄 匯出此座體檢卡</button>
@@ -660,12 +656,11 @@
 </div>
 
 <script>
-  // 請務必替換為您部署的 Google Apps Script Web App 網址
+  // 請替換為您的 Google Apps Script Web App 網址
   const GAS_API_URL = "https://script.google.com/macros/s/AKfycbw0HzHRYmJ2DaEA3fBjvlu3sNIBnn1_kih2v7ia_b108htI1UELN5WJrfqY-jdWmR39/exec";
 
   let sysAuth = JSON.parse(localStorage.getItem("INSPECT_SYS_AUTH")) || { user: "1234", admin: "9999" };
 
-  // 需求 18：病歷資料欄位標記「上次情況」
   const HISTORICAL_STRUCTURES = [
     { id: "H_003_1", stream: "中-003", name: "3號梳子壩", station: "0K+630", type: "梳子壩", period: "原計畫", pastRating: "A", pastCondition: "壩體良好，無露筋破壞；基礎穩固，無下切；未淤積，具土砂攔阻容量", warningNote: "上次調查功能完整。本次重點檢核：排砂鋼管有無遭大塊石撞擊變形？庫內有無新生倒木？" },
     { id: "H_003_2", stream: "中-003", name: "4號梳子壩及副壩", station: "0K+740", type: "梳子壩", period: "原計畫", pastRating: "B", pastCondition: "表面輕微磨損，副壩混凝土有細裂縫；無明顯掏空；半淤積 (淤積率約 25%)", warningNote: "上次調查表面輕微磨損。本次重點檢核：副壩開裂寬度有無超過 3mm？淤積率有無增加？" },
@@ -685,9 +680,8 @@
   let photosData = { panorama: [], damage: [], sediment: [], special: [] };
   let currentEditingRecordId = null;
   let globalCloudRecords = [];
-  let currentActiveViewingRecord = null; // 供後台彈窗匯出用
+  let currentActiveViewingRecord = null;
 
-  // ================= 需求 4：全域登入檢核 =================
   function verifyGlobalLogin() {
     const u = document.getElementById("loginUser").value.trim();
     const p = document.getElementById("loginPwd").value.trim();
@@ -721,7 +715,6 @@
     document.getElementById(tabId).classList.add("active");
   }
 
-  // ================= 需求 2, 3：後台解鎖與密碼修改 =================
   function verifyAdminPwd() {
     const inputPwd = document.getElementById("adminPwdInput").value.trim();
     const correctAdminPwd = sysAuth.admin || "9999";
@@ -761,7 +754,6 @@
     closeChangePwdModal();
   }
 
-  // ================= 需求 13：溪流選單動態管理 =================
   function renderStreamOptions() {
     const container = document.getElementById("streamOptionContainer");
     container.innerHTML = "";
@@ -807,11 +799,9 @@
     renderStreamManagerTags();
   }
 
-  // ================= 需求 14：評級詳細說明彈窗 =================
   function openRatingDetailModal() { document.getElementById("ratingDetailModal").style.display = "flex"; }
   function closeRatingDetailModal() { document.getElementById("ratingDetailModal").style.display = "none"; }
 
-  // ================= 需求 10, 18：前期歷史清冊 =================
   function openHistoryModal() { renderHistoryList(); document.getElementById("historyModal").style.display = "flex"; }
   function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
 
@@ -876,7 +866,6 @@
     autoSaveCurrentDraft();
   }
 
-  // ================= 需求 1, 12：已調查構造物 (含刪除按鈕) =================
   function openLocalListModal() { renderLocalList(); document.getElementById("localListModal").style.display = "flex"; }
   function closeLocalListModal() { document.getElementById("localListModal").style.display = "none"; }
 
@@ -932,7 +921,6 @@
     alert(`已刪除「${recName}」！`);
   }
 
-  // ================= 燈箱縮放 =================
   function openFullscreenViewer(base64Src) {
     document.getElementById("viewerImg").src = base64Src;
     document.getElementById("fullscreenViewer").style.display = "flex";
@@ -944,7 +932,6 @@
     }
   }
 
-  // ================= IndexedDB 照片儲存 =================
   const DB_NAME = "WaterConservancyOilDB", DB_STORE = "records_photos";
   function openDB() {
     return new Promise((resolve) => {
@@ -998,7 +985,6 @@
     "note_energy_good", "note_energy_bad", "note_energy_cut"
   ];
 
-  // 需求 13：狀態文字修改
   function autoSaveCurrentDraft() {
     if (!currentEditingRecordId) currentEditingRecordId = "REC_" + Date.now();
     const currentData = collectFormTextOnly(currentEditingRecordId);
@@ -1372,11 +1358,10 @@
     });
   }
 
-  // ================= 需求 16：後台檢視圖文彈窗與匯出按鈕 =================
   async function viewRecordDetails(recordId) {
     let r = globalCloudRecords.find(x => x.id === recordId);
     if (!r) return;
-    currentActiveViewingRecord = r; // 保存當前檢視項供匯出
+    currentActiveViewingRecord = r;
 
     document.getElementById("detailModalTitle").innerText = `🔍 ${r.structureName} 現場調查詳情卡`;
     let photos = r.photos;
@@ -1419,7 +1404,6 @@
 
   function closeDetailModal() { document.getElementById("detailModal").style.display = "none"; }
 
-  // 需求 16：後台匯出此座 CSV
   function exportDetailCurrentCSV() {
     if (!currentActiveViewingRecord) return;
     const d = currentActiveViewingRecord;
@@ -1428,12 +1412,16 @@
     downloadFile(csv, `體檢紀錄_${d.streamName}_${d.structureName}.csv`, "text/csv;charset=utf-8;");
   }
 
-  // 需求 16：後台匯出此座 HTML 體檢卡
   function exportDetailCurrentHTML() {
     if (!currentActiveViewingRecord) return;
     const d = currentActiveViewingRecord;
     let photoBlock = "";
-    const titles = { panorama: "類別一：全景照片", damage: "類別二：主體損壞特寫", sediment: "類別三：掏空與淤積", special: "類別四：特殊情況" };
+    const titles = { 
+      panorama: "類別一：全景照片 (含上下游水，並標示出水流方向)", 
+      damage: "類別二：主體損壞特寫", 
+      sediment: "類別三：掏空與淤積", 
+      special: "類別四：特殊情況" 
+    };
 
     if (d.photos) {
       Object.keys(d.photos).forEach(k => {
@@ -1453,7 +1441,7 @@
     }
 
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${d.structureName} 現場體檢報告卡</title>
-      <style>body{font-family:"標楷體","Noto Serif TC",serif; padding:20px; max-width:850px; margin:0 auto; background:#faf7f0; color:#2b2623;} table{width:100%; border-collapse:collapse; margin-top:10px;} th,td{border:1px solid #786d63; padding:6px 8px; font-size:14px;} th{background:#eee6d8; width:22%; text-align:center;}</style></head>
+      <style>body{font-family:"Microsoft JhengHei","微軟正黑體",sans-serif; padding:20px; max-width:850px; margin:0 auto; background:#faf7f0; color:#2b2623;} table{width:100%; border-collapse:collapse; margin-top:10px;} th,td{border:1px solid #786d63; padding:6px 8px; font-size:14px;} th{background:#eee6d8; width:22%; text-align:center;}</style></head>
       <body>
         <h2 style="text-align:center; margin-bottom:2px;">水工構造物現場體檢紀錄卡</h2>
         <p style="text-align:center; font-size:13px; margin-top:0; color:#6d6257;">計畫名稱：${d.projectName}</p>
