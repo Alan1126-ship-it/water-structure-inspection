@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>特定水保區水工構造物巡檢表</title>
+  <style>
+    :root {
+      --canvas-warm: #fcf9f2;
+      --card-linen: rgba(255, 253, 248, 0.94);
+      --oil-ink: #2b2623;
+      --oil-shadow: rgba(56, 44, 38, 0.12);
+      --accent-khaki: #F0E68C;
+      --accent-skyblue: #87CEEB;
+      --accent-plum: #DDA0DD;
+      --highlight-vermilion: #d96459;
+      --highlight-sun: #fff8dc;
+      --paint-a: #5a8a69;
+      --paint-b: #c8963e;
+      --paint-c: #c25b3e;
+      --paint-d: #9e2a2b;
+      /* 全面改為微軟正黑體 */
+      --font-main: "Microsoft JhengHei", "微軟正黑體", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      font-family: var(--font-main) !important;
+    }
+
+    body {
+      background-color: var(--canvas-warm);
+      color: var(--oil-ink);
+      font-family: var(--font-main);
+      margin: 0;
+      padding: 20px 14px 80px 14px;
+      line-height: 1.65;
+      background-image: 
+        radial-gradient(ellipse at 15% 10%, rgba(240, 230, 140, 0.35) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 15%, rgba(135, 206, 235, 0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(221, 160, 221, 0.25) 0%, transparent 60%);
+      background-size: 100% 100%;
+      background-attachment: fixed;
+    }
+
+    /* 全站登入遮罩 */
+    #globalAuthOverlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(43, 35, 30, 0.88); backdrop-filter: blur(8px);
+      z-index: 99999; display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
+    .auth-card {
+      background: #fffdfa; border-radius: 18px; width: 100%; max-width: 400px;
+      padding: 30px 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); text-align: center;
+      border: 1px solid #ebd9c2;
+    }
+
+    .oil-gallery-frame {
+      max-width: 920px; margin: 0 auto; background: var(--card-linen);
+      border-radius: 20px; padding: 30px 24px; box-shadow: 0 16px 40px var(--oil-shadow);
+      border: 1px solid rgba(220, 208, 188, 0.6); position: relative;
+    }
+
+    .painting-header { text-align: center; margin-bottom: 24px; }
+    .painting-title {
+      font-size: 1.7rem; font-weight: 700; letter-spacing: 1px;
+      color: #322924; margin: 0 0 6px 0; text-shadow: 1px 1px 0px var(--highlight-sun);
+    }
+
+    .imp-nav-ribbon {
+      display: flex; background: rgba(235, 227, 214, 0.7);
+      border-radius: 14px; padding: 6px; margin-bottom: 24px;
+      border: 1px solid rgba(210, 198, 180, 0.6);
+    }
+    .imp-tab-btn {
+      flex: 1; background: transparent; border: none; padding: 12px;
+      border-radius: 10px; font-size: 0.96rem;
+      font-weight: 700; color: #6a5d52; cursor: pointer; transition: all 0.3s ease;
+    }
+    .imp-tab-btn.active {
+      background: #ffffff; color: #2b221a;
+      box-shadow: 0 4px 14px rgba(70, 55, 40, 0.12);
+      border-bottom: 3px solid var(--accent-plum);
+    }
+
+    .imp-utility-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(90deg, rgba(240, 230, 140, 0.35) 0%, rgba(135, 206, 235, 0.35) 50%, rgba(221, 160, 221, 0.3) 100%);
+      padding: 10px 18px; border-radius: 12px; margin-bottom: 16px;
+      border: 1px solid rgba(200, 190, 170, 0.4); flex-wrap: wrap; gap: 10px;
+    }
+    .imp-palette-btn {
+      background: var(--card-linen); color: #3b3026;
+      border: 1px solid rgba(160, 145, 125, 0.4); padding: 7px 16px;
+      border-radius: 20px; font-size: 0.86rem;
+      font-weight: 700; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+
+    .oil-alert-plaque {
+      display: none; background: #fffdf5; border-left: 6px solid var(--accent-khaki);
+      border-right: 1px solid #ebd9a8; border-top: 1px solid #ebd9a8; border-bottom: 1px solid #ebd9a8;
+      border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;
+    }
+
+    .oil-section-panel {
+      background: #ffffff; border-radius: 16px; padding: 24px 20px;
+      margin-bottom: 22px; border: 1px solid rgba(224, 215, 200, 0.8); position: relative;
+    }
+    .oil-section-panel::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg, var(--accent-khaki), var(--accent-skyblue), var(--accent-plum));
+    }
+
+    .panel-brush-title {
+      font-size: 1.15rem; font-weight: 700; color: #382c23; margin-bottom: 18px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #ece4d5; padding-bottom: 8px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.92rem; color: #4b3e34; }
+    input[type="text"], input[type="date"], input[type="password"], select, textarea {
+      width: 100%; padding: 11px 14px; border: 1px solid #dcd3c3; border-radius: 8px;
+      font-size: 0.95rem; background: #faf7f0; color: var(--oil-ink);
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      background: #ffffff; border-color: var(--accent-plum);
+      box-shadow: 0 0 0 3px rgba(221, 160, 221, 0.35);
+    }
+    .row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .col { flex: 1; min-width: 220px; }
+
+    .choice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px; margin-top: 8px; }
+    .choice-item {
+      display: flex; align-items: flex-start; gap: 10px; background: #fbf9f4;
+      padding: 10px 14px; border-radius: 10px; border: 1px solid #e7decb; cursor: pointer; font-size: 0.9rem;
+    }
+
+    .expand-item-wrap { background: #faf7f2; border: 1px solid #ebd9c2; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
+    .expand-item-header { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.93rem; font-weight: 600; }
+    .expand-desc-box { display: none; margin-top: 10px; padding-left: 24px; }
+    .expand-desc-box input { background: #fff; border: 1px dashed var(--accent-skyblue); }
+
+    .rating-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; color: #fff; }
+    .rating-A { background: var(--paint-a); }
+    .rating-B { background: var(--paint-b); }
+    .rating-C { background: var(--paint-c); }
+    .rating-D { background: var(--paint-d); }
+
+    .rating-info-btn {
+      display: inline-flex; justify-content: center; align-items: center;
+      width: 20px; height: 20px; border-radius: 50%; background: #c8963e;
+      color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; border: none; margin-left: 6px;
+    }
+
+    .photo-category { background: #fcfbf8; border: 2px dashed #d8cbba; border-radius: 14px; padding: 16px; margin-bottom: 18px; }
+    .photo-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; margin-top: 12px; }
+    .photo-item { border: 1px solid #d9cdbd; border-radius: 10px; padding: 6px; background: #fff; position: relative; }
+    .photo-item img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; display: block; cursor: zoom-in; }
+    .photo-item textarea { font-size: 0.8rem; margin-top: 6px; height: 44px; resize: none; background: #faf8f5; border-radius: 6px; }
+    .btn-del-photo {
+      position: absolute; top: 8px; right: 8px; background: rgba(56, 44, 38, 0.75);
+      color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; cursor: pointer;
+    }
+
+    .bottom-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; }
+    .btn-action {
+      flex: 1; min-width: 140px; padding: 14px 10px; border: none; border-radius: 10px;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      text-align: center; color: #fff; box-shadow: 0 4px 12px var(--oil-shadow);
+    }
+    .btn-save { background: #557862; }
+    .btn-sync { background: #4a6c8e; }
+
+    .modal-backdrop {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(43, 35, 30, 0.65); backdrop-filter: blur(4px); z-index: 1000;
+      justify-content: center; align-items: center; padding: 16px;
+    }
+    .modal {
+      background: #fffdfa; border-radius: 18px; width: 100%; max-width: 650px; max-height: 90vh;
+      overflow-y: auto; padding: 26px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid #ebd9c2;
+    }
+    .btn-secondary {
+      background: #e8ded1; color: #43372c; border: none; padding: 8px 18px;
+      border-radius: 8px; font-weight: 700; cursor: pointer;
+    }
+
+    #fullscreenViewer {
+      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(18, 14, 12, 0.97); z-index: 10000; touch-action: none;
+      overflow: hidden; justify-content: center; align-items: center;
+    }
+    #viewerImg { max-width: 95vw; max-height: 85vh; transform-origin: center center; }
+    .viewer-btn-back {
+      position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; font-size: 0.95rem;
+      font-weight: bold; padding: 8px 18px; border-radius: 20px; cursor: pointer;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- 全域登入檢核視窗 -->
+<div id="globalAuthOverlay">
+  <div class="auth-card">
+    <h2 style="margin-top:0; color:#382c23; font-size:1.35rem;">🔐 水工設施巡檢系統登入</h2>
+    <p style="font-size:0.88rem; color:#786d63; margin-bottom:18px;">請輸入使用者名稱與通行密碼：</p>
+    <div style="text-align:left; margin-bottom:12px;">
+      <label style="font-size:0.85rem;">使用者名稱：</label>
+      <input type="text" id="loginUser" placeholder="請輸入帳號" value="user" style="text-align:center;">
+    </div>
+    <div style="text-align:left; margin-bottom:18px;">
+      <label style="font-size:0.85rem;">登入密碼：</label>
+      <input type="password" id="loginPwd" placeholder="請輸入密碼" value="1234" style="text-align:center;">
+    </div>
+    <button type="button" class="btn-action btn-save" style="width:100%;" onclick="verifyGlobalLogin()">確認登入</button>
+  </div>
+</div>
+
+<div class="oil-gallery-frame">
+
+  <!-- 大標題 -->
+  <div class="painting-header">
+    <h1 class="painting-title">特定水保區水工構造物巡檢表</h1>
+  </div>
+
+  <!-- 分頁切換鈕 -->
+  <div class="imp-nav-ribbon">
+    <button class="imp-tab-btn active" onclick="switchMainTab('surveyTab')">🎨 現場勘查表</button>
+    <button class="imp-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 後台總覽</button>
+  </div>
+
+  <!-- ================= 分頁 1：現場勘查表 ================= -->
+  <div id="surveyTab" class="tab-content active">
+
+    <div class="imp-utility-bar">
+      <span style="font-weight: 700; color: #4a3e35; font-size: 0.9rem;">🖌️ 現場調查輔助工具</span>
+      <div style="display:flex; gap: 8px;">
+        <button type="button" class="imp-palette-btn" onclick="openHistoryModal()">📖 查閱前期清冊</button>
+        <button type="button" class="imp-palette-btn" onclick="openLocalListModal()">📋 已調查構造物 (<span id="recordCountBadge">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- 前次重點回溯框 -->
+    <div class="oil-alert-plaque" id="historyAlertBox">
+      <div style="font-weight: bold; color: #9c6c18; margin-bottom: 4px;">⚠️ 前次五年通檢重點回溯：</div>
+      <div id="historyAlertContent"></div>
+    </div>
+
+    <!-- 狀態暫存文字 -->
+    <div style="display:flex; justify-content:space-between; font-size:0.84rem; color:#786d63; margin-bottom:12px; padding:0 6px;">
+      <span id="saveStatus">💾 已於 -- 暫存</span>
+      <span id="currentEditingIndicator" style="font-weight:bold; color:#754a6c;">📝 繪製新構造物紀錄</span>
+    </div>
+
+    <!-- 面板 1：基本資料 -->
+    <div class="oil-section-panel">
+      <div class="panel-brush-title">
+        <span>■ 構造物基本座標與履歷</span>
+        <button type="button" class="imp-palette-btn" style="padding:4px 10px; font-size:0.8rem;" onclick="fetchCurrentGPS()">📍 擷取現場 GPS</button>
+      </div>
+
+      <div class="form-group">
+        <label>調查溪流：<span style="color:var(--highlight-vermilion);">*</span></label>
+        <div class="choice-grid" id="streamOptionContainer"></div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>構造物名稱：<span style="color:var(--highlight-vermilion);">*</span></label>
+          <input type="text" id="structureName" placeholder="例如：3號梳子壩、系列固床工">
+        </div>
+        <div class="col form-group">
+          <label>構造物樁號：</label>
+          <input type="text" id="structureStation" placeholder="例如：0K+630 或 0K+540">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>構造物類別：<span style="color:var(--highlight-vermilion);">*</span></label>
+          <select id="structureType">
+            <option value="梳子壩">梳子壩</option>
+            <option value="防砂壩">防砂壩</option>
+            <option value="潛壩">潛壩</option>
+            <option value="固床工">固床工</option>
+            <option value="護岸">護岸</option>
+            <option value="沉砂池/靜水池">沉砂池/靜水池</option>
+            <option value="過水便道">過水便道/版橋</option>
+            <option value="其他">其他水工設施</option>
+          </select>
+        </div>
+        <div class="col form-group">
+          <label>勘查日期：<span style="color:var(--highlight-vermilion);">*</span></label>
+          <input type="date" id="surveyDate">
+        </div>
+        <div class="col form-group">
+          <label>勘查人員：<span style="color:var(--highlight-vermilion);">*</span></label>
+          <input type="text" id="surveyor" placeholder="例如：方方、工讀生">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>座標位置 X (經度)：</label>
+          <input type="text" id="coordX" placeholder="X (E) 或經度">
+        </div>
+        <div class="col form-group">
+          <label>座標位置 Y (緯度)：</label>
+          <input type="text" id="coordY" placeholder="Y (N) 或緯度">
+        </div>
+      </div>
+    </div>
+
+    <!-- 面板 2：現況損壞檢核 -->
+    <div class="oil-section-panel">
+      <div class="panel-brush-title">■ 現況損壞與功能檢核 (點選展開備註欄位)</div>
+
+      <div class="form-group">
+        <label>1. 結構主體現況：</label>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_main" value="良好無損" onchange="toggleDescBox(this, 'desc_main_good')"><span>良好無損</span></label>
+          <div class="expand-desc-box" id="desc_main_good"><input type="text" id="note_main_good" placeholder="選填補充說明"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_main" value="輕微磨損/裂縫(<3mm)" onchange="toggleDescBox(this, 'desc_main_crack')"><span>輕微磨損/裂縫 (&lt;3mm)</span></label>
+          <div class="expand-desc-box" id="desc_main_crack"><input type="text" id="note_main_crack" placeholder="詳細描述 (如：表面微剝落)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_main" value="嚴重損壞(貫穿裂縫/剝落/露筋)" onchange="toggleDescBox(this, 'desc_main_bad')"><span>嚴重損壞 (貫穿裂縫、剝落、鋼筋外露)</span></label>
+          <div class="expand-desc-box" id="desc_main_bad"><input type="text" id="note_main_bad" placeholder="詳細描述 (如：露筋長度與位置)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_main" value="結構傾斜/沉陷/位移" onchange="toggleDescBox(this, 'desc_main_tilt')"><span>結構傾斜/沉陷/位移</span></label>
+          <div class="expand-desc-box" id="desc_main_tilt"><input type="text" id="note_main_tilt" placeholder="詳細描述 (如：沉陷深度)"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>2. 基礎與兩翼檢核：</label>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_base" value="基礎穩固無淘刷" onchange="toggleDescBox(this, 'desc_base_solid')"><span>基礎穩固，無淘刷</span></label>
+          <div class="expand-desc-box" id="desc_base_solid"><input type="text" id="note_base_solid" placeholder="選填補充說明"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_base" value="基礎局部裸露/掏空" onchange="toggleDescBox(this, 'desc_base_undercut')"><span>基礎局部裸露/掏空</span></label>
+          <div class="expand-desc-box" id="desc_base_undercut"><input type="text" id="note_base_undercut" placeholder="詳細描述 (如：實測掏刷深 0.8m，長 3m)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_base" value="兩翼繞流沖刷掏空" onchange="toggleDescBox(this, 'desc_base_flank')"><span>兩翼接壤處繞流/沖刷掏空</span></label>
+          <div class="expand-desc-box" id="desc_base_flank"><input type="text" id="note_base_flank" placeholder="詳細描述 (如：右岸接山壁土坡刷深)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_base" value="護岸背填土流失" onchange="toggleDescBox(this, 'desc_base_backfill')"><span>上/下游護岸背填土流失</span></label>
+          <div class="expand-desc-box" id="desc_base_backfill"><input type="text" id="note_base_backfill" placeholder="詳細描述 (如：護岸背後塌陷穴坑)"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>3. 通砂與淤積現況：</label>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_sand" value="未淤積(庫容良好)" onchange="toggleDescBox(this, 'desc_sand_clean')"><span>未淤積 (庫容完整)</span></label>
+          <div class="expand-desc-box" id="desc_sand_clean"><input type="text" id="note_sand_clean" placeholder="選填補充說明"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_sand" value="半淤積" onchange="toggleDescBox(this, 'desc_sand_half')"><span>半淤積 (尚有調節容量)</span></label>
+          <div class="expand-desc-box" id="desc_sand_half"><input type="text" id="note_sand_half" placeholder="詳細描述 (如：淤積率約 40%)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_sand" value="已淤滿(淤積率100%)" onchange="toggleDescBox(this, 'desc_sand_full')"><span>已淤滿 (淤積率 100%)</span></label>
+          <div class="expand-desc-box" id="desc_sand_full"><input type="text" id="note_sand_full" placeholder="詳細描述 (如：土砂齊平工頂)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_sand" value="工頂/庫區雜木草茂密" onchange="toggleDescBox(this, 'desc_sand_veg')"><span>工頂/庫區雜木草生茂密</span></label>
+          <div class="expand-desc-box" id="desc_sand_veg"><input type="text" id="note_sand_veg" placeholder="詳細描述 (如：生長雜木阻礙通洪)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_sand" value="溢洪口遭巨石/漂流木阻塞" onchange="toggleDescBox(this, 'desc_sand_block')"><span>溢洪口遭巨石/漂流木嚴重阻塞</span></label>
+          <div class="expand-desc-box" id="desc_sand_block"><input type="text" id="note_sand_block" placeholder="詳細描述 (如：卡死大倒木數根)"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>4. 消能與溪床型態：</label>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_energy" value="靜水池完好" onchange="toggleDescBox(this, 'desc_energy_good')"><span>靜水池/消能設施完好</span></label>
+          <div class="expand-desc-box" id="desc_energy_good"><input type="text" id="note_energy_good" placeholder="選填補充說明"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_energy" value="靜水池破損嚴重" onchange="toggleDescBox(this, 'desc_energy_bad')"><span>靜水池破損/磨損嚴重</span></label>
+          <div class="expand-desc-box" id="desc_energy_bad"><input type="text" id="note_energy_bad" placeholder="詳細描述 (如：塊石脫落磨損)"></div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header"><input type="checkbox" name="chk_energy" value="下游溪床明顯下切" onchange="toggleDescBox(this, 'desc_energy_cut')"><span>下游溪床明顯下切</span></label>
+          <div class="expand-desc-box" id="desc_energy_cut"><input type="text" id="note_energy_cut" placeholder="詳細描述 (如：河床刷深掏切約 1.2m)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 面板 3：評級與建議 -->
+    <div class="oil-section-panel">
+      <div class="panel-brush-title">
+        <div style="display:flex; align-items:center;">
+          <span>■ 綜合評級與建議對策</span>
+          <button type="button" class="rating-info-btn" onclick="openRatingDetailModal()" title="查看 ABCD 詳細判定說明">!</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>體檢綜合評級：<span style="color:var(--highlight-vermilion);">*</span></label>
+        <div class="choice-grid">
+          <label class="choice-item"><input type="radio" name="overallRating" value="A"> <span><span class="rating-badge rating-A">A級</span> 良好：功能正常</span></label>
+          <label class="choice-item"><input type="radio" name="overallRating" value="B"> <span><span class="rating-badge rating-B">B級</span> 注意：持續觀察</span></label>
+          <label class="choice-item"><input type="radio" name="overallRating" value="C"> <span><span class="rating-badge rating-C">C級</span> 維修：需清疏補強</span></label>
+          <label class="choice-item"><input type="radio" name="overallRating" value="D"> <span><span class="rating-badge rating-D">D級</span> 危險：立即搶修</span></label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>建議處理對策：<span style="color:var(--highlight-vermilion);">*</span></label>
+        <div class="choice-grid">
+          <label class="choice-item"><input type="radio" name="actionPlan" value="維持現況"> 維持現況 (持續監測)</label>
+          <label class="choice-item"><input type="radio" name="actionPlan" value="優先處理"> 優先處理 (列入本期改善)</label>
+          <label class="choice-item"><input type="radio" name="actionPlan" value="需要處理"> 需要處理 (清疏/修復)</label>
+          <label class="choice-item"><input type="radio" name="actionPlan" value="暫緩處理"> 暫緩處理</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 面板 4：照片採集 (已修改全景照片標題) -->
+    <div class="oil-section-panel">
+      <div class="panel-brush-title">■ 現場照片採集 (點擊全螢幕手勢放大)</div>
+
+      <div class="photo-category">
+        <div class="photo-cat-header">
+          <div style="font-weight:700; color:#3b3026;">📸 類別一：全景照片 (含上下游水，並標示出水流方向)</div>
+          <div>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('panorama', true)">📷 手機現拍</button>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('panorama', false)">🖼️ 相簿選取</button>
+          </div>
+        </div>
+        <div class="photo-grid" id="grid_panorama"></div>
+      </div>
+
+      <div class="photo-category">
+        <div class="photo-cat-header">
+          <div style="font-weight:700; color:#3b3026;">📸 類別二：結構主體與損壞特寫</div>
+          <div>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('damage', true)">📷 手機現拍</button>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('damage', false)">🖼️ 相簿選取</button>
+          </div>
+        </div>
+        <div class="photo-grid" id="grid_damage"></div>
+      </div>
+
+      <div class="photo-category">
+        <div class="photo-cat-header">
+          <div style="font-weight:700; color:#3b3026;">📸 類別三：基礎掏空、沖刷與淤積</div>
+          <div>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('sediment', true)">📷 手機現拍</button>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('sediment', false)">🖼️ 相簿選取</button>
+          </div>
+        </div>
+        <div class="photo-grid" id="grid_sediment"></div>
+      </div>
+
+      <div class="photo-category">
+        <div class="photo-cat-header">
+          <div style="font-weight:700; color:#3b3026;">📸 類別四：特殊情況照片 (彈性加拍)</div>
+          <div>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('special', true)">📷 手機現拍</button>
+            <button type="button" class="imp-palette-btn" onclick="triggerPhotoInput('special', false)">🖼️ 相簿選取</button>
+          </div>
+        </div>
+        <div class="photo-grid" id="grid_special"></div>
+      </div>
+
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;" onchange="handleFileSelected(this)">
+      <input type="file" id="albumInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelected(this)">
+    </div>
+
+    <!-- 底部操作列 -->
+    <div class="bottom-actions">
+      <button type="button" class="btn-action btn-save" onclick="saveCurrentStructure()">💾 存檔並填下一座</button>
+      <button type="button" class="btn-action btn-sync" onclick="syncCurrentToCloud()">☁️ 同步本座至雲端</button>
+    </div>
+
+  </div>
+
+  <!-- ================= 分頁 2：後台總覽 ================= -->
+  <div id="adminTab" class="tab-content">
+    <div id="adminAuthBox" class="oil-section-panel" style="max-width: 440px; margin: 40px auto; text-align: center;">
+      <h3 style="color:#382c23; margin-top:0;">🔒 管理員驗證</h3>
+      <p style="font-size:0.9rem; color:#786d63;">請輸入管理員通行密碼：</p>
+      <input type="password" id="adminPwdInput" placeholder="請輸入管理員密碼" style="text-align: center; margin-bottom: 14px; font-size: 1.1rem; letter-spacing: 2px;">
+      <button type="button" class="btn-action btn-save" style="width: 100%;" onclick="verifyAdminPwd()">解鎖進入後台</button>
+    </div>
+
+    <div id="adminDashboard" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap:wrap; gap:8px;">
+        <h2 style="font-size: 1.25rem; margin: 0; color: #382c23;">📊 全區水工構造物體檢成果庫</h2>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="imp-palette-btn" onclick="fetchCloudData()">🔄 刷新雲端資料</button>
+          <button type="button" class="imp-palette-btn" style="background:#f0e6d2;" onclick="openChangePwdModal()">🔑 修改管理密碼</button>
+        </div>
+      </div>
+
+      <!-- 溪流管理卡片 -->
+      <div class="oil-section-panel" style="padding: 16px; margin-bottom: 18px; background:#fffcf5;">
+        <div style="font-weight:bold; margin-bottom:8px; color:#4a3e35;">⚙️ 調查溪流清單管理 (即時連動前台選單)：</div>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <input type="text" id="newStreamInput" placeholder="輸入新溪流 (例如：中-005 或 DF028野溪)" style="background:#fff;">
+          <button type="button" class="imp-palette-btn" style="white-space:nowrap;" onclick="addNewStream()">＋ 新增溪流</button>
+        </div>
+        <div id="streamManageTagList" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+      </div>
+
+      <!-- 統計圖解色塊 -->
+      <div style="display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
+        <div class="oil-section-panel" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">總座數<br><b id="statTotalCount" style="font-size:1.4rem; color:var(--oil-ink);">0</b></div>
+        <div class="oil-section-panel" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">勘查員<br><b id="statSurveyorCount" style="font-size:1.4rem; color:#754a6c;">0</b></div>
+        <div class="oil-section-panel" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">A級良好<br><b id="statCountA" style="font-size:1.4rem; color:var(--paint-a);">0</b></div>
+        <div class="oil-section-panel" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">C/D級警示<br><b id="statCountCD" style="font-size:1.4rem; color:var(--paint-d);">0</b></div>
+      </div>
+
+      <!-- 篩選列 -->
+      <div class="oil-section-panel" style="padding: 14px; margin-bottom: 16px;">
+        <div class="row">
+          <div class="col"><label>依人員篩選：</label><select id="filterSurveyor" onchange="applyAdminFilters()"><option value="ALL">全部人員</option></select></div>
+          <div class="col"><label>依溪流篩選：</label><select id="filterStream" onchange="applyAdminFilters()"><option value="ALL">全部溪流</option></select></div>
+          <div class="col"><label>依評級篩選：</label>
+            <select id="filterRating" onchange="applyAdminFilters()">
+              <option value="ALL">全部評級</option>
+              <option value="A">A 級 (良好)</option>
+              <option value="B">B 級 (注意)</option>
+              <option value="C">C 級 (維修)</option>
+              <option value="D">D 級 (危險)</option>
+            </select>
+          </div>
+          <div style="align-self:flex-end;">
+            <button type="button" class="imp-palette-btn" style="padding:10px 14px; background:#fff;" onclick="exportAdminFilteredCSV()">📥 匯出篩選總表 CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="adminRecordsList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 評級詳細說明彈窗 -->
+<div class="modal-backdrop" id="ratingDetailModal">
+  <div class="modal" style="max-width: 600px;">
+    <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">ℹ️ 水工構造物體檢評級 (A/B/C/D) 詳細判定準則</div>
+    <div style="font-size:0.92rem; line-height:1.7; color:#4a3e35;">
+      <div style="margin-bottom:12px; padding:10px; background:#f4fbf5; border-left:5px solid var(--paint-a); border-radius:6px;">
+        <b style="color:var(--paint-a); font-size:1rem;">■ A 級（良好）：功能健全</b><br>
+        • <b>定義：</b>構造物整體結構完整，無明顯結構性受損或淘刷，水保防災功能正常發揮。<br>
+        • <b>常見特徵：</b>混凝土表面完好或僅微髒污；消能設施完好；庫區未淤積或具充分蓄砂容量。
+      </div>
+      <div style="margin-bottom:12px; padding:10px; background:#fffdf4; border-left:5px solid var(--paint-b); border-radius:6px;">
+        <b style="color:var(--paint-b); font-size:1rem;">■ B 級（注意）：些微受損，持續觀察</b><br>
+        • <b>定義：</b>構造物有輕微磨損或局部裂縫，但不影響整體防護安全與結構穩定。<br>
+        • <b>常見特徵：</b>表面磨損剝落深&lt;2cm、非貫穿性細裂縫（&lt;3mm）；半淤積；庫頂雜草生長；平時監測即可。
+      </div>
+      <div style="margin-bottom:12px; padding:10px; background:#fff7f4; border-left:5px solid var(--paint-c); border-radius:6px;">
+        <b style="color:var(--paint-c); font-size:1rem;">■ C 級（維修）：結構受損或淤滿，需清疏/補強</b><br>
+        • <b>定義：</b>構造物結構已受損或嚴重淤積，影響既有防洪防砂功能，若遇豪雨恐擴大破壞。<br>
+        • <b>常見特徵：</b>基礎局部裸露/掏空（&gt;0.3m）；兩翼繞流淘刷；靜水池破損；庫區100%淤滿；需排定清疏或局部補強。
+      </div>
+      <div style="margin-bottom:12px; padding:10px; background:#fdf2f2; border-left:5px solid var(--paint-d); border-radius:6px;">
+        <b style="color:var(--paint-d); font-size:1rem;">■ D 級（危險）：嚴重損毀，需立即搶修</b><br>
+        • <b>定義：</b>構造物主體嚴重破裂、傾斜位移或已局部崩毀，功能完全喪失，具致災危險。<br>
+        • <b>常見特徵：</b>貫穿性大裂縫、大面積鋼筋外露；壩基全斷面掏空；溢洪口完全卡死；需立即通報辦理搶險搶修。
+      </div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+      <button type="button" class="btn-secondary" onclick="closeRatingDetailModal()">了解並關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- 修改管理員密碼彈窗 -->
+<div class="modal-backdrop" id="changePwdModal">
+  <div class="modal" style="max-width: 400px; text-align: center;">
+    <h3 style="color:#382c23; margin-top:0;">🔑 修改管理員登入密碼</h3>
+    <p style="font-size:0.86rem; color:#786d63; margin-bottom:14px;">修改後將自動同步至 Google 試算表 `帳號密碼設定` 分頁：</p>
+    <div style="text-align: left; margin-bottom: 14px;">
+      <label>請輸入新密碼：</label>
+      <input type="text" id="newAdminPwdInput" placeholder="請輸入新密碼">
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button type="button" class="btn-action btn-save" style="flex:1;" onclick="submitNewAdminPassword()">儲存並同步</button>
+      <button type="button" class="btn-secondary" style="flex:1;" onclick="closeChangePwdModal()">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 前期歷史構造物清冊彈窗 -->
+<div class="modal-backdrop" id="historyModal">
+  <div class="modal">
+    <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📖 前期歷史構造物清冊</div>
+    <div style="margin-bottom:12px;">
+      <label>依溪流篩選：</label>
+      <select id="historyStreamFilter" onchange="renderHistoryList()">
+        <option value="ALL">全部溪流設施</option>
+        <option value="中-003">中-003（松鶴一溪）</option>
+        <option value="中-004">中-004（松鶴二溪）</option>
+      </select>
+    </div>
+    <div id="historyListContainer"></div>
+    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
+      <button type="button" class="btn-secondary" onclick="closeHistoryModal()">關閉清單</button>
+    </div>
+  </div>
+</div>
+
+<!-- 已調查構造物彈窗 -->
+<div class="modal-backdrop" id="localListModal">
+  <div class="modal">
+    <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📋 已調查構造物</div>
+    <div id="localRecordsContainer"></div>
+    <div style="margin-top: 14px; border-top: 1px solid #ebd9c2; padding-top: 10px;">
+      <button type="button" class="btn-action btn-sync" style="width:100%; margin-bottom:8px;" onclick="syncAllLocalToCloud()">☁️ 一鍵把本機全部資料同步至雲端</button>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+      <button type="button" class="btn-secondary" onclick="closeLocalListModal()">關閉清單</button>
+    </div>
+  </div>
+</div>
+
+<!-- 檢視詳情彈窗 -->
+<div class="modal-backdrop" id="detailModal">
+  <div class="modal">
+    <div id="detailModalTitle" style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">構造物體檢完整細項</div>
+    <div id="detailModalBody"></div>
+    <div style="display:flex; gap:8px; margin-top:16px; border-top:1px solid #ebd9c2; padding-top:12px; flex-wrap:wrap;">
+      <button type="button" class="imp-palette-btn" style="background:#f4eee2;" onclick="exportDetailCurrentCSV()">📊 匯出此座 CSV</button>
+      <button type="button" class="imp-palette-btn" style="background:#f4eee2;" onclick="exportDetailCurrentHTML()">📄 匯出此座體檢卡</button>
+      <div style="flex:1;"></div>
+      <button type="button" class="btn-secondary" onclick="closeDetailModal()">關閉視窗</button>
+    </div>
+  </div>
+</div>
+
+<!-- 全螢幕燈箱 -->
+<div id="fullscreenViewer" onclick="closeFullscreenViewer(event)">
+  <button type="button" class="viewer-btn-back" onclick="closeFullscreenViewer(event, true)">✕ 返回畫布</button>
+  <img id="viewerImg" src="" alt="全螢幕照片">
+</div>
+
+<script>
+  // 請替換為您的 Google Apps Script Web App 網址
+  const GAS_API_URL = "https://script.google.com/macros/s/AKfycbw0HzHRYmJ2DaEA3fBjvlu3sNIBnn1_kih2v7ia_b108htI1UELN5WJrfqY-jdWmR39/exec";
+
+  let sysAuth = JSON.parse(localStorage.getItem("INSPECT_SYS_AUTH")) || { user: "1234", admin: "9999" };
+
+  const HISTORICAL_STRUCTURES = [
+    { id: "H_003_1", stream: "中-003", name: "3號梳子壩", station: "0K+630", type: "梳子壩", period: "原計畫", pastRating: "A", pastCondition: "壩體良好，無露筋破壞；基礎穩固，無下切；未淤積，具土砂攔阻容量", warningNote: "上次調查功能完整。本次重點檢核：排砂鋼管有無遭大塊石撞擊變形？庫內有無新生倒木？" },
+    { id: "H_003_2", stream: "中-003", name: "4號梳子壩及副壩", station: "0K+740", type: "梳子壩", period: "原計畫", pastRating: "B", pastCondition: "表面輕微磨損，副壩混凝土有細裂縫；無明顯掏空；半淤積 (淤積率約 25%)", warningNote: "上次調查表面輕微磨損。本次重點檢核：副壩開裂寬度有無超過 3mm？淤積率有無增加？" },
+    { id: "H_003_3", stream: "中-003", name: "沉砂池", station: "0K+050", type: "沉砂池/靜水池", period: "一期工程", pastRating: "B", pastCondition: "左岸護岸局部磨損；護岸基腳有微幅水流淘刷；淤砂量約 40%", warningNote: "上次調查左岸有淘刷。本次重點檢核：護岸基腳掏空深度有無擴大？沉砂池是否需要立即清淤？" },
+    { id: "H_004_1", stream: "中-004", name: "1號潛壩", station: "0K+565", type: "潛壩", period: "一期工程", pastRating: "A", pastCondition: "壩體結構完好；無掏空；工頂局部植生覆蓋", warningNote: "上次調查壩身良好。本次重點檢核：工頂雜木有無阻塞通水斷面？" },
+    { id: "H_004_2", stream: "中-004", name: "系列固床工", station: "0K+530~540", type: "固床工", period: "二期工程", pastRating: "C", pastCondition: "溪床坡度陡水流湍急，鋪底混凝土撞擊破損；基礎局部裸露/掏空嚴重；水流直沖基底", warningNote: "⚠️【前期核心病灶】0K+540 處前期已有基底裸露掏空！本次務必量測：掏空深度有無超過 0.5m？下游有無系列性破壞？" },
+    { id: "H_004_3", stream: "中-004", name: "版橋及過水便道", station: "0K+325", type: "過水便道", period: "二期工程", pastRating: "B", pastCondition: "橋面尚完整；未設護岸銜接處易溢流；暴雨時土砂易漫過路面", warningNote: "上次調查橋孔淨空不足。本次重點檢核：橋樑通洪斷面是否受巨石淤積阻礙？" }
+  ];
+
+  const DEFAULT_CONFIG = {
+    projectName: "115年度臺中市和平區博愛里中-003、中-004特定水保區五年通盤檢討",
+    streams: ["中-003（松鶴一溪）", "中-004（松鶴二溪）"]
+  };
+
+  let sysConfig = JSON.parse(localStorage.getItem("INSPECT_SYS_CONFIG")) || DEFAULT_CONFIG;
+  let currentActivePhotoCategory = "";
+  let photosData = { panorama: [], damage: [], sediment: [], special: [] };
+  let currentEditingRecordId = null;
+  let globalCloudRecords = [];
+  let currentActiveViewingRecord = null;
+
+  function verifyGlobalLogin() {
+    const u = document.getElementById("loginUser").value.trim();
+    const p = document.getElementById("loginPwd").value.trim();
+    const expectedUserPwd = sysAuth.user || "1234";
+    const expectedAdminPwd = sysAuth.admin || "9999";
+
+    if ((u === "user" && p === expectedUserPwd) || (u === "admin" && p === expectedAdminPwd)) {
+      document.getElementById("globalAuthOverlay").style.display = "none";
+      sessionStorage.setItem("IS_LOGGED_IN", "true");
+    } else {
+      alert("帳號或密碼錯誤！\n預設現場人員請輸入 user / 1234");
+    }
+  }
+
+  async function syncAuthFromCloud() {
+    try {
+      const res = await fetch(GAS_API_URL);
+      const json = await res.json();
+      if (json && json.auth) {
+        sysAuth = json.auth;
+        localStorage.setItem("INSPECT_SYS_AUTH", JSON.stringify(sysAuth));
+      }
+    } catch(e) {}
+  }
+
+  function switchMainTab(tabId) {
+    document.querySelectorAll(".imp-tab-btn").forEach((btn, idx) => {
+      btn.classList.toggle("active", (idx === 0 && tabId === "surveyTab") || (idx === 1 && tabId === "adminTab"));
+    });
+    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+    document.getElementById(tabId).classList.add("active");
+  }
+
+  function verifyAdminPwd() {
+    const inputPwd = document.getElementById("adminPwdInput").value.trim();
+    const correctAdminPwd = sysAuth.admin || "9999";
+    if (inputPwd === correctAdminPwd) {
+      document.getElementById("adminAuthBox").style.display = "none";
+      document.getElementById("adminDashboard").style.display = "block";
+      renderStreamManagerTags();
+      fetchCloudData();
+    } else {
+      alert("管理員密碼錯誤！");
+    }
+  }
+
+  function openChangePwdModal() {
+    document.getElementById("newAdminPwdInput").value = "";
+    document.getElementById("changePwdModal").style.display = "flex";
+  }
+  function closeChangePwdModal() { document.getElementById("changePwdModal").style.display = "none"; }
+
+  async function submitNewAdminPassword() {
+    const newPwd = document.getElementById("newAdminPwdInput").value.trim();
+    if (!newPwd) return alert("密碼不能為空！");
+
+    sysAuth.admin = newPwd;
+    localStorage.setItem("INSPECT_SYS_AUTH", JSON.stringify(sysAuth));
+
+    try {
+      await fetch(GAS_API_URL, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "UPDATE_ADMIN_PWD", newPassword: newPwd })
+      });
+      alert("✅ 密碼修改成功！已同步至 Google 試算表 `帳號密碼設定` 分頁。");
+    } catch (e) {
+      alert("本機密碼已變更，但目前為離線狀態：" + e.message);
+    }
+    closeChangePwdModal();
+  }
+
+  function renderStreamOptions() {
+    const container = document.getElementById("streamOptionContainer");
+    container.innerHTML = "";
+    sysConfig.streams.forEach(st => {
+      const label = document.createElement("label");
+      label.className = "choice-item";
+      label.innerHTML = `<input type="radio" name="streamName" value="${st}"> <span>${st}</span>`;
+      container.appendChild(label);
+    });
+  }
+
+  function renderStreamManagerTags() {
+    const container = document.getElementById("streamManageTagList");
+    if (!container) return;
+    container.innerHTML = "";
+    sysConfig.streams.forEach((st, idx) => {
+      const tag = document.createElement("span");
+      tag.style.cssText = "background:#f4eee2; padding:4px 10px; border-radius:14px; font-size:0.85rem; border:1px solid #d8cdbd; display:inline-flex; align-items:center; gap:6px;";
+      tag.innerHTML = `<span>${st}</span> <button type="button" style="border:none; background:none; cursor:pointer; font-weight:bold; color:#9e2a2b;" onclick="removeStream(${idx})">×</button>`;
+      container.appendChild(tag);
+    });
+  }
+
+  function addNewStream() {
+    const input = document.getElementById("newStreamInput");
+    const name = input.value.trim();
+    if (!name) return alert("請輸入溪流名稱！");
+    if (sysConfig.streams.includes(name)) return alert("此溪流已存在！");
+    sysConfig.streams.push(name);
+    localStorage.setItem("INSPECT_SYS_CONFIG", JSON.stringify(sysConfig));
+    input.value = "";
+    renderStreamOptions();
+    renderStreamManagerTags();
+    alert(`已新增溪流：${name}！前台調查表已同步更新選單。`);
+  }
+
+  function removeStream(idx) {
+    if (sysConfig.streams.length <= 1) return alert("至少需保留一條溪流選項！");
+    if (!confirm(`確定刪除「${sysConfig.streams[idx]}」嗎？`)) return;
+    sysConfig.streams.splice(idx, 1);
+    localStorage.setItem("INSPECT_SYS_CONFIG", JSON.stringify(sysConfig));
+    renderStreamOptions();
+    renderStreamManagerTags();
+  }
+
+  function openRatingDetailModal() { document.getElementById("ratingDetailModal").style.display = "flex"; }
+  function closeRatingDetailModal() { document.getElementById("ratingDetailModal").style.display = "none"; }
+
+  function openHistoryModal() { renderHistoryList(); document.getElementById("historyModal").style.display = "flex"; }
+  function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
+
+  function renderHistoryList() {
+    const filter = document.getElementById("historyStreamFilter").value;
+    const container = document.getElementById("historyListContainer");
+    container.innerHTML = "";
+    HISTORICAL_STRUCTURES.filter(s => filter === "ALL" || s.stream === filter).forEach(item => {
+      const div = document.createElement("div");
+      div.className = "oil-section-panel";
+      div.style.cssText = "padding:12px; margin-bottom:10px;";
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <b style="color:#382c23; font-size:1rem;">${item.name} (${item.station})</b>
+          <span class="rating-badge rating-${item.pastRating}">前期：${item.pastRating} 級</span>
+        </div>
+        <div style="font-size:0.86rem; color:#5c4f44; margin-top:6px;">
+          <span><b>類別：</b>${item.type} | <b>期程：</b>${item.period}</span>
+          <br><b>上次情況：</b>${item.pastCondition}
+          <div style="background:#fff9e6; border-left:4px solid var(--accent-khaki); padding:6px 10px; margin-top:6px; color:#856404; font-weight:bold; border-radius:4px;">${item.warningNote}</div>
+        </div>
+        <div style="text-align:right; margin-top:8px;">
+          <button type="button" class="imp-palette-btn" onclick="applyHistoryToForm('${item.id}')">📥 帶入此座並啟動複查</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function applyHistoryToForm(histId) {
+    const item = HISTORICAL_STRUCTURES.find(h => h.id === histId);
+    if (!item) return;
+
+    const streamRad = Array.from(document.querySelectorAll("input[name='streamName']")).find(el => el.value.includes(item.stream));
+    if (streamRad) streamRad.checked = true;
+
+    document.getElementById("structureName").value = item.name;
+    document.getElementById("structureStation").value = item.station;
+    document.getElementById("structureType").value = item.type;
+
+    const alertBox = document.getElementById("historyAlertBox");
+    document.getElementById("historyAlertContent").innerHTML = `
+      <b>構造物：</b>${item.name} (${item.station})<br>
+      <b>前次評級：</b>${item.pastRating} 級 | <b>上次情況：</b>${item.pastCondition}<br>
+      <span style="color:#b23b2a;">👉 <b>複查重點：</b>${item.warningNote}</span>
+    `;
+    alertBox.style.display = "block";
+
+    closeHistoryModal();
+    alert(`已帶入【${item.name}】！請針對上次情況重點拍照比對。`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleDescBox(checkbox, boxId) {
+    const box = document.getElementById(boxId);
+    if (!box) return;
+    box.style.display = checkbox.checked ? "block" : "none";
+    if (!checkbox.checked) {
+      const input = box.querySelector("input");
+      if (input) input.value = "";
+    }
+    autoSaveCurrentDraft();
+  }
+
+  function openLocalListModal() { renderLocalList(); document.getElementById("localListModal").style.display = "flex"; }
+  function closeLocalListModal() { document.getElementById("localListModal").style.display = "none"; }
+
+  function renderLocalList() {
+    const container = document.getElementById("localRecordsContainer");
+    container.innerHTML = "";
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    if (!allRecords.length) {
+      container.innerHTML = "<p style='text-align:center; color:#888; padding:20px 0;'>本機尚未有存檔紀錄</p>";
+      return;
+    }
+    allRecords.forEach((rec, idx) => {
+      const div = document.createElement("div");
+      div.className = "oil-section-panel";
+      div.style.cssText = "padding:12px; margin-bottom:10px;";
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+          <div>
+            <b>${idx+1}. ${rec.structureName}</b> (${rec.streamName})
+            <span class="rating-badge rating-${rec.overallRating}">${rec.overallRating} 級</span>
+            <br><small style="color:#786d63;">樁號: ${rec.structureStation || "-"} | 日期: ${rec.surveyDate}</small>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="imp-palette-btn" onclick="loadRecordById('${rec.id}')">載入回溯</button>
+            <button type="button" class="imp-palette-btn" style="background:#fce8e6; color:#9e2a2b; border-color:#e0b4b4;" onclick="deleteLocalRecord('${rec.id}', '${rec.structureName}')">🗑️ 刪除</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  async function deleteLocalRecord(recId, recName) {
+    if (!confirm(`⚠️ 確定要刪除「${recName}」這筆紀錄嗎？\n刪除後該紀錄與本機照片將無法復原。`)) return;
+
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    allRecords = allRecords.filter(r => r.id !== recId);
+    localStorage.setItem("ALL_STRUCTURE_RECORDS", JSON.stringify(allRecords));
+    localStorage.removeItem("DRAFT_TEXT_" + recId);
+
+    try {
+      const db = await openDB();
+      const tx = db.transaction(DB_STORE, "readwrite");
+      tx.objectStore(DB_STORE).delete(recId);
+    } catch (e) {}
+
+    if (currentEditingRecordId === recId) {
+      startNewBlankRecord();
+    }
+
+    updateLocalCountBadge();
+    renderLocalList();
+    alert(`已刪除「${recName}」！`);
+  }
+
+  function openFullscreenViewer(base64Src) {
+    document.getElementById("viewerImg").src = base64Src;
+    document.getElementById("fullscreenViewer").style.display = "flex";
+  }
+  function closeFullscreenViewer(e, force = false) {
+    if (force || e.target.id === "fullscreenViewer") {
+      document.getElementById("fullscreenViewer").style.display = "none";
+      document.getElementById("viewerImg").src = "";
+    }
+  }
+
+  const DB_NAME = "WaterConservancyOilDB", DB_STORE = "records_photos";
+  function openDB() {
+    return new Promise((resolve) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = (e) => e.target.result.createObjectStore(DB_STORE, { keyPath: "recordId" });
+      req.onsuccess = () => resolve(req.result);
+    });
+  }
+  async function savePhotosToDB(recordId, pData) {
+    try {
+      const db = await openDB();
+      const tx = db.transaction(DB_STORE, "readwrite");
+      tx.objectStore(DB_STORE).put({ recordId: recordId, photos: pData });
+    } catch (err) {}
+  }
+  async function getPhotosFromDB(recordId) {
+    return new Promise(async (resolve) => {
+      try {
+        const db = await openDB();
+        const tx = db.transaction(DB_STORE, "readonly");
+        const req = tx.objectStore(DB_STORE).get(recordId);
+        req.onsuccess = () => resolve(req.result ? req.result.photos : { panorama:[], damage:[], sediment:[], special:[] });
+        req.onerror = () => resolve({ panorama:[], damage:[], sediment:[], special:[] });
+      } catch (e) { resolve({ panorama:[], damage:[], sediment:[], special:[] }); }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (sessionStorage.getItem("IS_LOGGED_IN") === "true") {
+      document.getElementById("globalAuthOverlay").style.display = "none";
+    }
+    syncAuthFromCloud();
+
+    document.getElementById("surveyDate").value = new Date().toISOString().split('T')[0];
+    renderStreamOptions();
+    updateLocalCountBadge();
+
+    const draftId = localStorage.getItem("CURRENT_EDITING_ID");
+    if (draftId) loadRecordById(draftId, false);
+
+    document.querySelectorAll("input, select, textarea").forEach(el => {
+      el.addEventListener("input", autoSaveCurrentDraft);
+      el.addEventListener("change", autoSaveCurrentDraft);
+    });
+  });
+
+  const NOTES_FIELD_IDS = [
+    "note_main_good", "note_main_crack", "note_main_bad", "note_main_tilt",
+    "note_base_solid", "note_base_undercut", "note_base_flank", "note_base_backfill",
+    "note_sand_clean", "note_sand_half", "note_sand_full", "note_sand_veg", "note_sand_block",
+    "note_energy_good", "note_energy_bad", "note_energy_cut"
+  ];
+
+  function autoSaveCurrentDraft() {
+    if (!currentEditingRecordId) currentEditingRecordId = "REC_" + Date.now();
+    const currentData = collectFormTextOnly(currentEditingRecordId);
+    localStorage.setItem("DRAFT_TEXT_" + currentEditingRecordId, JSON.stringify(currentData));
+    savePhotosToDB(currentEditingRecordId, photosData);
+    document.getElementById("saveStatus").innerText = `💾 已於 ${new Date().toLocaleTimeString()} 暫存`;
+  }
+
+  function collectFormTextOnly(recordId) {
+    const notesData = {};
+    NOTES_FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) notesData[id] = el.value;
+    });
+
+    return {
+      id: recordId,
+      updatedAt: new Date().toLocaleString(),
+      projectName: sysConfig.projectName,
+      streamName: document.querySelector("input[name='streamName']:checked")?.value || "",
+      structureName: document.getElementById("structureName").value,
+      structureStation: document.getElementById("structureStation").value,
+      structureType: document.getElementById("structureType").value,
+      surveyDate: document.getElementById("surveyDate").value,
+      surveyor: document.getElementById("surveyor").value,
+      coordX: document.getElementById("coordX").value,
+      coordY: document.getElementById("coordY").value,
+      chk_main: Array.from(document.querySelectorAll("input[name='chk_main']:checked")).map(el => el.value),
+      chk_base: Array.from(document.querySelectorAll("input[name='chk_base']:checked")).map(el => el.value),
+      chk_sand: Array.from(document.querySelectorAll("input[name='chk_sand']:checked")).map(el => el.value),
+      chk_energy: Array.from(document.querySelectorAll("input[name='chk_energy']:checked")).map(el => el.value),
+      mainDamage: formatDamageSummary("chk_main", notesData, 'main'),
+      baseDamage: formatDamageSummary("chk_base", notesData, 'base'),
+      sandCondition: formatDamageSummary("chk_sand", notesData, 'sand'),
+      energyCondition: formatDamageSummary("chk_energy", notesData, 'energy'),
+      notes: notesData,
+      overallRating: document.querySelector("input[name='overallRating']:checked")?.value || "",
+      actionPlan: document.querySelector("input[name='actionPlan']:checked")?.value || ""
+    };
+  }
+
+  function formatDamageSummary(chkGroup, notes, type) {
+    const chkArr = Array.isArray(chkGroup) ? chkGroup : Array.from(document.querySelectorAll(`input[name='${chkGroup}']:checked`)).map(el => el.value);
+    if (!chkArr || !chkArr.length) return "良好無損";
+    const mapping = {
+      main: { "良好無損":"note_main_good", "輕微磨損/裂縫(<3mm)":"note_main_crack", "嚴重損壞(貫穿裂縫/剝落/露筋)":"note_main_bad", "結構傾斜/沉陷/位移":"note_main_tilt" },
+      base: { "基礎穩固無淘刷":"note_base_solid", "基礎局部裸露/掏空":"note_base_undercut", "兩翼繞流沖刷掏空":"note_base_flank", "護岸背填土流失":"note_base_backfill" },
+      sand: { "未淤積(庫容良好)":"note_sand_clean", "半淤積":"note_sand_half", "已淤滿(淤積率100%)":"note_sand_full", "工頂/庫區雜木草茂密":"note_sand_veg", "溢洪口遭巨石/漂流木阻塞":"note_sand_block" },
+      energy: { "靜水池完好":"note_energy_good", "靜水池破損嚴重":"note_energy_bad", "下游溪床明顯下切":"note_energy_cut" }
+    };
+    return chkArr.map(v => {
+      let str = v;
+      const noteKey = mapping[type][v];
+      if (notes && notes[noteKey]) str += `【備註: ${notes[noteKey]}】`;
+      return str;
+    }).join("；");
+  }
+
+  function saveCurrentStructure() {
+    const sName = document.getElementById("structureName").value.trim();
+    if (!sName) return alert("請填寫構造物名稱再存檔！");
+
+    if (!currentEditingRecordId) currentEditingRecordId = "REC_" + Date.now();
+    const data = collectFormTextOnly(currentEditingRecordId);
+
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    const existIdx = allRecords.findIndex(r => r.id === currentEditingRecordId);
+    if (existIdx >= 0) allRecords[existIdx] = data;
+    else allRecords.push(data);
+
+    localStorage.setItem("ALL_STRUCTURE_RECORDS", JSON.stringify(allRecords));
+    savePhotosToDB(currentEditingRecordId, photosData);
+
+    alert(`✅ 已儲存「${data.structureName}」！切換至空白畫布供填寫下一座。`);
+    startNewBlankRecord();
+  }
+
+  function startNewBlankRecord() {
+    currentEditingRecordId = "REC_" + Date.now();
+    localStorage.setItem("CURRENT_EDITING_ID", currentEditingRecordId);
+
+    document.getElementById("structureName").value = "";
+    document.getElementById("structureStation").value = "";
+    document.getElementById("coordX").value = "";
+    document.getElementById("coordY").value = "";
+
+    document.querySelectorAll("input[type='checkbox']").forEach(el => {
+      el.checked = false;
+      el.dispatchEvent(new Event('change'));
+    });
+    document.querySelectorAll("input[name='overallRating']").forEach(el => el.checked = false);
+    document.querySelectorAll("input[name='actionPlan']").forEach(el => el.checked = false);
+    NOTES_FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+
+    document.getElementById("historyAlertBox").style.display = "none";
+    photosData = { panorama: [], damage: [], sediment: [], special: [] };
+    renderAllPhotos();
+    document.getElementById("currentEditingIndicator").innerText = "📝 目前狀態：繪製新構造物紀錄";
+    updateLocalCountBadge();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function loadRecordById(recordId, shouldCloseModal = true) {
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    let record = allRecords.find(r => r.id === recordId);
+    if (!record) {
+      const draft = localStorage.getItem("DRAFT_TEXT_" + recordId);
+      if (draft) record = JSON.parse(draft);
+    }
+    if (!record) return;
+
+    currentEditingRecordId = record.id;
+    localStorage.setItem("CURRENT_EDITING_ID", currentEditingRecordId);
+
+    if (record.streamName) {
+      const rad = document.querySelector(`input[name='streamName'][value='${record.streamName}']`);
+      if (rad) rad.checked = true;
+    }
+    document.getElementById("structureName").value = record.structureName || "";
+    document.getElementById("structureStation").value = record.structureStation || "";
+    document.getElementById("structureType").value = record.structureType || "梳子壩";
+    document.getElementById("surveyDate").value = record.surveyDate || "";
+    document.getElementById("surveyor").value = record.surveyor || "";
+    document.getElementById("coordX").value = record.coordX || "";
+    document.getElementById("coordY").value = record.coordY || "";
+
+    ["chk_main", "chk_base", "chk_sand", "chk_energy"].forEach(group => {
+      document.querySelectorAll(`input[name='${group}']`).forEach(el => el.checked = false);
+      (record[group] || []).forEach(v => {
+        const el = document.querySelector(`input[name='${group}'][value='${v}']`);
+        if (el) { el.checked = true; el.dispatchEvent(new Event('change')); }
+      });
+    });
+
+    if (record.notes) {
+      Object.keys(record.notes).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = record.notes[id];
+      });
+    }
+
+    if (record.overallRating) {
+      const rad = document.querySelector(`input[name='overallRating'][value='${record.overallRating}']`);
+      if (rad) rad.checked = true;
+    }
+    if (record.actionPlan) {
+      const rad = document.querySelector(`input[name='actionPlan'][value='${record.actionPlan}']`);
+      if (rad) rad.checked = true;
+    }
+
+    photosData = await getPhotosFromDB(record.id);
+    renderAllPhotos();
+
+    document.getElementById("currentEditingIndicator").innerText = `🔍 正在回溯修改：【${record.structureName}】`;
+    if (shouldCloseModal) closeLocalListModal();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateLocalCountBadge() {
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    document.getElementById("recordCountBadge").innerText = allRecords.length;
+  }
+
+  function triggerPhotoInput(cat, isCamera) {
+    currentActivePhotoCategory = cat;
+    if (isCamera) document.getElementById("cameraInput").click();
+    else document.getElementById("albumInput").click();
+  }
+
+  function handleFileSelected(input) {
+    const files = Array.from(input.files);
+    if (!files.length) return;
+    files.forEach(file => compressAndStoreImage(file, currentActivePhotoCategory));
+    input.value = "";
+  }
+
+  function compressAndStoreImage(file, category) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 1200;
+        let width = img.width, height = img.height;
+        if (width > MAX_WIDTH) {
+          height = Math.round((height * MAX_WIDTH) / width);
+          width = MAX_WIDTH;
+        }
+        canvas.width = width; canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+
+        const photoObj = {
+          id: Date.now() + "_" + Math.random().toString(36).substr(2, 5),
+          base64: canvas.toDataURL("image/jpeg", 0.7),
+          desc: "",
+          timestamp: new Date().toLocaleString()
+        };
+
+        if (!photosData[category]) photosData[category] = [];
+        photosData[category].push(photoObj);
+        renderCategoryPhotos(category);
+        autoSaveCurrentDraft();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function renderAllPhotos() { ["panorama", "damage", "sediment", "special"].forEach(renderCategoryPhotos); }
+
+  function renderCategoryPhotos(cat) {
+    const grid = document.getElementById(`grid_${cat}`);
+    grid.innerHTML = "";
+    (photosData[cat] || []).forEach((item, index) => {
+      const div = document.createElement("div");
+      div.className = "photo-item";
+      div.innerHTML = `
+        <button type="button" class="btn-del-photo" onclick="deletePhoto('${cat}', ${index})">×</button>
+        <img src="${item.base64}" title="點擊檢視照片" onclick="openFullscreenViewer('${item.base64}')">
+        <textarea placeholder="填寫照片說明..." oninput="updatePhotoDesc('${cat}', ${index}, this.value)">${item.desc || ""}</textarea>
+      `;
+      grid.appendChild(div);
+    });
+  }
+
+  function updatePhotoDesc(cat, idx, text) {
+    if (photosData[cat] && photosData[cat][idx]) {
+      photosData[cat][idx].desc = text;
+      autoSaveCurrentDraft();
+    }
+  }
+
+  function deletePhoto(cat, idx) {
+    if (confirm("確定刪除這張照片？")) {
+      photosData[cat].splice(idx, 1);
+      renderCategoryPhotos(cat);
+      autoSaveCurrentDraft();
+    }
+  }
+
+  function fetchCurrentGPS() {
+    if (!navigator.geolocation) return alert("手機不支援 GPS 定位");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        document.getElementById("coordX").value = pos.coords.longitude.toFixed(6);
+        document.getElementById("coordY").value = pos.coords.latitude.toFixed(6);
+        autoSaveCurrentDraft();
+        alert("已成功取得 GPS 座標！");
+      },
+      (err) => alert("定位失敗: " + err.message),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  async function syncCurrentToCloud() {
+    const sName = document.getElementById("structureName").value.trim();
+    if (!sName) return alert("請先填寫構造物名稱！");
+    const data = collectFormTextOnly(currentEditingRecordId);
+    data.photos = photosData;
+
+    try {
+      await fetch(GAS_API_URL, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(data)
+      });
+      alert(`🎉 恭喜！「${data.structureName}」已順利同步至中央雲端！`);
+    } catch (e) {
+      alert("上傳失敗: " + e.message);
+    }
+  }
+
+  async function syncAllLocalToCloud() {
+    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+    if (!allRecords.length) return alert("本機無存檔紀錄！");
+    if (!confirm(`確定將本機共 ${allRecords.length} 座構造物資料整批同步至雲端嗎？`)) return;
+
+    for (let r of allRecords) {
+      r.photos = await getPhotosFromDB(r.id);
+      await fetch(GAS_API_URL, {
+        method: "POST", mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(r)
+      });
+    }
+    alert("🎉 本機所有構造物資料已全數同步至中央雲端！");
+    closeLocalListModal();
+  }
+
+  async function fetchCloudData() {
+    const container = document.getElementById("adminRecordsList");
+    container.innerHTML = "<p style='text-align:center; color:#786d63;'>正在從中央資料庫獲取巡檢成果...</p>";
+    try {
+      const res = await fetch(GAS_API_URL);
+      const result = await res.json();
+      globalCloudRecords = result.records || [];
+      if (result.auth) {
+        sysAuth = result.auth;
+        localStorage.setItem("INSPECT_SYS_AUTH", JSON.stringify(sysAuth));
+      }
+      renderAdminDashboard();
+    } catch (err) {
+      globalCloudRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
+      renderAdminDashboard();
+    }
+  }
+
+  function renderAdminDashboard() {
+    document.getElementById("statTotalCount").innerText = globalCloudRecords.length;
+    const surveyors = new Set(globalCloudRecords.map(r => r.surveyor).filter(Boolean));
+    document.getElementById("statSurveyorCount").innerText = surveyors.size;
+    document.getElementById("statCountA").innerText = globalCloudRecords.filter(r => r.overallRating === "A").length;
+    document.getElementById("statCountCD").innerText = globalCloudRecords.filter(r => r.overallRating === "C" || r.overallRating === "D").length;
+
+    const surveyorSelect = document.getElementById("filterSurveyor");
+    surveyorSelect.innerHTML = '<option value="ALL">全部人員</option>';
+    surveyors.forEach(s => surveyorSelect.innerHTML += `<option value="${s}">${s}</option>`);
+
+    const streams = new Set(globalCloudRecords.map(r => r.streamName).filter(Boolean));
+    const streamSelect = document.getElementById("filterStream");
+    streamSelect.innerHTML = '<option value="ALL">全部溪流</option>';
+    streams.forEach(st => streamSelect.innerHTML += `<option value="${st}">${st}</option>`);
+
+    applyAdminFilters();
+  }
+
+  function applyAdminFilters() {
+    const fSurveyor = document.getElementById("filterSurveyor").value;
+    const fStream = document.getElementById("filterStream").value;
+    const fRating = document.getElementById("filterRating").value;
+
+    const filtered = globalCloudRecords.filter(r => {
+      const matchS = fSurveyor === "ALL" || r.surveyor === fSurveyor;
+      const matchSt = fStream === "ALL" || r.streamName === fStream;
+      const matchR = fRating === "ALL" || r.overallRating === fRating;
+      return matchS && matchSt && matchR;
+    });
+
+    const container = document.getElementById("adminRecordsList");
+    container.innerHTML = "";
+
+    if (!filtered.length) {
+      container.innerHTML = "<p style='text-align:center; color:#786d63;'>查無符合條件的體檢紀錄</p>";
+      return;
+    }
+
+    filtered.forEach((r, idx) => {
+      const div = document.createElement("div");
+      div.className = "oil-section-panel";
+      div.style.cssText = "padding:14px; margin-bottom:12px;";
+      let pCount = 0;
+      if (r.photos) Object.keys(r.photos).forEach(k => pCount += (r.photos[k] || []).length);
+      div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ece4d5; padding-bottom:6px;">
+          <div>
+            <b style="font-size:1.05rem; color:#382c23;">${idx+1}. ${r.structureName}</b>
+            <span style="font-size:0.8rem; background:#f4ede1; padding:3px 8px; border-radius:6px; margin-left:6px; color:#5c4f44;">${r.streamName}</span>
+            <span class="rating-badge rating-${r.overallRating}" style="margin-left:6px;">${r.overallRating} 級</span>
+          </div>
+          <button type="button" class="imp-palette-btn" onclick="viewRecordDetails('${r.id}')">🔍 檢視完整圖文</button>
+        </div>
+        <div style="font-size:0.88rem; color:#5c4f44; margin-top:8px;">
+          <span><b>勘查人員：</b>${r.surveyor || "未填"}</span> | 
+          <span><b>樁號：</b>${r.structureStation || "-"}</span> | 
+          <span><b>建議對策：</b>${r.actionPlan || "-"}</span> | 
+          <span><b>照片：</b>${pCount} 張</span>
+          <br><small style="color:#8a7c70;">主體: ${r.mainDamage} | 基礎: ${r.baseDamage}</small>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  async function viewRecordDetails(recordId) {
+    let r = globalCloudRecords.find(x => x.id === recordId);
+    if (!r) return;
+    currentActiveViewingRecord = r;
+
+    document.getElementById("detailModalTitle").innerText = `🔍 ${r.structureName} 現場調查詳情卡`;
+    let photos = r.photos;
+    if (!photos || Object.keys(photos).length === 0) {
+      photos = await getPhotosFromDB(r.id);
+      currentActiveViewingRecord.photos = photos;
+    }
+
+    let photoHTML = "";
+    Object.keys(photos).forEach(cat => {
+      (photos[cat] || []).forEach(p => {
+        photoHTML += `
+          <div style="border:1px solid #dcd3c3; padding:6px; border-radius:8px; background:#fff;">
+            <img src="${p.base64}" style="width:100%; height:130px; object-fit:cover; border-radius:6px; cursor:zoom-in;" onclick="openFullscreenViewer('${p.base64}')">
+            <p style="font-size:12px; margin:4px 0 0 0; font-weight:bold; color:#4b3e34;">${p.desc ? "說明: " + p.desc : "（未填說明）"}</p>
+          </div>
+        `;
+      });
+    });
+
+    document.getElementById("detailModalBody").innerHTML = `
+      <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.9rem;">
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0; width:25%;"><b>調查溪流</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.streamName}</td><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0; width:25%;"><b>設施樁號</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.structureStation}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>勘查人員</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.surveyor}</td><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>體檢評級</b></td><td style="padding:6px; border:1px solid #dcd3c3;"><b>${r.overallRating} 級</b></td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>GPS 座標</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">X: ${r.coordX || "-"} , Y: ${r.coordY || "-"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>結構主體現況</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.mainDamage}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>基礎兩翼檢核</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.baseDamage}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>通砂淤積狀態</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.sandCondition}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>消能溪床狀態</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.energyCondition}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>建議處理對策</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;"><b>${r.actionPlan}</b></td></tr>
+      </table>
+      <div style="font-weight:bold; margin-bottom:6px; color:#382c23;">📸 現勘照片紀錄：</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:8px;">
+        ${photoHTML || "<p style='color:#786d63;'>（無照片）</p>"}
+      </div>
+    `;
+
+    document.getElementById("detailModal").style.display = "flex";
+  }
+
+  function closeDetailModal() { document.getElementById("detailModal").style.display = "none"; }
+
+  function exportDetailCurrentCSV() {
+    if (!currentActiveViewingRecord) return;
+    const d = currentActiveViewingRecord;
+    let csv = "\uFEFF專案名稱,調查溪流,構造物名稱,樁號,類別,勘查日期,勘查人員,座標X,座標Y,結構主體現況,基礎兩翼掏刷,通砂淤積現況,消能設施現況,體檢評級,建議對策\n";
+    csv += `"${d.projectName}","${d.streamName}","${d.structureName}","${d.structureStation}","${d.structureType}","${d.surveyDate}","${d.surveyor}","${d.coordX}","${d.coordY}","${d.mainDamage}","${d.baseDamage}","${d.sandCondition}","${d.energyCondition}","${d.overallRating} 級","${d.actionPlan}"\n`;
+    downloadFile(csv, `體檢紀錄_${d.streamName}_${d.structureName}.csv`, "text/csv;charset=utf-8;");
+  }
+
+  function exportDetailCurrentHTML() {
+    if (!currentActiveViewingRecord) return;
+    const d = currentActiveViewingRecord;
+    let photoBlock = "";
+    const titles = { 
+      panorama: "類別一：全景照片 (含上下游水，並標示出水流方向)", 
+      damage: "類別二：主體損壞特寫", 
+      sediment: "類別三：掏空與淤積", 
+      special: "類別四：特殊情況" 
+    };
+
+    if (d.photos) {
+      Object.keys(d.photos).forEach(k => {
+        if (d.photos[k] && d.photos[k].length > 0) {
+          photoBlock += `<h3 style="color:#5c4f44; border-bottom:1px solid #dcd3c3; padding-bottom:4px; margin-top:16px;">${titles[k]}</h3><div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:10px;">`;
+          d.photos[k].forEach(p => {
+            photoBlock += `
+              <div style="border:1px solid #dcd3c3; padding:6px; border-radius:8px; background:#fcfbf8;">
+                <img src="${p.base64}" style="width:100%; height:150px; object-fit:cover; border-radius:6px;">
+                <p style="font-size:12px; margin:4px 0 0 0; color:#382c23;">說明：<b>${p.desc || "無說明"}</b></p>
+              </div>
+            `;
+          });
+          photoBlock += `</div>`;
+        }
+      });
+    }
+
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${d.structureName} 現場體檢報告卡</title>
+      <style>body{font-family:"Microsoft JhengHei","微軟正黑體",sans-serif; padding:20px; max-width:850px; margin:0 auto; background:#faf7f0; color:#2b2623;} table{width:100%; border-collapse:collapse; margin-top:10px;} th,td{border:1px solid #786d63; padding:6px 8px; font-size:14px;} th{background:#eee6d8; width:22%; text-align:center;}</style></head>
+      <body>
+        <h2 style="text-align:center; margin-bottom:2px;">水工構造物現場體檢紀錄卡</h2>
+        <p style="text-align:center; font-size:13px; margin-top:0; color:#6d6257;">計畫名稱：${d.projectName}</p>
+        <table>
+          <tr><th>調查溪流</th><td>${d.streamName}</td><th>構造物名稱</th><td>${d.structureName}</td></tr>
+          <tr><th>施設樁號</th><td>${d.structureStation}</td><th>類別</th><td>${d.structureType}</td></tr>
+          <tr><th>勘查日期</th><td>${d.surveyDate}</td><th>勘查人員</th><td>${d.surveyor}</td></tr>
+          <tr><th>GPS 座標</th><td colspan="3">X: ${d.coordX || "-"} , Y: ${d.coordY || "-"}</td></tr>
+          <tr><th>結構主體現況</th><td colspan="3">${d.mainDamage}</td></tr>
+          <tr><th>基礎兩翼檢核</th><td colspan="3">${d.baseDamage}</td></tr>
+          <tr><th>通砂與淤積</th><td colspan="3">${d.sandCondition}</td></tr>
+          <tr><th>消能與溪床</th><td colspan="3">${d.energyCondition}</td></tr>
+          <tr><th>綜合評級</th><td colspan="3"><b>${d.overallRating} 級</b></td></tr>
+          <tr><th>建議對策</th><td colspan="3"><b>${d.actionPlan}</b></td></tr>
+        </table>
+        ${photoBlock || "<p style='color:#786d63;'>（無照片紀錄）</p>"}
+      </body></html>`;
+
+    downloadFile(html, `體檢報告_${d.streamName}_${d.structureName}.html`, "text/html;charset=utf-8;");
+  }
+
+  function exportAdminFilteredCSV() {
+    let csv = "\uFEFF專案名稱,調查溪流,構造物名稱,樁號,類別,勘查日期,勘查人員,座標X,座標Y,結構主體現況,基礎兩翼掏刷,通砂淤積現況,消能設施現況,體檢評級,建議對策,上傳時間\n";
+    globalCloudRecords.forEach(d => {
+      csv += `"${d.projectName}","${d.streamName}","${d.structureName}","${d.structureStation}","${d.structureType}","${d.surveyDate}","${d.surveyor}","${d.coordX}","${d.coordY}","${d.mainDamage}","${d.baseDamage}","${d.sandCondition}","${d.energyCondition}","${d.overallRating} 級","${d.actionPlan}","${d.updatedAt || ""}"\n`;
+    });
+    downloadFile(csv, `全體水工構造物體檢總表_${new Date().toISOString().split('T')[0]}.csv`, "text/csv;charset=utf-8;");
+  }
+
+  function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+  }
+</script>
+</body>
+</html>
