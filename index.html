@@ -111,6 +111,7 @@
       padding: 10px 12px; border-radius: 10px; border: 1px solid #e7ddce; cursor: pointer; font-size: 0.92rem; font-weight: 600;
     }
 
+    /* 舊版折疊展開樣式 */
     .expand-item-wrap { background: #faf7f2; border: 1px solid #ebd9c2; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
     .expand-item-header { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.93rem; font-weight: 600; }
     .expand-desc-box { display: none; margin-top: 10px; padding-left: 24px; }
@@ -188,11 +189,11 @@
       <div class="row">
         <div class="col form-group">
           <label>專案名稱：</label>
-          <input type="text" id="projectName" value="115年度臺中市和平區博愛里中-003、004特定水保區通盤檢討" class="survey-input">
+          <input type="text" id="projectName" value="115年度臺中市和平區博愛里中-003、004特定水保區通盤檢討">
         </div>
         <div class="col form-group">
           <label>特定區溪流：<span style="color:red;">*</span></label>
-          <select id="streamName" class="survey-input">
+          <select id="streamName">
             <option value="中-003（松鶴一溪）">中-003（松鶴一溪）</option>
             <option value="中-004（松鶴二溪）">中-004（松鶴二溪）</option>
           </select>
@@ -202,66 +203,66 @@
       <div class="row">
         <div class="col form-group">
           <label>受訪者姓名/商號：<span style="color:red;">*</span></label>
-          <input type="text" id="interviewee" placeholder="例如：松鶴那一家、林先生" class="survey-input">
+          <input type="text" id="interviewee" placeholder="例如：松鶴那一家、林先生">
         </div>
         <div class="col form-group">
           <label>聯絡電話：</label>
-          <input type="text" id="phone" placeholder="選填，電話或手機" class="survey-input">
+          <input type="text" id="phone" placeholder="選填，電話或手機">
         </div>
         <div class="col form-group">
           <label>訪談日期：<span style="color:red;">*</span></label>
-          <input type="date" id="surveyDate" class="survey-input">
+          <input type="date" id="surveyDate">
         </div>
       </div>
 
       <div class="row">
         <div class="col form-group">
           <label>訪談調查人員：<span style="color:red;">*</span></label>
-          <input type="text" id="surveyor" placeholder="例如：梁閔智、邱渝方、工讀生" class="survey-input">
+          <input type="text" id="surveyor" placeholder="例如：梁閔智、邱渝方、工讀生">
         </div>
         <div class="col form-group">
           <label>標的座落地號/門牌：</label>
-          <input type="text" id="address" placeholder="例如：東關路一段松鶴二巷4-2號" class="survey-input">
+          <input type="text" id="address" placeholder="例如：東關路一段松鶴二巷4-2號">
         </div>
       </div>
 
       <div class="row">
         <div class="col form-group">
           <label>GPS 座標 X (經度)：</label>
-          <input type="text" id="coordX" placeholder="X (E)" class="survey-input">
+          <input type="text" id="coordX" placeholder="X (E)">
         </div>
         <div class="col form-group">
           <label>GPS 座標 Y (緯度)：</label>
-          <input type="text" id="coordY" placeholder="Y (N)" class="survey-input">
+          <input type="text" id="coordY" placeholder="Y (N)">
         </div>
       </div>
 
       <div class="form-group">
         <label>土地權屬關係：</label>
         <div class="choice-grid">
-          <label class="choice-item"><input type="radio" name="landRight" value="土地所有權人" class="survey-input"> 土地所有權人</label>
-          <label class="choice-item"><input type="radio" name="landRight" value="合法承租人" class="survey-input"> 合法承租人</label>
-          <label class="choice-item"><input type="radio" name="landRight" value="設籍現住戶" class="survey-input"> 設籍現住戶</label>
-          <label class="choice-item"><input type="radio" name="landRight" value="其他" class="survey-input"> 其他權屬</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="土地所有權人"> 土地所有權人</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="合法承租人"> 合法承租人</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="設籍現住戶"> 設籍現住戶</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="其他"> 其他權屬</label>
         </div>
-        <input type="text" id="landRightNote" placeholder="權屬備註 (如：待確認、原住民保留地租賃)" style="margin-top:6px;" class="survey-input">
+        <input type="text" id="landRightNote" placeholder="權屬備註 (如：待確認、原住民保留地租賃)" style="margin-top:6px;">
       </div>
 
       <div class="form-group">
         <label>保全對象類型：</label>
         <div class="choice-grid">
-          <label class="choice-item"><input type="radio" name="targetType" value="住宅/聚落住戶" class="survey-input"> 住宅 / 聚落住戶</label>
-          <label class="choice-item"><input type="radio" name="targetType" value="學校/公有建物" class="survey-input"> 學校 / 公有建物</label>
-          <label class="choice-item"><input type="radio" name="targetType" value="交通道路/重要橋梁" class="survey-input"> 交通道路 / 重要橋梁</label>
-          <label class="choice-item"><input type="radio" name="targetType" value="農業/觀光休閒設施" class="survey-input"> 農業 / 觀光休閒設施</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="住宅/聚落住戶"> 住宅 / 聚落住戶</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="學校/公有建物"> 學校 / 公有建物</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="交通道路/重要橋梁"> 交通道路 / 重要橋梁</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="農業/觀光休閒設施"> 農業 / 觀光休閒設施</label>
         </div>
-        <input type="text" id="targetTypeNote" placeholder="類型備註說明" style="margin-top:6px;" class="survey-input">
+        <input type="text" id="targetTypeNote" placeholder="類型備註說明" style="margin-top:6px;">
       </div>
 
       <div class="row">
         <div class="col form-group">
           <label>居住/耕作年資：</label>
-          <select id="seniority" class="survey-input">
+          <select id="seniority">
             <option value="未滿 5 年">未滿 5 年</option>
             <option value="5～10 年">5～10 年</option>
             <option value="10～20 年">10～20 年</option>
@@ -270,86 +271,86 @@
         </div>
         <div class="col form-group">
           <label>起算年份 (自民國幾年起居住)：</label>
-          <input type="text" id="startYear" placeholder="例如：民國 75 年" class="survey-input">
+          <input type="text" id="startYear" placeholder="例如：民國 75 年">
         </div>
       </div>
     </div>
 
-    <!-- 2. 歷史受災與現場衝擊 -->
+    <!-- 2. 歷史受災與現場衝擊 (已移入舊版點選展開項目) -->
     <div class="panel-card">
       <div class="panel-title">■ 歷史受災過程與受災陳述</div>
 
       <div class="form-group">
         <label>歷次重大災害經歷：</label>
         <div class="choice-grid">
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="88年 921地震" class="survey-input"> 88年 921地震</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="90年 桃芝颱風" class="survey-input"> 90年 桃芝颱風</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="93年 敏督利颱風(七二水災)" class="survey-input"> 93年 七二敏督利</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="98年 莫拉克颱風" class="survey-input"> 98年 莫拉克颱風</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="近年重大豪雨事件" class="survey-input"> 近年強降雨/豪雨</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="從未經歷顯著災害" class="survey-input"> 從未經歷顯著災害</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="88年 921地震"> 88年 921地震</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="90年 桃芝颱風"> 90年 桃芝颱風</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="93年 敏督利颱風(七二水災)"> 93年 七二敏督利</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="98年 莫拉克颱風"> 98年 莫拉克颱風</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="近年重大豪雨事件"> 近年強降雨/豪雨</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="從未經歷顯著災害"> 從未經歷顯著災害</label>
         </div>
-        <input type="text" id="disasterNote" placeholder="重大事件歷程補充" style="margin-top:6px;" class="survey-input">
+        <input type="text" id="disasterNote" placeholder="重大事件歷程補充" style="margin-top:6px;">
       </div>
 
-      <!-- 可點選展開的衝擊細項 -->
+      <!-- 移植自舊版：可點選展開的衝擊細項 -->
       <div class="form-group">
         <label>歷次受災情況與現場衝擊項目（點選展開詳細數據）：</label>
         <div class="expand-item-wrap">
           <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="土砂溢淹與淤積" onchange="toggleDescBox(this, 'box_impact_sand')" class="survey-input">
+            <input type="checkbox" name="chk_impact" value="土砂溢淹與淤積" onchange="toggleDescBox(this, 'box_impact_sand')">
             <span>1. 土砂溢淹與淤積狀況</span>
           </label>
           <div class="expand-desc-box" id="box_impact_sand">
-            <input type="text" id="note_impact_sand" placeholder="描述：庭院泥流約__公分，或土石進室內__公尺 (無則填無)" class="survey-input">
+            <input type="text" id="note_impact_sand" placeholder="描述：庭院泥流約__公分，或土石進室內__公尺 (無則填無)">
           </div>
         </div>
         <div class="expand-item-wrap">
           <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="邊坡位移與構造損壞" onchange="toggleDescBox(this, 'box_impact_slope')" class="survey-input">
+            <input type="checkbox" name="chk_impact" value="邊坡位移與構造損壞" onchange="toggleDescBox(this, 'box_impact_slope')">
             <span>2. 邊坡位移與構造損壞</span>
           </label>
           <div class="expand-desc-box" id="box_impact_slope">
-            <input type="text" id="note_impact_slope" placeholder="描述：地表開裂、擋土牆受損位移、建物龜裂等" class="survey-input">
+            <input type="text" id="note_impact_slope" placeholder="描述：地表開裂、擋土牆受損位移、建物龜裂等">
           </div>
         </div>
         <div class="expand-item-wrap">
           <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="聯外交通與生活機能中斷" onchange="toggleDescBox(this, 'box_impact_life')" class="survey-input">
+            <input type="checkbox" name="chk_impact" value="聯外交通與生活機能中斷" onchange="toggleDescBox(this, 'box_impact_life')">
             <span>3. 聯外交通與生活機能影響</span>
           </label>
           <div class="expand-desc-box" id="box_impact_life">
-            <input type="text" id="note_impact_life" placeholder="描述：道路中斷__天、水電中斷、曾配合撤離等" class="survey-input">
+            <input type="text" id="note_impact_life" placeholder="描述：道路中斷__天、水電中斷、曾配合撤離等">
           </div>
         </div>
       </div>
 
       <div class="form-group">
         <label>居民口述受災詳細過程：</label>
-        <textarea id="interviewDetail" rows="3" placeholder="詳細記錄受訪者陳述之土石流流向、崩塌發生的徵兆、近年溪流整治前後之變化感受..." class="survey-input"></textarea>
+        <textarea id="interviewDetail" rows="3" placeholder="詳細記錄受訪者陳述之土石流流向、崩塌發生的徵兆、近年溪流整治前後之變化感受..."></textarea>
       </div>
     </div>
 
-    <!-- 3. 設施成效評估 -->
+    <!-- 3. 設施成效評估 (移植自舊版結構化單選) -->
     <div class="panel-card">
       <div class="panel-title">■ 既有水保與防砂設施成效評估 (受訪者感受)</div>
       <div class="form-group">
         <label>針對上游或周邊已完工水土保持與防砂工程（梳子壩、沉砂池、護岸等）：</label>
         <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
           <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升" class="survey-input">
+            <input type="radio" name="engineeringFeedback" value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升">
             <span><b>成效極為顯著：</b>工程完工後歷次豪雨皆無再受災，安全感明顯提升</span>
           </label>
           <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮" class="survey-input">
+            <input type="radio" name="engineeringFeedback" value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮">
             <span><b>稍有改善：</b>但豪雨時局部斷面仍有漫淹或沖刷疑慮</span>
           </label>
           <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形" class="survey-input">
+            <input type="radio" name="engineeringFeedback" value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形">
             <span><b>成效有限：</b>設施有淤滿、局部損壞或清疏不及情形</span>
           </label>
           <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="周邊未見顯著整治工程 / 不清楚工程位置" class="survey-input">
+            <input type="radio" name="engineeringFeedback" value="周邊未見顯著整治工程 / 不清楚工程位置">
             <span><b>不清楚／未見工程：</b>周邊未見顯著整治工程或不清楚位置</span>
           </label>
         </div>
@@ -530,7 +531,6 @@
   }
 
   async function savePhotosToDB(recordId, photos) {
-    if (!recordId) return;
     try {
       const db = await openDB();
       const tx = db.transaction(DB_STORE, "readwrite");
@@ -539,7 +539,6 @@
   }
 
   async function getPhotosFromDB(recordId) {
-    if (!recordId) return [];
     return new Promise(async (resolve) => {
       try {
         const db = await openDB();
@@ -552,7 +551,6 @@
   }
 
   async function deletePhotosFromDB(recordId) {
-    if (!recordId) return;
     try {
       const db = await openDB();
       const tx = db.transaction(DB_STORE, "readwrite");
@@ -572,8 +570,7 @@
     const draftId = localStorage.getItem("CURRENT_INTV_ID");
     if (draftId) loadLocalRecord(draftId, false);
 
-    // 【重要修復】只有填報區的表單欄位才會觸發 autoSaveDraft，後台與密碼框完全排除！
-    document.querySelectorAll(".survey-input").forEach(el => {
+    document.querySelectorAll("input, select, textarea").forEach(el => {
       el.addEventListener("input", autoSaveDraft);
       el.addEventListener("change", autoSaveDraft);
     });
@@ -636,11 +633,7 @@
     }
   }
 
-  // 【關鍵防呆】：受訪者姓名空白時，絕不自動建立任何草稿 ID！
   function autoSaveDraft() {
-    const name = document.getElementById("interviewee").value.trim();
-    if (!name) return; // 沒填姓名，直接退出，不產生任何幽靈草稿
-
     if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
     const data = collectFormData(currentRecordId);
     localStorage.setItem("INTV_DRAFT_" + currentRecordId, JSON.stringify(data));
@@ -663,7 +656,7 @@
       streamName: document.getElementById("streamName").value,
       surveyDate: document.getElementById("surveyDate").value,
       surveyor: document.getElementById("surveyor").value,
-      interviewee: document.getElementById("interviewee").value.trim(),
+      interviewee: document.getElementById("interviewee").value,
       phone: document.getElementById("phone").value,
       address: document.getElementById("address").value,
       coordX: document.getElementById("coordX").value,
@@ -689,7 +682,7 @@
 
   function saveCurrentInterview() {
     const name = document.getElementById("interviewee").value.trim();
-    if (!name) return alert("⚠️ 請務必填寫「受訪者姓名/商號」再存檔！");
+    if (!name) return alert("請填寫受訪者姓名/商號！");
 
     if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
     const data = collectFormData(currentRecordId);
@@ -698,7 +691,6 @@
     const idx = all.findIndex(r => r.id === currentRecordId);
     if (idx >= 0) all[idx] = data; else all.push(data);
 
-    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
     localStorage.setItem("ALL_INTERVIEW_RECORDS", JSON.stringify(all));
     savePhotosToDB(currentRecordId, photoList);
 
@@ -707,8 +699,8 @@
   }
 
   function startNewBlankRecord() {
-    currentRecordId = null; // 重設為 null，避免空白表單帶有 ID
-    localStorage.removeItem("CURRENT_INTV_ID");
+    currentRecordId = "INTV_" + Date.now();
+    localStorage.setItem("CURRENT_INTV_ID", currentRecordId);
 
     document.getElementById("interviewee").value = "";
     document.getElementById("phone").value = "";
@@ -723,6 +715,7 @@
 
     document.querySelectorAll("input[type='radio'], input[type='checkbox']").forEach(e => e.checked = false);
     
+    // 重設舊版移植過來的輸入項與展開框
     ["note_impact_sand", "note_impact_slope", "note_impact_life"].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = "";
@@ -735,7 +728,6 @@
     photoList = [];
     renderPhotos();
     document.getElementById("currentEditingIndicator").innerText = "📝 填報新受訪對象";
-    document.getElementById("saveStatus").innerText = "💾 草稿已自動保存至本機";
     updateLocalCountBadge();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -747,7 +739,7 @@
       const draft = localStorage.getItem("INTV_DRAFT_" + recordId);
       if (draft) record = JSON.parse(draft);
     }
-    if (!record || !record.interviewee) return;
+    if (!record) return;
 
     currentRecordId = record.id;
     localStorage.setItem("CURRENT_INTV_ID", currentRecordId);
@@ -788,6 +780,7 @@
       if (chk) chk.checked = true;
     });
 
+    // 載入衝擊項目與展開備註
     document.querySelectorAll("input[name='chk_impact']").forEach(e => e.checked = false);
     ["box_impact_sand", "box_impact_slope", "box_impact_life"].forEach(id => document.getElementById(id).style.display = "none");
     
@@ -821,7 +814,7 @@
   }
 
   async function deleteLocalRecord(recordId, name) {
-    if (!confirm(`⚠️ 確定要刪除「${name}」的訪談資料嗎？\n刪除後此筆紀錄與其照片將自本機永久移除！`)) return;
+    if (!confirm(`⚠️ 確定要刪除「${name}」的訪談資料嗎？\n刪除後此筆紀錄與其照片將自本機永久移除，不再上傳！`)) return;
 
     let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
     all = all.filter(r => r.id !== recordId);
@@ -846,7 +839,6 @@
     const container = document.getElementById("localRecordsList");
     container.innerHTML = "";
     let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
-    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
     if (!all.length) {
       container.innerHTML = "<p style='text-align:center; color:#888;'>本機尚無暫存訪談紀錄</p>";
       return;
@@ -873,7 +865,6 @@
 
   function updateLocalCountBadge() {
     let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
-    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
     document.getElementById("recordCountBadge").innerText = all.length;
   }
 
@@ -924,12 +915,9 @@
     }, err => alert("定位失敗: " + err.message));
   }
 
-  // 同步本戶至雲端
   async function syncCurrentToCloud() {
     const name = document.getElementById("interviewee").value.trim();
-    if (!name) return alert("⚠️ 同步失敗：受訪者姓名/商號為必填項，請填寫後再同步！");
-
-    if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
+    if (!name) return alert("請先填寫受訪者姓名！");
     const data = collectFormData(currentRecordId);
     data.photos = photoList;
 
@@ -948,32 +936,24 @@
     } catch(e) { alert("同步失敗: " + e.message); }
   }
 
-  // 一鍵同步全部本機
   async function syncAllLocalToCloud() {
     let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
-    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
+    if (!all.length) return alert("本機無訪談紀錄！");
+    if (!confirm(`確定將本機共 ${all.length} 戶訪談資料同步至雲端嗎？`)) return;
 
-    if (!all.length) return alert("⚠️ 本機無有效訪談紀錄可供同步！");
-    if (!confirm(`確定將本機共 ${all.length} 戶有效訪談資料同步至雲端嗎？`)) return;
-
-    let successCount = 0;
     for (let r of all) {
       r.photos = await getPhotosFromDB(r.id);
-      try {
-        const res = await fetch(GAS_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(r)
-        });
-        const json = await res.json();
-        if (json.status === "success") successCount++;
-      } catch(e){}
+      await fetch(GAS_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(r)
+      });
     }
-    alert(`🎉 同步完成！共成功同步 ${successCount} 戶訪談資料！`);
+    alert("🎉 本機所有訪談資料已全數同步完成！");
     closeLocalListModal();
   }
 
-  // 刷新雲端資料
+  // 刷新雲端資料：嚴格過濾空白紀錄
   async function fetchCloudData() {
     const container = document.getElementById("cloudRecordsContainer");
     container.innerHTML = "<p style='text-align:center;'>正在抓取雲端訪談紀錄...</p>";
@@ -1057,9 +1037,7 @@
     const r = globalCloudRecords.find(x => String(x.id).trim() === String(id).trim());
     if (!r) return;
 
-    r.interviewee = document.getElementById("edit_interviewee").value.trim();
-    if (!r.interviewee) return alert("受訪者姓名不能為空！");
-
+    r.interviewee = document.getElementById("edit_interviewee").value;
     r.phone = document.getElementById("edit_phone").value;
     r.surveyDate = document.getElementById("edit_surveyDate").value;
     r.surveyor = document.getElementById("edit_surveyor").value;
@@ -1131,6 +1109,7 @@
 
   function closeDetailModal() { document.getElementById("detailModal").style.display = "none"; }
 
+  // 下載 Word (.doc) 檔
   function downloadInterviewWord() {
     if (!currentViewingRecord) return alert("查無當前訪談資料！");
     const r = currentViewingRecord;
