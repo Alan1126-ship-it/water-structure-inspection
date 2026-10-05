@@ -3,41 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>水工構造物現場體檢系統 - 印象光影典藏版</title>
+  <title>特定水土保持區保全對象現地訪談調查系統</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap');
 
     :root {
-      /* 畫布與厚塗質感基底色 */
       --canvas-bg: #fdfbf7;
       --canvas-card: rgba(255, 253, 249, 0.95);
       --oil-charcoal: #2c2523;
       --oil-muted: #6e645e;
       --oil-border: #e2d7c5;
-
-      /* 指定風格強調色 (Impressionism Accent Palette) */
-      --accent-khaki: #F0E68C;   /* Khaki 卡其日光 */
-      --accent-skyblue: #87CEEB; /* Sky Blue 溪流微光 */
-      --accent-plum: #DDA0DD;    /* Plum 紫藤晚霞 */
-
-      /* 鮮豔高光 (Impressionist Highlighting) */
-      --highlight-ochre: #d9822b;
-      --highlight-crimson: #c23b22;
-      --highlight-sage: #5b8266;
-
-      /* 效能評級厚塗色調 (A/B/C/D) */
-      --grade-a: #437356;
-      --grade-b: #bf8b2e;
-      --grade-c: #bd5338;
-      --grade-d: #8e2829;
-
-      --font-serif-tc: 'Noto Serif TC', 'Garamond', 'Songti TC', serif;
-      --font-serif-en: 'Cinzel', 'Garamond', serif;
+      --accent-khaki: #F0E68C;
+      --accent-skyblue: #87CEEB;
+      --accent-plum: #DDA0DD;
+      --btn-green: #437356;
+      --btn-blue: #4a6c8e;
+      --btn-danger: #a93226;
+      --font-serif-tc: 'Noto Serif TC', 'Garamond', serif;
     }
 
     * { box-sizing: border-box; }
 
-    /* 背景：模仿莫內畫布粗織麻布與光斑交融質感 */
     body {
       background-color: var(--canvas-bg);
       color: var(--oil-charcoal);
@@ -48,309 +34,115 @@
       background-image: 
         radial-gradient(circle at 10% 15%, rgba(240, 230, 140, 0.35) 0%, transparent 40%),
         radial-gradient(circle at 90% 20%, rgba(135, 206, 235, 0.35) 0%, transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(221, 160, 221, 0.28) 0%, transparent 55%),
-        linear-gradient(45deg, rgba(235, 225, 210, 0.4) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(235, 225, 210, 0.4) 25%, transparent 25%);
-      background-size: 100% 100%, 100% 100%, 100% 100%, 5px 5px, 5px 5px;
+        radial-gradient(circle at 50% 85%, rgba(221, 160, 221, 0.28) 0%, transparent 55%);
       background-attachment: fixed;
     }
 
     .canvas-container {
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
       background: var(--canvas-card);
       border-radius: 20px;
       padding: 24px 20px;
-      box-shadow: 0 14px 35px rgba(58, 44, 34, 0.12), 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 14px 35px rgba(58, 44, 34, 0.12);
       border: 1px solid rgba(210, 198, 180, 0.7);
-      backdrop-filter: blur(6px);
     }
 
-    /* 頂部光影畫廊標題 */
-    .gallery-header {
-      text-align: center;
-      margin-bottom: 22px;
-    }
-    .gallery-subtitle {
-      font-family: var(--font-serif-en);
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      color: var(--oil-muted);
-      text-transform: uppercase;
-    }
-    .gallery-title {
-      font-size: 1.65rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #352822;
-      margin: 4px 0 0 0;
-      text-shadow: 1px 1px 0px rgba(240, 230, 140, 0.5);
-    }
+    .gallery-header { text-align: center; margin-bottom: 20px; }
+    .gallery-subtitle { font-size: 0.85rem; letter-spacing: 2px; color: var(--oil-muted); text-transform: uppercase; }
+    .gallery-title { font-size: 1.65rem; font-weight: 700; color: #352822; margin: 4px 0 0 0; }
 
-    /* 印象導航分頁條 */
     .palette-nav {
-      display: flex;
-      background: rgba(230, 220, 204, 0.65);
-      border-radius: 14px;
-      padding: 5px;
-      margin-bottom: 20px;
-      border: 1px solid var(--oil-border);
+      display: flex; background: rgba(230, 220, 204, 0.65); border-radius: 14px;
+      padding: 5px; margin-bottom: 20px; border: 1px solid var(--oil-border);
     }
     .palette-tab-btn {
-      flex: 1;
-      background: transparent;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-family: var(--font-serif-tc);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--oil-muted);
-      cursor: pointer;
-      transition: all 0.25s ease;
+      flex: 1; background: transparent; border: none; padding: 10px 14px;
+      border-radius: 10px; font-family: var(--font-serif-tc); font-size: 0.95rem;
+      font-weight: 700; color: var(--oil-muted); cursor: pointer; transition: all 0.25s;
     }
     .palette-tab-btn.active {
-      background: #ffffff;
-      color: var(--oil-charcoal);
-      box-shadow: 0 4px 12px rgba(60, 48, 38, 0.1);
-      border-bottom: 3px solid var(--accent-plum);
+      background: #ffffff; color: var(--oil-charcoal);
+      box-shadow: 0 4px 12px rgba(60, 48, 38, 0.1); border-bottom: 3px solid var(--accent-plum);
     }
 
-    /* 工具與歷史病歷快捷條 (Pastel Ribbon) */
     .pastel-ribbon {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
       background: linear-gradient(90deg, rgba(240, 230, 140, 0.35) 0%, rgba(135, 206, 235, 0.35) 50%, rgba(221, 160, 221, 0.35) 100%);
-      padding: 10px 16px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(210, 198, 180, 0.6);
-      flex-wrap: wrap;
-      gap: 8px;
+      padding: 10px 16px; border-radius: 12px; margin-bottom: 16px; border: 1px solid rgba(210, 198, 180, 0.6);
+      flex-wrap: wrap; gap: 8px;
     }
     .btn-brush {
-      background: #fff;
-      color: #3e322b;
-      border: 1px solid #c9bca9;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.86rem;
-      font-family: var(--font-serif-tc);
-      font-weight: 700;
-      cursor: pointer;
+      background: #fff; color: #3e322b; border: 1px solid #c9bca9;
+      padding: 6px 14px; border-radius: 20px; font-size: 0.86rem;
+      font-family: var(--font-serif-tc); font-weight: 700; cursor: pointer;
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: transform 0.15s;
-    }
-    .btn-brush:active { transform: scale(0.96); }
-
-    /* 歷史病歷提示板 */
-    .oil-alert-box {
-      display: none;
-      background: #fffef7;
-      border-left: 6px solid var(--accent-khaki);
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      border-top: 1px solid #ebd9a8;
-      border-right: 1px solid #ebd9a8;
-      border-bottom: 1px solid #ebd9a8;
-      font-size: 0.92rem;
     }
 
-    /* 畫布卡片面板 */
     .panel-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 20px 18px;
-      margin-bottom: 18px;
-      border: 1px solid var(--oil-border);
-      box-shadow: 0 6px 20px rgba(65, 52, 42, 0.04);
-      position: relative;
+      background: #ffffff; border-radius: 16px; padding: 20px 18px; margin-bottom: 18px;
+      border: 1px solid var(--oil-border); box-shadow: 0 6px 20px rgba(65, 52, 42, 0.04); position: relative;
     }
     .panel-card::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 3px;
-      border-radius: 16px 16px 0 0;
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0;
       background: linear-gradient(90deg, var(--accent-khaki), var(--accent-skyblue), var(--accent-plum));
     }
     .panel-title {
-      font-size: 1.12rem;
-      font-weight: 700;
-      color: #382c23;
-      margin-bottom: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ede4d6;
-      padding-bottom: 8px;
+      font-size: 1.12rem; font-weight: 700; color: #382c23; margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ede4d6; padding-bottom: 8px;
     }
 
-    /* 表單項目 */
     .form-group { margin-bottom: 14px; }
     label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.92rem; color: #44372e; }
-    input[type="text"], input[type="date"], select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid #d7cbbb;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-family: var(--font-serif-tc);
-      background: #fbf9f4;
-      color: var(--oil-charcoal);
-      outline: none;
-      transition: all 0.2s;
+    input[type="text"], input[type="date"], input[type="password"], select, textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid #d7cbbb; border-radius: 8px;
+      font-size: 0.95rem; font-family: var(--font-serif-tc); background: #fbf9f4;
+      color: var(--oil-charcoal); outline: none; transition: all 0.2s;
     }
-    input:focus, select:focus {
-      background: #fff;
-      border-color: var(--accent-plum);
-      box-shadow: 0 0 0 3px rgba(221, 160, 221, 0.35);
+    input:focus, select:focus, textarea:focus {
+      background: #fff; border-color: var(--accent-plum); box-shadow: 0 0 0 3px rgba(221, 160, 221, 0.35);
     }
     .row { display: flex; gap: 12px; flex-wrap: wrap; }
     .col { flex: 1; min-width: 220px; }
 
-    /* 條狀勾選卡片 (純勾選無多餘備註框) */
     .choice-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
     .choice-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      background: #faf7f2;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #e7ddce;
-      cursor: pointer;
-      font-size: 0.92rem;
-      font-weight: 600;
-      transition: all 0.15s;
+      display: flex; align-items: flex-start; gap: 10px; background: #faf7f2;
+      padding: 10px 12px; border-radius: 10px; border: 1px solid #e7ddce; cursor: pointer; font-size: 0.92rem; font-weight: 600;
     }
-    .choice-item:hover { background: #f4eee2; }
-    .choice-item input { margin-top: 3px; accent-color: #557862; }
 
-    /* 評級標章 */
-    .grade-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      color: #fff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-    .grade-A { background: var(--grade-a); }
-    .grade-B { background: var(--grade-b); }
-    .grade-C { background: var(--grade-c); }
-    .grade-d { background: var(--grade-d); }
+    .expand-item-wrap { background: #faf7f2; border: 1px solid #ebd9c2; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
+    .expand-item-header { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.93rem; font-weight: 600; }
+    .expand-desc-box { display: none; margin-top: 10px; padding-left: 24px; }
+    .expand-desc-box input { background: #fff; border: 1px dashed var(--accent-skyblue); }
 
-    /* 簡化版照片網格 (純展示與刪除，無多餘文字說明框) */
-    .photo-area {
-      background: #faf8f4;
-      border: 2px dashed #d5c8b7;
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 8px;
-    }
-    .photo-area-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .photo-grid-stream {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
+    .photo-grid-stream { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
     .photo-thumb-wrap {
-      border: 1px solid #dcd1c2;
-      border-radius: 8px;
-      padding: 5px;
-      background: #fff;
-      position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border: 1px solid #dcd1c2; border-radius: 8px; padding: 5px; background: #fff; position: relative;
     }
-    .photo-thumb-wrap img {
-      width: 100%;
-      height: 105px;
-      object-fit: cover;
-      border-radius: 6px;
-      display: block;
-      cursor: zoom-in;
-    }
+    .photo-thumb-wrap img { width: 100%; height: 105px; object-fit: cover; border-radius: 6px; display: block; cursor: zoom-in; }
     .btn-photo-del {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(44, 37, 35, 0.75);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      font-size: 13px;
-      cursor: pointer;
+      position: absolute; top: 8px; right: 8px; background: rgba(44, 37, 35, 0.75);
+      color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 13px; cursor: pointer;
     }
 
-    /* 底部功能大按鈕 */
     .action-panel { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
     .btn-act {
-      flex: 1;
-      min-width: 135px;
-      padding: 12px 10px;
-      border: none;
-      border-radius: 10px;
-      font-family: var(--font-serif-tc);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.15s;
+      flex: 1; min-width: 135px; padding: 12px 10px; border: none; border-radius: 10px;
+      font-family: var(--font-serif-tc); font-size: 0.95rem; font-weight: 700; color: #fff; cursor: pointer; text-align: center;
     }
-    .btn-act:active { transform: scale(0.97); }
-    .btn-save { background: #557862; }
-    .btn-sync { background: #4a6c8e; }
-    .btn-csv  { background: #92588c; }
-    .btn-card { background: #826a57; }
+    .btn-save { background: var(--btn-green); }
+    .btn-sync { background: var(--btn-blue); }
+    .btn-danger-sm { background: var(--btn-danger); color: #fff; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
 
-    /* 彈窗樣式 */
     .modal-backdrop {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(35, 28, 24, 0.65); backdrop-filter: blur(4px); z-index: 1000;
       justify-content: center; align-items: center; padding: 16px;
     }
     .modal {
-      background: #fffdfa; border-radius: 18px; width: 100%; max-width: 640px; max-height: 90vh;
-      overflow-y: auto; padding: 24px; box-shadow: 0 16px 40px rgba(0,0,0,0.3);
-      border: 1px solid #ebd9c2;
-    }
-    .btn-sec {
-      background: #e8ded1; color: #43372c; border: none; padding: 8px 16px;
-      border-radius: 8px; font-weight: 700; font-family: var(--font-serif-tc); cursor: pointer;
-    }
-
-    /* 全螢幕燈箱縮放 */
-    #fullscreenViewer {
-      display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(14, 12, 11, 0.98); z-index: 10000; touch-action: none;
-      overflow: hidden; justify-content: center; align-items: center;
-    }
-    #viewerImg {
-      max-width: 95vw; max-height: 85vh; transform-origin: center center;
-      transition: transform 0.05s ease-out; user-select: none;
-    }
-    .viewer-btn-back {
-      position: absolute; top: 18px; right: 18px;
-      background: rgba(255, 255, 255, 0.25); border: 1px solid rgba(255, 255, 255, 0.5);
-      color: #fff; font-size: 0.95rem; font-weight: bold; padding: 8px 18px; border-radius: 20px; cursor: pointer;
-    }
-    .viewer-hint {
-      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-      color: rgba(255,255,255,0.7); font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 4px 14px; border-radius: 14px; pointer-events: none;
+      background: #fffdfa; border-radius: 18px; width: 100%; max-width: 720px; max-height: 90vh;
+      overflow-y: auto; padding: 24px; border: 1px solid #ebd9c2;
     }
 
     .tab-content { display: none; }
@@ -361,316 +153,431 @@
 
 <div class="canvas-container">
 
-  <!-- 畫作光影標題 -->
   <div class="gallery-header">
-    <div class="gallery-subtitle">Impressionist Field Survey System</div>
-    <div class="gallery-title">水工構造物現場體檢與功能評估表</div>
+    <div class="gallery-subtitle">Specific Soil and Water Conservation Zone Survey</div>
+    <div class="gallery-title">保全對象現地訪談調查系統</div>
   </div>
 
-  <!-- 分頁切換 -->
   <div class="palette-nav">
-    <button class="palette-tab-btn active" onclick="switchMainTab('surveyTab')">🎨 現場勘查與評估畫布</button>
-    <button class="palette-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 典藏後台總覽 (密碼 9999)</button>
+    <button class="palette-tab-btn active" onclick="switchMainTab('surveyTab')">📝 訪談紀錄填報</button>
+    <button class="palette-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 訪談成果庫</button>
   </div>
 
-  <!-- ================= 分頁 1：現場調查表 ================= -->
+  <!-- ================= 分頁 1：訪談紀錄填報 ================= -->
   <div id="surveyTab" class="tab-content active">
 
-    <!-- 輔助快捷列 -->
     <div class="pastel-ribbon">
       <span style="font-weight:700; color:#4a3e35; font-size:0.9rem;">
-        🖌️ 印象派外業輔助調色盤
+        📋 本機已訪談戶管理
       </span>
-      <div style="display:flex; gap: 8px;">
-        <button type="button" class="btn-brush" onclick="openHistoryModal()">📖 查閱前期病歷</button>
-        <button type="button" class="btn-brush" onclick="openLocalListModal()">📋 本機畫稿 (<span id="recordCountBadge">0</span>)</button>
-      </div>
+      <button type="button" class="btn-brush" onclick="openLocalListModal()">📋 開啟本機訪談清冊 (<span id="recordCountBadge">0</span>)</button>
     </div>
 
-    <!-- 歷史病灶提示警示板 -->
-    <div class="oil-alert-box" id="historyAlertBox">
-      <div style="font-weight: bold; color: #9c6c18; margin-bottom: 4px;">⚠️ 前期歷史病灶提醒：</div>
-      <div id="historyAlertContent"></div>
+    <div style="display:flex; justify-content:space-between; font-size:0.84rem; color:var(--oil-muted); margin-bottom:12px;">
+      <span id="saveStatus">💾 草稿已自動保存至本機</span>
+      <span id="currentEditingIndicator" style="font-weight:bold; color:var(--accent-plum);">📝 填報新受訪對象</span>
     </div>
 
-    <div style="display:flex; justify-content:space-between; font-size:0.84rem; color:var(--oil-muted); margin-bottom:12px; padding:0 4px;">
-      <span id="saveStatus">💾 草稿已自動保存至本機 (支援斷網)</span>
-      <span id="currentEditingIndicator" style="font-weight:bold; color:var(--accent-plum);">📝 填寫新構造物紀錄</span>
-    </div>
-
-    <!-- 1. 基本資料 -->
+    <!-- 1. 基本資訊 -->
     <div class="panel-card">
       <div class="panel-title">
-        <span>■ 基本資料</span>
-        <button type="button" class="btn-brush" style="padding:4px 10px; font-size:0.8rem;" onclick="fetchCurrentGPS()">📍 自動抓取 GPS</button>
+        <span>■ 受訪者基本資訊</span>
+        <button type="button" class="btn-brush" onclick="fetchCurrentGPS()">📍 擷取訪談點 GPS</button>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>專案名稱：</label>
+          <input type="text" id="projectName" value="115年度臺中市和平區博愛里中-003、004特定水保區通盤檢討" class="survey-input">
+        </div>
+        <div class="col form-group">
+          <label>特定區溪流：<span style="color:red;">*</span></label>
+          <select id="streamName" class="survey-input">
+            <option value="中-003（松鶴一溪）">中-003（松鶴一溪）</option>
+            <option value="中-004（松鶴二溪）">中-004（松鶴二溪）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>受訪者姓名/商號：<span style="color:red;">*</span></label>
+          <input type="text" id="interviewee" placeholder="例如：松鶴那一家、林先生" class="survey-input">
+        </div>
+        <div class="col form-group">
+          <label>聯絡電話：</label>
+          <input type="text" id="phone" placeholder="選填，電話或手機" class="survey-input">
+        </div>
+        <div class="col form-group">
+          <label>訪談日期：<span style="color:red;">*</span></label>
+          <input type="date" id="surveyDate" class="survey-input">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>訪談調查人員：<span style="color:red;">*</span></label>
+          <input type="text" id="surveyor" placeholder="例如：梁閔智、邱渝方、工讀生" class="survey-input">
+        </div>
+        <div class="col form-group">
+          <label>標的座落地號/門牌：</label>
+          <input type="text" id="address" placeholder="例如：東關路一段松鶴二巷4-2號" class="survey-input">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+          <label>GPS 座標 X (經度)：</label>
+          <input type="text" id="coordX" placeholder="X (E)" class="survey-input">
+        </div>
+        <div class="col form-group">
+          <label>GPS 座標 Y (緯度)：</label>
+          <input type="text" id="coordY" placeholder="Y (N)" class="survey-input">
+        </div>
       </div>
 
       <div class="form-group">
-        <label>調查溪流：<span style="color:var(--highlight-crimson);">*</span></label>
-        <div class="choice-grid" id="streamOptionContainer"></div>
+        <label>土地權屬關係：</label>
+        <div class="choice-grid">
+          <label class="choice-item"><input type="radio" name="landRight" value="土地所有權人" class="survey-input"> 土地所有權人</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="合法承租人" class="survey-input"> 合法承租人</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="設籍現住戶" class="survey-input"> 設籍現住戶</label>
+          <label class="choice-item"><input type="radio" name="landRight" value="其他" class="survey-input"> 其他權屬</label>
+        </div>
+        <input type="text" id="landRightNote" placeholder="權屬備註 (如：待確認、原住民保留地租賃)" style="margin-top:6px;" class="survey-input">
+      </div>
+
+      <div class="form-group">
+        <label>保全對象類型：</label>
+        <div class="choice-grid">
+          <label class="choice-item"><input type="radio" name="targetType" value="住宅/聚落住戶" class="survey-input"> 住宅 / 聚落住戶</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="學校/公有建物" class="survey-input"> 學校 / 公有建物</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="交通道路/重要橋梁" class="survey-input"> 交通道路 / 重要橋梁</label>
+          <label class="choice-item"><input type="radio" name="targetType" value="農業/觀光休閒設施" class="survey-input"> 農業 / 觀光休閒設施</label>
+        </div>
+        <input type="text" id="targetTypeNote" placeholder="類型備註說明" style="margin-top:6px;" class="survey-input">
       </div>
 
       <div class="row">
         <div class="col form-group">
-          <label>構造物名稱：<span style="color:var(--highlight-crimson);">*</span></label>
-          <input type="text" id="structureName" placeholder="例如：3號梳子壩、系列固床工">
-        </div>
-        <div class="col form-group">
-          <label>構造物樁號：</label>
-          <input type="text" id="structureStation" placeholder="例如：0K+630 或 0K+540">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col form-group">
-          <label>構造物類別：<span style="color:var(--highlight-crimson);">*</span></label>
-          <select id="structureType">
-            <option value="梳子壩">梳子壩</option>
-            <option value="防砂壩">防砂壩</option>
-            <option value="潛壩">潛壩</option>
-            <option value="固床工">固床工</option>
-            <option value="護岸">護岸</option>
-            <option value="沉砂池/靜水池">沉砂池/靜水池</option>
-            <option value="過水便道">過水便道/版橋</option>
-            <option value="其他">其他水工設施</option>
+          <label>居住/耕作年資：</label>
+          <select id="seniority" class="survey-input">
+            <option value="未滿 5 年">未滿 5 年</option>
+            <option value="5～10 年">5～10 年</option>
+            <option value="10～20 年">10～20 年</option>
+            <option value="20 年以上">20 年以上</option>
           </select>
         </div>
         <div class="col form-group">
-          <label>勘查日期：<span style="color:var(--highlight-crimson);">*</span></label>
-          <input type="date" id="surveyDate">
-        </div>
-        <div class="col form-group">
-          <label>勘查人員：<span style="color:var(--highlight-crimson);">*</span></label>
-          <input type="text" id="surveyor" placeholder="例如：方方、工讀生">
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col form-group">
-          <label>座標位置 X (經度)：</label>
-          <input type="text" id="coordX" placeholder="X (E) 或經度">
-        </div>
-        <div class="col form-group">
-          <label>座標位置 Y (緯度)：</label>
-          <input type="text" id="coordY" placeholder="Y (N) 或緯度">
+          <label>起算年份 (自民國幾年起居住)：</label>
+          <input type="text" id="startYear" placeholder="例如：民國 75 年" class="survey-input">
         </div>
       </div>
     </div>
 
-    <!-- 2. 現況損壞與功能檢核 (依指定最新項目調整) -->
+    <!-- 2. 歷史受災與現場衝擊 -->
     <div class="panel-card">
-      <div class="panel-title">■ 現況損壞與功能檢核（實地檢視並勾選）</div>
+      <div class="panel-title">■ 歷史受災過程與受災陳述</div>
 
-      <!-- 結構主體 -->
       <div class="form-group">
-        <label>1. 結構主體：</label>
+        <label>歷次重大災害經歷：</label>
         <div class="choice-grid">
-          <label class="choice-item"><input type="checkbox" name="chk_main" value="良好無損"> <span>良好無損</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_main" value="輕微磨損/裂縫(寬度<3mm)"> <span>輕微磨損/裂縫（寬度 &lt; 3mm）</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_main" value="嚴重損壞(裂縫貫穿/混凝土大面積剝落/露筋)"> <span>嚴重損壞（裂縫貫穿、大面積剝落、露筋）</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_main" value="結構傾斜/沉陷/位移"> <span>結構傾斜/沉陷/位移</span></label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="88年 921地震" class="survey-input"> 88年 921地震</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="90年 桃芝颱風" class="survey-input"> 90年 桃芝颱風</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="93年 敏督利颱風(七二水災)" class="survey-input"> 93年 七二敏督利</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="98年 莫拉克颱風" class="survey-input"> 98年 莫拉克颱風</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="近年重大豪雨事件" class="survey-input"> 近年強降雨/豪雨</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="從未經歷顯著災害" class="survey-input"> 從未經歷顯著災害</label>
         </div>
+        <input type="text" id="disasterNote" placeholder="重大事件歷程補充" style="margin-top:6px;" class="survey-input">
       </div>
 
-      <!-- 基礎與兩翼 (最新精簡項目) -->
-      <div class="form-group" style="margin-top:16px;">
-        <label>2. 基礎與兩翼：</label>
-        <div class="choice-grid">
-          <label class="choice-item"><input type="checkbox" name="chk_base" value="基礎穩固，無淘刷"> <span>基礎穩固，無淘刷</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_base" value="基礎局部裸露/掏空"> <span>基礎局部裸露/掏空</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_base" value="兩翼(與山壁接壤處/沖刷掏空)"> <span>兩翼（與山壁接壤處/沖刷掏空）</span></label>
-        </div>
-      </div>
-
-      <!-- 通砂與淤積現況 (最新精簡項目) -->
-      <div class="form-group" style="margin-top:16px;">
-        <label>3. 通砂與淤積現況：</label>
-        <div class="choice-grid">
-          <label class="choice-item"><input type="checkbox" name="chk_sand" value="未淤積(尚有庫容)"> <span>未淤積（尚有庫容）</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_sand" value="已淤滿(淤積率100%)"> <span>已淤滿（淤積率 100%）</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_sand" value="工頂/庫區雜木雜草茂密生長(恐阻礙通洪斷面)"> <span>工頂/庫區雜木雜草茂密生長（恐阻礙通洪斷面）</span></label>
-          <label class="choice-item"><input type="checkbox" name="chk_sand" value="溢洪口/排砂孔遭巨石、漂流木嚴重阻塞"> <span>溢洪口/排砂孔遭巨石、漂流木嚴重阻塞</span></label>
-        </div>
-      </div>
-      <!-- 第4項 消能與附屬設施已依指示全數刪除 -->
-    </div>
-
-    <!-- 3. 效能綜合評級與建議對策 -->
-    <div class="panel-card">
-      <div class="panel-title">■ 效能綜合評級與建議對策</div>
-      
+      <!-- 可點選展開的衝擊細項 -->
       <div class="form-group">
-        <label>效能綜合評級（請直接勾選一級）：<span style="color:var(--highlight-crimson);">*</span></label>
-        <div class="choice-grid">
-          <label class="choice-item"><input type="radio" name="overallRating" value="A"> <span><span class="grade-badge grade-A">A 級</span>（良好）：結構完整，無損壞，功能正常。</span></label>
-          <label class="choice-item"><input type="radio" name="overallRating" value="B"> <span><span class="grade-badge grade-B">B 級</span>（注意）：些微受損（如表層磨損），不影響防護功能，持續觀察。</span></label>
-          <label class="choice-item"><input type="radio" name="overallRating" value="C"> <span><span class="grade-badge grade-C">C 級</span>（維修）：結構受損影響功能，需評估清淤、裂縫修補或局部加固。</span></label>
-          <label class="choice-item"><input type="radio" name="overallRating" value="D"> <span><span class="grade-badge grade-D">D 級</span>（危險）：構造物嚴重毀損、功能喪失，有致災風險需立即搶修。</span></label>
-        </div>
-      </div>
-
-      <div class="form-group" style="margin-top:16px;">
-        <label>建議處理對策：<span style="color:var(--highlight-crimson);">*</span></label>
-        <div class="choice-grid">
-          <label class="choice-item"><input type="radio" name="actionPlan" value="維持現況"> 維持現況（持續監測）</label>
-          <label class="choice-item"><input type="radio" name="actionPlan" value="優先處理"> 優先處理（列入本期改善）</label>
-          <label class="choice-item"><input type="radio" name="actionPlan" value="需要處理"> 需要處理（清疏/修復）</label>
-          <label class="choice-item"><input type="radio" name="actionPlan" value="暫緩處理"> 暫緩處理</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. 現場拍照紀錄 (已精簡：不需輸入文字說明，提供拍照與相簿雙管道直接記錄) -->
-    <div class="panel-card">
-      <div class="panel-title">■ 現場拍照紀錄 (直覺拍照記錄，點擊照片手勢縮放)</div>
-      
-      <div class="photo-area">
-        <div class="photo-area-bar">
-          <span style="font-weight:700; color:#3e322b;">📸 現場快照庫（現拍 / 匯入，無張數限制）</span>
-          <div>
-            <button type="button" class="btn-brush" onclick="triggerCameraInput()">📷 手機現拍</button>
-            <button type="button" class="btn-brush" onclick="triggerAlbumInput()">🖼️ 相簿選取</button>
+        <label>歷次受災情況與現場衝擊項目（點選展開詳細數據）：</label>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header">
+            <input type="checkbox" name="chk_impact" value="土砂溢淹與淤積" onchange="toggleDescBox(this, 'box_impact_sand')" class="survey-input">
+            <span>1. 土砂溢淹與淤積狀況</span>
+          </label>
+          <div class="expand-desc-box" id="box_impact_sand">
+            <input type="text" id="note_impact_sand" placeholder="描述：庭院泥流約__公分，或土石進室內__公尺 (無則填無)" class="survey-input">
           </div>
         </div>
-        <div class="photo-grid-stream" id="photoStreamContainer"></div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header">
+            <input type="checkbox" name="chk_impact" value="邊坡位移與構造損壞" onchange="toggleDescBox(this, 'box_impact_slope')" class="survey-input">
+            <span>2. 邊坡位移與構造損壞</span>
+          </label>
+          <div class="expand-desc-box" id="box_impact_slope">
+            <input type="text" id="note_impact_slope" placeholder="描述：地表開裂、擋土牆受損位移、建物龜裂等" class="survey-input">
+          </div>
+        </div>
+        <div class="expand-item-wrap">
+          <label class="expand-item-header">
+            <input type="checkbox" name="chk_impact" value="聯外交通與生活機能中斷" onchange="toggleDescBox(this, 'box_impact_life')" class="survey-input">
+            <span>3. 聯外交通與生活機能影響</span>
+          </label>
+          <div class="expand-desc-box" id="box_impact_life">
+            <input type="text" id="note_impact_life" placeholder="描述：道路中斷__天、水電中斷、曾配合撤離等" class="survey-input">
+          </div>
+        </div>
       </div>
 
-      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;" onchange="handleFileSelected(this)">
-      <input type="file" id="albumInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelected(this)">
+      <div class="form-group">
+        <label>居民口述受災詳細過程：</label>
+        <textarea id="interviewDetail" rows="3" placeholder="詳細記錄受訪者陳述之土石流流向、崩塌發生的徵兆、近年溪流整治前後之變化感受..." class="survey-input"></textarea>
+      </div>
     </div>
 
-    <!-- 底部操作列 -->
+    <!-- 3. 設施成效評估 -->
+    <div class="panel-card">
+      <div class="panel-title">■ 既有水保與防砂設施成效評估 (受訪者感受)</div>
+      <div class="form-group">
+        <label>針對上游或周邊已完工水土保持與防砂工程（梳子壩、沉砂池、護岸等）：</label>
+        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+          <label class="choice-item">
+            <input type="radio" name="engineeringFeedback" value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升" class="survey-input">
+            <span><b>成效極為顯著：</b>工程完工後歷次豪雨皆無再受災，安全感明顯提升</span>
+          </label>
+          <label class="choice-item">
+            <input type="radio" name="engineeringFeedback" value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮" class="survey-input">
+            <span><b>稍有改善：</b>但豪雨時局部斷面仍有漫淹或沖刷疑慮</span>
+          </label>
+          <label class="choice-item">
+            <input type="radio" name="engineeringFeedback" value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形" class="survey-input">
+            <span><b>成效有限：</b>設施有淤滿、局部損壞或清疏不及情形</span>
+          </label>
+          <label class="choice-item">
+            <input type="radio" name="engineeringFeedback" value="周邊未見顯著整治工程 / 不清楚工程位置" class="survey-input">
+            <span><b>不清楚／未見工程：</b>周邊未見顯著整治工程或不清楚位置</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 照片紀錄 -->
+    <div class="panel-card">
+      <div class="panel-title">■ 現場訪談與環境照片紀錄</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span style="font-size:0.9rem; color:var(--oil-muted);">拍照記錄（現訪合影、標的物外觀、周邊溪溝）</span>
+        <div>
+          <button type="button" class="btn-brush" onclick="document.getElementById('camInput').click()">📷 手機拍照</button>
+          <button type="button" class="btn-brush" onclick="document.getElementById('albumInput').click()">🖼️ 相簿選取</button>
+        </div>
+      </div>
+      <div class="photo-grid-stream" id="photoContainer"></div>
+      <input type="file" id="camInput" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(this)">
+      <input type="file" id="albumInput" accept="image/*" multiple style="display:none;" onchange="handlePhotoUpload(this)">
+    </div>
+
+    <!-- 操作按鈕 -->
     <div class="action-panel">
-      <button type="button" class="btn-act btn-save" onclick="saveCurrentStructure()">💾 存檔並填下一座</button>
-      <button type="button" class="btn-act btn-sync" onclick="syncCurrentToCloud()">☁️ 同步本座至雲端</button>
-      <button type="button" class="btn-act btn-csv" onclick="exportSingleCSV()">📊 匯出此座 CSV</button>
-      <button type="button" class="btn-act btn-card" onclick="exportSingleHTML()">📄 匯出此座體檢卡</button>
+      <button type="button" class="btn-act btn-save" onclick="saveCurrentInterview()">💾 存檔並訪談下一戶</button>
+      <button type="button" class="btn-act btn-sync" onclick="syncCurrentToCloud()">☁️ 同步本戶至雲端</button>
     </div>
 
   </div>
 
-  <!-- ================= 分頁 2：管理員專區 ================= -->
+  <!-- ================= 分頁 2：訪談成果庫 ================= -->
   <div id="adminTab" class="tab-content">
-    <div id="adminAuthBox" class="panel-card" style="max-width: 440px; margin: 40px auto; text-align: center;">
-      <h3 style="color:#382c23; margin-top:0;">🔒 典藏資料庫管理驗證</h3>
-      <p style="font-size:0.9rem; color:var(--oil-muted);">請輸入管理員密碼檢視團隊全體成果：</p>
-      <input type="password" id="adminPwdInput" placeholder="請輸入密碼 (9999)" style="text-align: center; margin-bottom: 14px; font-size: 1.2rem; letter-spacing: 4px;">
-      <button type="button" class="btn-act btn-save" style="width: 100%;" onclick="verifyAdminPwd()">解鎖進入後台</button>
+    <div id="adminAuthBox" class="panel-card" style="max-width:440px; margin:40px auto; text-align:center;">
+      <h3 style="margin-top:0;">🔒 管理員驗證</h3>
+      <input type="password" id="adminPwdInput" placeholder="請輸入管理員密碼" style="text-align:center; font-size:1.1rem; letter-spacing:3px; margin-bottom:14px;">
+      <button type="button" class="btn-act btn-save" style="width:100%;" onclick="verifyAdminPwd()">解鎖進入後台</button>
     </div>
 
-    <div id="adminDashboard" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap:wrap; gap:8px;">
-        <h2 style="font-size: 1.25rem; margin: 0; color: #382c23;">📊 全區水工構造物體檢成果管理庫</h2>
-        <button type="button" class="btn-brush" onclick="fetchCloudData()">🔄 刷新雲端畫稿</button>
-      </div>
-
-      <!-- 統計圖解色塊 -->
-      <div style="display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;">
-        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">總座數<br><b id="statTotalCount" style="font-size:1.4rem; color:var(--oil-charcoal);">0</b></div>
-        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">勘查員<br><b id="statSurveyorCount" style="font-size:1.4rem; color:#754a6c;">0</b></div>
-        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">A級良好<br><b id="statCountA" style="font-size:1.4rem; color:var(--grade-a);">0</b></div>
-        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center; background:#faf7f0;">C/D級警示<br><b id="statCountCD" style="font-size:1.4rem; color:var(--grade-d);">0</b></div>
-      </div>
-
-      <!-- 篩選列 -->
-      <div class="panel-card" style="padding: 14px; margin-bottom: 16px;">
-        <div class="row">
-          <div class="col"><label>依人員篩選：</label><select id="filterSurveyor" onchange="applyAdminFilters()"><option value="ALL">全部人員</option></select></div>
-          <div class="col"><label>依溪流篩選：</label><select id="filterStream" onchange="applyAdminFilters()"><option value="ALL">全部溪流</option></select></div>
-          <div class="col"><label>依評級篩選：</label>
-            <select id="filterRating" onchange="applyAdminFilters()">
-              <option value="ALL">全部評級</option>
-              <option value="A">A 級 (良好)</option>
-              <option value="B">B 級 (注意)</option>
-              <option value="C">C 級 (維修)</option>
-              <option value="D">D 級 (危險)</option>
-            </select>
-          </div>
-          <div style="align-self:flex-end;">
-            <button type="button" class="btn-brush" style="padding:10px 14px;" onclick="exportAdminFilteredCSV()">📥 匯出篩選總表 CSV</button>
-          </div>
+    <div id="adminDashboard" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <h2 style="font-size:1.25rem; margin:0;">📊 保全對象訪談成果總覽</h2>
+        <div>
+          <button type="button" class="btn-brush" onclick="fetchCloudData()">🔄 刷新雲端資料</button>
+          <button type="button" class="btn-brush" style="background:#5c768d; color:#fff;" onclick="openChangePwdModal()">🔑 修改管理員密碼</button>
         </div>
       </div>
 
-      <div id="adminRecordsList"></div>
+      <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center;">訪談總戶數<br><b id="statTotalCount" style="font-size:1.4rem;">0</b></div>
+        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center;">中-003戶數<br><b id="stat003Count" style="font-size:1.4rem; color:var(--btn-blue);">0</b></div>
+        <div class="panel-card" style="flex:1; margin:0; padding:12px; text-align:center;">中-004戶數<br><b id="stat004Count" style="font-size:1.4rem; color:var(--btn-green);">0</b></div>
+      </div>
+
+      <div id="cloudRecordsContainer"></div>
     </div>
   </div>
 
-</div>
-
-<!-- 歷史病歷庫彈窗 -->
-<div class="modal-backdrop" id="historyModal">
-  <div class="modal">
-    <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📖 前期歷史構造物清冊與病歷庫</div>
-    <div style="margin-bottom:12px;">
-      <label>依溪流篩選：</label>
-      <select id="historyStreamFilter" onchange="renderHistoryList()">
-        <option value="ALL">全部溪流設施</option>
-        <option value="中-003">中-003（松鶴一溪）</option>
-        <option value="中-004">中-004（松鶴二溪）</option>
-      </select>
-    </div>
-    <div id="historyListContainer"></div>
-    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
-      <button type="button" class="btn-sec" onclick="closeHistoryModal()">關閉清單</button>
-    </div>
-  </div>
 </div>
 
 <!-- 本機清單彈窗 -->
 <div class="modal-backdrop" id="localListModal">
   <div class="modal">
-    <div style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">📋 本機已調查構造物 (點選回溯修改)</div>
-    <div id="localRecordsContainer"></div>
-    <div style="margin-top: 14px; border-top: 1px solid #ebd9c2; padding-top: 10px;">
-      <button type="button" class="btn-act btn-sync" style="width:100%; margin-bottom:8px;" onclick="syncAllLocalToCloud()">☁️ 一鍵把本機全部資料同步至雲端</button>
+    <h3 style="margin-top:0;">📋 本機已訪談戶清冊</h3>
+    <div id="localRecordsList"></div>
+    <div style="margin-top:14px; border-top:1px solid #ebd9c2; padding-top:10px;">
+      <button type="button" class="btn-act btn-sync" style="width:100%;" onclick="syncAllLocalToCloud()">☁️ 一鍵把本機全部訪談資料同步至雲端</button>
     </div>
-    <div style="display:flex; justify-content:flex-end; margin-top:8px;">
-      <button type="button" class="btn-sec" onclick="closeLocalListModal()">關閉清單</button>
+    <div style="text-align:right; margin-top:10px;">
+      <button type="button" class="btn-brush" onclick="closeLocalListModal()">關閉清單</button>
     </div>
   </div>
 </div>
 
-<!-- 詳情展示彈窗 -->
+<!-- 詳細訪談卡展示彈窗 -->
 <div class="modal-backdrop" id="detailModal">
   <div class="modal">
-    <div id="detailModalTitle" style="font-weight:700; color:#382c23; font-size:1.15rem; margin-bottom:12px;">構造物體檢完整細項</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h3 style="margin:0;" id="detailModalTitle">保全對象訪談紀錄卡</h3>
+      <button type="button" class="btn-brush" style="background:#5c768d; color:#fff;" onclick="downloadInterviewWord()">📄 下載 Word (.doc) 表格檔</button>
+    </div>
     <div id="detailModalBody"></div>
-    <div style="display:flex; justify-content:flex-end; margin-top:14px;">
-      <button type="button" class="btn-sec" onclick="closeDetailModal()">關閉視窗</button>
+    <div style="text-align:right; margin-top:14px;">
+      <button type="button" class="btn-brush" onclick="closeDetailModal()">關閉視窗</button>
     </div>
   </div>
 </div>
 
-<!-- 全螢幕燈箱縮放 -->
-<div id="fullscreenViewer" onclick="closeFullscreenViewer(event)">
-  <button type="button" class="viewer-btn-back" onclick="closeFullscreenViewer(event, true)">✕ 返回畫布</button>
-  <img id="viewerImg" src="" alt="全螢幕照片">
-  <div class="viewer-hint">雙指張開縮放／拖曳平移／雙擊放大</div>
+<!-- 後台在線修改彈窗 -->
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <h3 style="margin-top:0; color:var(--btn-blue);">✏️ 修改訪談紀錄內容</h3>
+    <input type="hidden" id="edit_id">
+    <div class="row">
+      <div class="col form-group"><label>受訪者姓名/商號：</label><input type="text" id="edit_interviewee"></div>
+      <div class="col form-group"><label>聯絡電話：</label><input type="text" id="edit_phone"></div>
+    </div>
+    <div class="row">
+      <div class="col form-group"><label>訪談日期：</label><input type="date" id="edit_surveyDate"></div>
+      <div class="col form-group"><label>訪談人員：</label><input type="text" id="edit_surveyor"></div>
+    </div>
+    <div class="form-group"><label>座落地號/門牌：</label><input type="text" id="edit_address"></div>
+    <div class="row">
+      <div class="col form-group">
+        <label>土地權屬：</label>
+        <select id="edit_landRight">
+          <option value="土地所有權人">土地所有權人</option>
+          <option value="合法承租人">合法承租人</option>
+          <option value="設籍現住戶">設籍現住戶</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="col form-group"><label>權屬備註：</label><input type="text" id="edit_landRightNote"></div>
+    </div>
+    <div class="row">
+      <div class="col form-group">
+        <label>保全對象類型：</label>
+        <select id="edit_targetType">
+          <option value="住宅/聚落住戶">住宅/聚落住戶</option>
+          <option value="學校/公有建物">學校/公有建物</option>
+          <option value="交通道路/重要橋梁">交通道路/重要橋梁</option>
+          <option value="農業/觀光休閒設施">農業/觀光休閒設施</option>
+        </select>
+      </div>
+      <div class="col form-group"><label>年資起算：</label><input type="text" id="edit_startYear"></div>
+    </div>
+    <div class="form-group">
+      <label>現場受災衝擊描述：</label>
+      <input type="text" id="edit_impactSummary">
+    </div>
+    <div class="form-group"><label>受災詳細過程：</label><textarea id="edit_interviewDetail" rows="3"></textarea></div>
+    <div class="form-group">
+      <label>既有工程成效感受：</label>
+      <select id="edit_engineeringFeedback">
+        <option value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升">成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升</option>
+        <option value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮">稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮</option>
+        <option value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形">成效有限 / 設施有淤滿、局部損壞或清疏不及情形</option>
+        <option value="周邊未見顯著整治工程 / 不清楚工程位置">周邊未見顯著整治工程 / 不清楚工程位置</option>
+      </select>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button type="button" class="btn-brush" onclick="closeEditModal()">取消</button>
+      <button type="button" class="btn-act btn-save" style="min-width:120px;" onclick="saveEditedRecordToCloud()">💾 儲存並同步更新至雲端</button>
+    </div>
+  </div>
+</div>
+
+<!-- 修改密碼彈窗 -->
+<div class="modal-backdrop" id="changePwdModal">
+  <div class="modal" style="max-width:380px;">
+    <h3 style="margin-top:0;">🔑 修改管理員密碼</h3>
+    <div class="form-group">
+      <label>請輸入新密碼：</label>
+      <input type="text" id="newAdminPwd" placeholder="輸入自訂新密碼">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button type="button" class="btn-brush" onclick="closeChangePwdModal()">取消</button>
+      <button type="button" class="btn-act btn-save" onclick="submitChangePwd()">確認更新</button>
+    </div>
+  </div>
 </div>
 
 <script>
-  const GAS_API_URL = "https://script.google.com/macros/s/YOUR_GAS_DEPLOYED_URL_HERE/exec";
+  // 請填入您發布的 Google Web App URL
+  const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyWkAQuKducGBfzemEEURSelshYngqnio9y5LsgApot6oyEnnYoGsX1qxhukOl0C384/exec";
 
-  // 內建前期歷史病歷資料庫
-  const HISTORICAL_STRUCTURES = [
-    { id: "H_003_1", stream: "中-003", name: "3號梳子壩", station: "0K+630", type: "梳子壩", period: "原計畫", pastRating: "A", pastDamage: "壩體良好，無露筋破壞", pastBase: "基礎穩固，無下切", pastSand: "未淤積，具土砂攔阻容量", warningNote: "上次調查功能完整。本次重點檢核：排砂鋼管有無遭大塊石撞擊變形？庫內有無新生倒木？" },
-    { id: "H_003_2", stream: "中-003", name: "4號梳子壩及副壩", station: "0K+740", type: "梳子壩", period: "原計畫", pastRating: "B", pastDamage: "表面輕微磨損，副壩混凝土有細裂縫", pastBase: "無明顯掏空", pastSand: "半淤積 (淤積率約 25%)", warningNote: "上次調查表面輕微磨損。本次重點檢核：副壩開裂寬度有無超過 3mm？淤積率有無增加？" },
-    { id: "H_003_3", stream: "中-003", name: "沉砂池", station: "0K+050", type: "沉砂池/靜水池", period: "一期工程", pastRating: "B", pastDamage: "左岸護岸局部磨損", pastBase: "護岸基腳有微幅水流淘刷", pastSand: "淤砂量約 40%", warningNote: "上次調查左岸有淘刷。本次重點檢核：護岸基腳掏空深度有無擴大？沉砂池是否需要立即清淤？" },
-    { id: "H_004_1", stream: "中-004", name: "1號潛壩", station: "0K+565", type: "潛壩", period: "一期工程", pastRating: "A", pastDamage: "壩體結構完好", pastBase: "無掏空", pastSand: "工頂局部植生覆蓋", warningNote: "上次調查壩身良好。本次重點檢核：工頂雜木有無阻塞通水斷面？" },
-    { id: "H_004_2", stream: "中-004", name: "系列固床工", station: "0K+530~540", type: "固床工", period: "二期工程", pastRating: "C", pastDamage: "溪床坡度陡水流湍急，鋪底混凝土撞擊破損", pastBase: "基礎局部裸露/掏空嚴重", pastSand: "水流直沖基底", warningNote: "⚠️【前期核心病灶】0K+540 處前期已有基底裸露掏空！本次務必量測：掏空深度有無超過 0.5m？" },
-    { id: "H_004_3", stream: "中-004", name: "版橋及過水便道", station: "0K+325", type: "過水便道", period: "二期工程", pastRating: "B", pastDamage: "橋面尚完整", pastBase: "未設護岸銜接處易溢流", pastSand: "暴雨時土砂易漫過路面", warningNote: "上次調查橋孔淨空不足。本次重點檢核：橋樑通洪斷面是否受巨石淤積阻礙？" }
-  ];
-
-  const DEFAULT_CONFIG = {
-    projectName: "115年度博愛里特定水保區五年通盤檢討",
-    streams: ["中-003（松鶴一溪）", "中-004（松鶴二溪）"]
-  };
-
-  let sysConfig = JSON.parse(localStorage.getItem("INSPECT_SYS_CONFIG")) || DEFAULT_CONFIG;
-  let photoList = []; // 純照片物件清單 { id, base64, timestamp }
-  let currentEditingRecordId = null;
+  let photoList = [];
+  let currentRecordId = null;
   let globalCloudRecords = [];
+  let currentViewingRecord = null;
+
+  const DB_NAME = "InterviewPhotoDB", DB_STORE = "records_photos";
+
+  function openDB() {
+    return new Promise((resolve) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = e => e.target.result.createObjectStore(DB_STORE, { keyPath: "recordId" });
+      req.onsuccess = () => resolve(req.result);
+    });
+  }
+
+  async function savePhotosToDB(recordId, photos) {
+    if (!recordId) return;
+    try {
+      const db = await openDB();
+      const tx = db.transaction(DB_STORE, "readwrite");
+      tx.objectStore(DB_STORE).put({ recordId: recordId, photos: photos });
+    } catch(e){}
+  }
+
+  async function getPhotosFromDB(recordId) {
+    if (!recordId) return [];
+    return new Promise(async (resolve) => {
+      try {
+        const db = await openDB();
+        const tx = db.transaction(DB_STORE, "readonly");
+        const req = tx.objectStore(DB_STORE).get(recordId);
+        req.onsuccess = () => resolve(req.result ? req.result.photos : []);
+        req.onerror = () => resolve([]);
+      } catch(e) { resolve([]); }
+    });
+  }
+
+  async function deletePhotosFromDB(recordId) {
+    if (!recordId) return;
+    try {
+      const db = await openDB();
+      const tx = db.transaction(DB_STORE, "readwrite");
+      tx.objectStore(DB_STORE).delete(recordId);
+    } catch(e){}
+  }
+
+  function toggleDescBox(chk, boxId) {
+    const box = document.getElementById(boxId);
+    if (box) box.style.display = chk.checked ? "block" : "none";
+    autoSaveDraft();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("surveyDate").value = new Date().toISOString().split('T')[0];
+    updateLocalCountBadge();
+    const draftId = localStorage.getItem("CURRENT_INTV_ID");
+    if (draftId) loadLocalRecord(draftId, false);
+
+    // 【重要修復】只有填報區的表單欄位才會觸發 autoSaveDraft，後台與密碼框完全排除！
+    document.querySelectorAll(".survey-input").forEach(el => {
+      el.addEventListener("input", autoSaveDraft);
+      el.addEventListener("change", autoSaveDraft);
+    });
+  });
 
   function switchMainTab(tabId) {
     document.querySelectorAll(".palette-tab-btn").forEach((btn, idx) => {
@@ -680,313 +587,284 @@
     document.getElementById(tabId).classList.add("active");
   }
 
-  function verifyAdminPwd() {
-    if (document.getElementById("adminPwdInput").value.trim() === "9999") {
-      document.getElementById("adminAuthBox").style.display = "none";
-      document.getElementById("adminDashboard").style.display = "block";
-      fetchCloudData();
-    } else {
-      alert("密碼錯誤！請輸入 9999。");
-    }
-  }
+  // ================= 密碼驗證 (與 Google Sheets 雲端連動) =================
+  async function verifyAdminPwd() {
+    const pwdInput = document.getElementById("adminPwdInput").value.trim();
+    if (!pwdInput) return alert("請輸入密碼！");
 
-  function openHistoryModal() { renderHistoryList(); document.getElementById("historyModal").style.display = "flex"; }
-  function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
-
-  function renderHistoryList() {
-    const filter = document.getElementById("historyStreamFilter").value;
-    const container = document.getElementById("historyListContainer");
-    container.innerHTML = "";
-    HISTORICAL_STRUCTURES.filter(s => filter === "ALL" || s.stream === filter).forEach(item => {
-      const div = document.createElement("div");
-      div.className = "panel-card";
-      div.style.cssText = "padding:12px; margin-bottom:10px;";
-      div.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <b style="color:#382c23; font-size:1rem;">${item.name} (${item.station})</b>
-          <span class="grade-badge grade-${item.pastRating}">前期：${item.pastRating} 級</span>
-        </div>
-        <div style="font-size:0.86rem; color:#5c4f44; margin-top:6px;">
-          <span><b>類別：</b>${item.type} | <b>期程：</b>${item.period}</span>
-          <br><b>上次損壞：</b>${item.pastDamage}；${item.pastBase}
-          <div style="background:#fff9e6; border-left:4px solid var(--accent-khaki); padding:6px 10px; margin-top:6px; color:#856404; font-weight:bold; border-radius:4px;">${item.warningNote}</div>
-        </div>
-        <div style="text-align:right; margin-top:8px;">
-          <button type="button" class="btn-brush" onclick="applyHistoryToForm('${item.id}')">📥 帶入此座並啟動複查</button>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-  }
-
-  function applyHistoryToForm(histId) {
-    const item = HISTORICAL_STRUCTURES.find(h => h.id === histId);
-    if (!item) return;
-
-    const streamRad = Array.from(document.querySelectorAll("input[name='streamName']")).find(el => el.value.includes(item.stream));
-    if (streamRad) streamRad.checked = true;
-
-    document.getElementById("structureName").value = item.name;
-    document.getElementById("structureStation").value = item.station;
-    document.getElementById("structureType").value = item.type;
-
-    const alertBox = document.getElementById("historyAlertBox");
-    document.getElementById("historyAlertContent").innerHTML = `
-      <b>構造物：</b>${item.name} (${item.station})<br>
-      <b>前次評級：</b>${item.pastRating} 級 | <b>上次病況：</b>${item.pastDamage}；${item.pastBase}<br>
-      <span style="color:#b23b2a;">👉 <b>複查重點：</b>${item.warningNote}</span>
-    `;
-    alertBox.style.display = "block";
-
-    closeHistoryModal();
-    alert(`已帶入【${item.name}】！請實地檢核並拍照。`);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // ================= 雙指縮放燈箱手勢 =================
-  let viewerScale = 1, viewerPosX = 0, viewerPosY = 0, startDist = 0, initialScale = 1, isDragging = false, startX = 0, startY = 0, lastTap = 0;
-  function openFullscreenViewer(base64Src) {
-    document.getElementById("viewerImg").src = base64Src;
-    viewerScale = 1; viewerPosX = 0; viewerPosY = 0; updateImgTransform();
-    document.getElementById("fullscreenViewer").style.display = "flex";
-  }
-  function closeFullscreenViewer(e, force = false) {
-    if (force || e.target.id === "fullscreenViewer") {
-      document.getElementById("fullscreenViewer").style.display = "none";
-      document.getElementById("viewerImg").src = "";
-    }
-  }
-  function updateImgTransform() {
-    document.getElementById("viewerImg").style.transform = `translate(${viewerPosX}px, ${viewerPosY}px) scale(${viewerScale})`;
-  }
-
-  const vContainer = document.getElementById("fullscreenViewer");
-  vContainer.addEventListener("touchstart", (e) => {
-    if (e.touches.length === 2) {
-      startDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-      initialScale = viewerScale;
-    } else if (e.touches.length === 1) {
-      const now = Date.now();
-      if (now - lastTap < 300) {
-        viewerScale = viewerScale > 1.5 ? 1 : 2.5; viewerPosX = 0; viewerPosY = 0; updateImgTransform(); lastTap = 0; return;
-      }
-      lastTap = now; isDragging = true; startX = e.touches[0].pageX - viewerPosX; startY = e.touches[0].pageY - viewerPosY;
-    }
-  }, { passive: false });
-
-  vContainer.addEventListener("touchmove", (e) => {
-    e.preventDefault();
-    if (e.touches.length === 2 && startDist > 0) {
-      const currentDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-      viewerScale = Math.min(Math.max(initialScale * (currentDist / startDist), 0.8), 4.5);
-      updateImgTransform();
-    } else if (e.touches.length === 1 && isDragging && viewerScale > 1) {
-      viewerPosX = e.touches[0].pageX - startX; viewerPosY = e.touches[0].pageY - startY; updateImgTransform();
-    }
-  }, { passive: false });
-
-  vContainer.addEventListener("touchend", () => {
-    isDragging = false;
-    if (viewerScale < 1) { viewerScale = 1; viewerPosX = 0; viewerPosY = 0; updateImgTransform(); }
-  });
-
-  // ================= IndexedDB 照片快取資料庫 =================
-  const DB_NAME = "WaterConservancyStreamDB", DB_STORE = "records_photos";
-  function openDB() {
-    return new Promise((resolve) => {
-      const req = indexedDB.open(DB_NAME, 1);
-      req.onupgradeneeded = (e) => e.target.result.createObjectStore(DB_STORE, { keyPath: "recordId" });
-      req.onsuccess = () => resolve(req.result);
-    });
-  }
-  async function savePhotosToDB(recordId, photos) {
     try {
-      const db = await openDB();
-      const tx = db.transaction(DB_STORE, "readwrite");
-      tx.objectStore(DB_STORE).put({ recordId: recordId, photos: photos });
-    } catch (err) {}
-  }
-  async function getPhotosFromDB(recordId) {
-    return new Promise(async (resolve) => {
-      try {
-        const db = await openDB();
-        const tx = db.transaction(DB_STORE, "readonly");
-        const req = tx.objectStore(DB_STORE).get(recordId);
-        req.onsuccess = () => resolve(req.result ? req.result.photos : []);
-        req.onerror = () => resolve([]);
-      } catch (e) { resolve([]); }
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("surveyDate").value = new Date().toISOString().split('T')[0];
-    renderStreamOptions();
-    updateLocalCountBadge();
-
-    const draftId = localStorage.getItem("CURRENT_EDITING_ID");
-    if (draftId) loadRecordById(draftId, false);
-
-    document.querySelectorAll("input, select").forEach(el => {
-      el.addEventListener("input", autoSaveCurrentDraft);
-      el.addEventListener("change", autoSaveCurrentDraft);
-    });
-  });
-
-  function renderStreamOptions() {
-    const container = document.getElementById("streamOptionContainer");
-    container.innerHTML = "";
-    sysConfig.streams.forEach(st => {
-      const label = document.createElement("label");
-      label.className = "choice-item";
-      label.innerHTML = `<input type="radio" name="streamName" value="${st}"> <span>${st}</span>`;
-      container.appendChild(label);
-    });
+      const res = await fetch(GAS_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "VERIFY_ADMIN_PWD", password: pwdInput })
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        document.getElementById("adminAuthBox").style.display = "none";
+        document.getElementById("adminDashboard").style.display = "block";
+        fetchCloudData();
+      } else {
+        alert("密碼錯誤，請重新輸入！");
+      }
+    } catch (e) {
+      alert("驗證連線失敗，請檢查網路或 API 網址設定！");
+    }
   }
 
-  function autoSaveCurrentDraft() {
-    if (!currentEditingRecordId) currentEditingRecordId = "REC_" + Date.now();
-    const currentData = collectFormData(currentEditingRecordId);
-    localStorage.setItem("DRAFT_TEXT_" + currentEditingRecordId, JSON.stringify(currentData));
-    savePhotosToDB(currentEditingRecordId, photoList);
-    document.getElementById("saveStatus").innerText = `💾 草稿已於 ${new Date().toLocaleTimeString()} 保存至本機`;
+  function openChangePwdModal() { document.getElementById("changePwdModal").style.display = "flex"; }
+  function closeChangePwdModal() { document.getElementById("changePwdModal").style.display = "none"; }
+
+  async function submitChangePwd() {
+    const newPwd = document.getElementById("newAdminPwd").value.trim();
+    if (!newPwd) return alert("請輸入新密碼！");
+
+    try {
+      const res = await fetch(GAS_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "UPDATE_ADMIN_PWD", newPassword: newPwd })
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        alert("✅ 管理員密碼已成功更新至 Google Sheets 試算表！");
+        closeChangePwdModal();
+      } else {
+        alert("更新失敗：" + data.message);
+      }
+    } catch(e) {
+      alert("連線更新失敗：" + e.message);
+    }
+  }
+
+  // 【關鍵防呆】：受訪者姓名空白時，絕不自動建立任何草稿 ID！
+  function autoSaveDraft() {
+    const name = document.getElementById("interviewee").value.trim();
+    if (!name) return; // 沒填姓名，直接退出，不產生任何幽靈草稿
+
+    if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
+    const data = collectFormData(currentRecordId);
+    localStorage.setItem("INTV_DRAFT_" + currentRecordId, JSON.stringify(data));
+    savePhotosToDB(currentRecordId, photoList);
+    document.getElementById("saveStatus").innerText = `💾 草稿已於 ${new Date().toLocaleTimeString()} 暫存`;
   }
 
   function collectFormData(recordId) {
+    const impactArr = Array.from(document.querySelectorAll("input[name='chk_impact']:checked")).map(el => {
+      let val = el.value;
+      if (val === "土砂溢淹與淤積" && document.getElementById("note_impact_sand")?.value) val += `【${document.getElementById("note_impact_sand").value}】`;
+      if (val === "邊坡位移與構造損壞" && document.getElementById("note_impact_slope")?.value) val += `【${document.getElementById("note_impact_slope").value}】`;
+      if (val === "聯外交通與生活機能中斷" && document.getElementById("note_impact_life")?.value) val += `【${document.getElementById("note_impact_life").value}】`;
+      return val;
+    });
+
     return {
       id: recordId,
-      updatedAt: new Date().toLocaleString(),
-      projectName: sysConfig.projectName,
-      streamName: document.querySelector("input[name='streamName']:checked")?.value || "",
-      structureName: document.getElementById("structureName").value,
-      structureStation: document.getElementById("structureStation").value,
-      structureType: document.getElementById("structureType").value,
+      projectName: document.getElementById("projectName").value,
+      streamName: document.getElementById("streamName").value,
       surveyDate: document.getElementById("surveyDate").value,
       surveyor: document.getElementById("surveyor").value,
+      interviewee: document.getElementById("interviewee").value.trim(),
+      phone: document.getElementById("phone").value,
+      address: document.getElementById("address").value,
       coordX: document.getElementById("coordX").value,
       coordY: document.getElementById("coordY").value,
-      chk_main: Array.from(document.querySelectorAll("input[name='chk_main']:checked")).map(el => el.value),
-      chk_base: Array.from(document.querySelectorAll("input[name='chk_base']:checked")).map(el => el.value),
-      chk_sand: Array.from(document.querySelectorAll("input[name='chk_sand']:checked")).map(el => el.value),
-      mainDamage: Array.from(document.querySelectorAll("input[name='chk_main']:checked")).map(el => el.value).join("；") || "良好無損",
-      baseDamage: Array.from(document.querySelectorAll("input[name='chk_base']:checked")).map(el => el.value).join("；") || "基礎穩固，無淘刷",
-      sandCondition: Array.from(document.querySelectorAll("input[name='chk_sand']:checked")).map(el => el.value).join("；") || "未淤積（尚有庫容）",
-      overallRating: document.querySelector("input[name='overallRating']:checked")?.value || "",
-      actionPlan: document.querySelector("input[name='actionPlan']:checked")?.value || ""
+      landRight: document.querySelector("input[name='landRight']:checked")?.value || "",
+      landRightNote: document.getElementById("landRightNote").value,
+      targetType: document.querySelector("input[name='targetType']:checked")?.value || "",
+      targetTypeNote: document.getElementById("targetTypeNote").value,
+      seniority: document.getElementById("seniority").value,
+      startYear: document.getElementById("startYear").value,
+      disasterHistory: Array.from(document.querySelectorAll("input[name='chk_disaster']:checked")).map(e => e.value).join("；"),
+      disasterNote: document.getElementById("disasterNote").value,
+      impactSummary: impactArr.join("；"),
+      interviewDetail: document.getElementById("interviewDetail").value,
+      engineeringFeedback: document.querySelector("input[name='engineeringFeedback']:checked")?.value || "",
+      notes: {
+        sand: document.getElementById("note_impact_sand")?.value || "",
+        slope: document.getElementById("note_impact_slope")?.value || "",
+        life: document.getElementById("note_impact_life")?.value || ""
+      }
     };
   }
 
-  function saveCurrentStructure() {
-    const sName = document.getElementById("structureName").value.trim();
-    if (!sName) return alert("請填寫構造物名稱再存檔！");
+  function saveCurrentInterview() {
+    const name = document.getElementById("interviewee").value.trim();
+    if (!name) return alert("⚠️ 請務必填寫「受訪者姓名/商號」再存檔！");
 
-    if (!currentEditingRecordId) currentEditingRecordId = "REC_" + Date.now();
-    const data = collectFormData(currentEditingRecordId);
+    if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
+    const data = collectFormData(currentRecordId);
 
-    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-    const existIdx = allRecords.findIndex(r => r.id === currentEditingRecordId);
-    if (existIdx >= 0) allRecords[existIdx] = data;
-    else allRecords.push(data);
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    const idx = all.findIndex(r => r.id === currentRecordId);
+    if (idx >= 0) all[idx] = data; else all.push(data);
 
-    localStorage.setItem("ALL_STRUCTURE_RECORDS", JSON.stringify(allRecords));
-    savePhotosToDB(currentEditingRecordId, photoList);
+    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
+    localStorage.setItem("ALL_INTERVIEW_RECORDS", JSON.stringify(all));
+    savePhotosToDB(currentRecordId, photoList);
 
-    alert(`✅ 已儲存「${data.structureName}」！已切換至空白頁供填寫下一座。`);
+    alert(`✅ 已儲存「${data.interviewee}」訪談紀錄！切換至空白頁供填寫下一戶。`);
     startNewBlankRecord();
   }
 
   function startNewBlankRecord() {
-    currentEditingRecordId = "REC_" + Date.now();
-    localStorage.setItem("CURRENT_EDITING_ID", currentEditingRecordId);
+    currentRecordId = null; // 重設為 null，避免空白表單帶有 ID
+    localStorage.removeItem("CURRENT_INTV_ID");
 
-    document.getElementById("structureName").value = "";
-    document.getElementById("structureStation").value = "";
+    document.getElementById("interviewee").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("address").value = "";
     document.getElementById("coordX").value = "";
     document.getElementById("coordY").value = "";
+    document.getElementById("landRightNote").value = "";
+    document.getElementById("targetTypeNote").value = "";
+    document.getElementById("startYear").value = "";
+    document.getElementById("disasterNote").value = "";
+    document.getElementById("interviewDetail").value = "";
 
-    document.querySelectorAll("input[type='checkbox']").forEach(el => el.checked = false);
-    document.querySelectorAll("input[name='overallRating']").forEach(el => el.checked = false);
-    document.querySelectorAll("input[name='actionPlan']").forEach(el => el.checked = false);
+    document.querySelectorAll("input[type='radio'], input[type='checkbox']").forEach(e => e.checked = false);
+    
+    ["note_impact_sand", "note_impact_slope", "note_impact_life"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = "";
+    });
+    ["box_impact_sand", "box_impact_slope", "box_impact_life"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
 
-    document.getElementById("historyAlertBox").style.display = "none";
     photoList = [];
-    renderPhotoStream();
-    document.getElementById("currentEditingIndicator").innerText = "📝 目前狀態：填寫新構造物紀錄";
+    renderPhotos();
+    document.getElementById("currentEditingIndicator").innerText = "📝 填報新受訪對象";
+    document.getElementById("saveStatus").innerText = "💾 草稿已自動保存至本機";
     updateLocalCountBadge();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  async function loadRecordById(recordId, shouldCloseModal = true) {
-    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-    let record = allRecords.find(r => r.id === recordId);
+  async function loadLocalRecord(recordId, shouldCloseModal = true) {
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    let record = all.find(r => r.id === recordId);
     if (!record) {
-      const draft = localStorage.getItem("DRAFT_TEXT_" + recordId);
+      const draft = localStorage.getItem("INTV_DRAFT_" + recordId);
       if (draft) record = JSON.parse(draft);
     }
-    if (!record) return;
+    if (!record || !record.interviewee) return;
 
-    currentEditingRecordId = record.id;
-    localStorage.setItem("CURRENT_EDITING_ID", currentEditingRecordId);
+    currentRecordId = record.id;
+    localStorage.setItem("CURRENT_INTV_ID", currentRecordId);
 
-    if (record.streamName) {
-      const rad = document.querySelector(`input[name='streamName'][value='${record.streamName}']`);
-      if (rad) rad.checked = true;
-    }
-    document.getElementById("structureName").value = record.structureName || "";
-    document.getElementById("structureStation").value = record.structureStation || "";
-    document.getElementById("structureType").value = record.structureType || "梳子壩";
+    document.getElementById("projectName").value = record.projectName || "";
+    document.getElementById("streamName").value = record.streamName || "中-003（松鶴一溪）";
     document.getElementById("surveyDate").value = record.surveyDate || "";
     document.getElementById("surveyor").value = record.surveyor || "";
+    document.getElementById("interviewee").value = record.interviewee || "";
+    document.getElementById("phone").value = record.phone || "";
+    document.getElementById("address").value = record.address || "";
     document.getElementById("coordX").value = record.coordX || "";
     document.getElementById("coordY").value = record.coordY || "";
+    document.getElementById("landRightNote").value = record.landRightNote || "";
+    document.getElementById("targetTypeNote").value = record.targetTypeNote || "";
+    document.getElementById("seniority").value = record.seniority || "20 年以上";
+    document.getElementById("startYear").value = record.startYear || "";
+    document.getElementById("disasterNote").value = record.disasterNote || "";
+    document.getElementById("interviewDetail").value = record.interviewDetail || "";
 
-    ["chk_main", "chk_base", "chk_sand"].forEach(group => {
-      document.querySelectorAll(`input[name='${group}']`).forEach(el => el.checked = false);
-      (record[group] || []).forEach(v => {
-        const el = document.querySelector(`input[name='${group}'][value='${v}']`);
-        if (el) el.checked = true;
-      });
+    if (record.landRight) {
+      const rad = document.querySelector(`input[name='landRight'][value='${record.landRight}']`);
+      if (rad) rad.checked = true;
+    }
+    if (record.targetType) {
+      const rad = document.querySelector(`input[name='targetType'][value='${record.targetType}']`);
+      if (rad) rad.checked = true;
+    }
+
+    if (record.engineeringFeedback) {
+      const efRad = document.querySelector(`input[name='engineeringFeedback'][value='${record.engineeringFeedback}']`);
+      if (efRad) efRad.checked = true;
+    }
+
+    document.querySelectorAll("input[name='chk_disaster']").forEach(e => e.checked = false);
+    (record.disasterHistory || "").split("；").forEach(val => {
+      const chk = document.querySelector(`input[name='chk_disaster'][value='${val}']`);
+      if (chk) chk.checked = true;
     });
 
-    if (record.overallRating) {
-      const rad = document.querySelector(`input[name='overallRating'][value='${record.overallRating}']`);
-      if (rad) rad.checked = true;
+    document.querySelectorAll("input[name='chk_impact']").forEach(e => e.checked = false);
+    ["box_impact_sand", "box_impact_slope", "box_impact_life"].forEach(id => document.getElementById(id).style.display = "none");
+    
+    if (record.notes) {
+      if (document.getElementById("note_impact_sand")) document.getElementById("note_impact_sand").value = record.notes.sand || "";
+      if (document.getElementById("note_impact_slope")) document.getElementById("note_impact_slope").value = record.notes.slope || "";
+      if (document.getElementById("note_impact_life")) document.getElementById("note_impact_life").value = record.notes.life || "";
     }
-    if (record.actionPlan) {
-      const rad = document.querySelector(`input[name='actionPlan'][value='${record.actionPlan}']`);
-      if (rad) rad.checked = true;
-    }
+
+    (record.impactSummary || "").split("；").forEach(item => {
+      if (item.includes("土砂溢淹與淤積")) {
+        const chk = document.querySelector("input[name='chk_impact'][value='土砂溢淹與淤積']");
+        if (chk) { chk.checked = true; document.getElementById("box_impact_sand").style.display = "block"; }
+      }
+      if (item.includes("邊坡位移與構造損壞")) {
+        const chk = document.querySelector("input[name='chk_impact'][value='邊坡位移與構造損壞']");
+        if (chk) { chk.checked = true; document.getElementById("box_impact_slope").style.display = "block"; }
+      }
+      if (item.includes("聯外交通與生活機能中斷")) {
+        const chk = document.querySelector("input[name='chk_impact'][value='聯外交通與生活機能中斷']");
+        if (chk) { chk.checked = true; document.getElementById("box_impact_life").style.display = "block"; }
+      }
+    });
 
     photoList = await getPhotosFromDB(record.id);
-    renderPhotoStream();
+    renderPhotos();
 
-    document.getElementById("currentEditingIndicator").innerText = `🔍 正在回溯修改：【${record.structureName}】`;
+    document.getElementById("currentEditingIndicator").innerText = `🔍 正在回溯修改：【${record.interviewee}】`;
     if (shouldCloseModal) closeLocalListModal();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function deleteLocalRecord(recordId, name) {
+    if (!confirm(`⚠️ 確定要刪除「${name}」的訪談資料嗎？\n刪除後此筆紀錄與其照片將自本機永久移除！`)) return;
+
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    all = all.filter(r => r.id !== recordId);
+    localStorage.setItem("ALL_INTERVIEW_RECORDS", JSON.stringify(all));
+
+    localStorage.removeItem("INTV_DRAFT_" + recordId);
+    await deletePhotosFromDB(recordId);
+
+    if (currentRecordId === recordId) {
+      startNewBlankRecord();
+    }
+
+    updateLocalCountBadge();
+    renderLocalList();
+    alert(`已成功刪除「${name}」！`);
   }
 
   function openLocalListModal() { renderLocalList(); document.getElementById("localListModal").style.display = "flex"; }
   function closeLocalListModal() { document.getElementById("localListModal").style.display = "none"; }
 
   function renderLocalList() {
-    const container = document.getElementById("localRecordsContainer");
+    const container = document.getElementById("localRecordsList");
     container.innerHTML = "";
-    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-    if (!allRecords.length) {
-      container.innerHTML = "<p style='text-align:center; color:#888;'>本機尚未有存檔紀錄</p>";
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
+    if (!all.length) {
+      container.innerHTML = "<p style='text-align:center; color:#888;'>本機尚無暫存訪談紀錄</p>";
       return;
     }
-    allRecords.forEach((rec, idx) => {
+    all.forEach((rec, idx) => {
       const div = document.createElement("div");
       div.className = "panel-card";
-      div.style.cssText = "padding:12px; margin-bottom:10px;";
+      div.style.cssText = "padding:10px; margin-bottom:8px;";
       div.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <b>${idx+1}. ${rec.structureName}</b> (${rec.streamName})
-            <span class="grade-badge grade-${rec.overallRating}">${rec.overallRating} 級</span>
-            <br><small style="color:var(--oil-muted);">樁號: ${rec.structureStation || "-"} | 日期: ${rec.surveyDate}</small>
+            <b>${idx+1}. ${rec.interviewee}</b> (${rec.streamName})
+            <br><small style="color:var(--oil-muted);">門牌: ${rec.address || "-"} | 日期: ${rec.surveyDate}</small>
           </div>
-          <button type="button" class="btn-brush" onclick="loadRecordById('${rec.id}')">載入回溯</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn-brush" onclick="loadLocalRecord('${rec.id}')">載入回溯</button>
+            <button type="button" class="btn-danger-sm" onclick="deleteLocalRecord('${rec.id}', '${rec.interviewee}')">🗑️ 刪除</button>
+          </div>
         </div>
       `;
       container.appendChild(div);
@@ -994,300 +872,315 @@
   }
 
   function updateLocalCountBadge() {
-    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-    document.getElementById("recordCountBadge").innerText = allRecords.length;
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
+    document.getElementById("recordCountBadge").innerText = all.length;
   }
 
-  // ================= 現場拍照上傳 (無張數限制，無多餘文字說明) =================
-  function triggerCameraInput() { document.getElementById("cameraInput").click(); }
-  function triggerAlbumInput() { document.getElementById("albumInput").click(); }
-
-  function handleFileSelected(input) {
-    const files = Array.from(input.files);
-    if (!files.length) return;
-    files.forEach(file => compressAndStorePhoto(file));
+  function handlePhotoUpload(input) {
+    Array.from(input.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const MAX_WIDTH = 1200;
+          let w = img.width, h = img.height;
+          if (w > MAX_WIDTH) { h = Math.round((h * MAX_WIDTH) / w); w = MAX_WIDTH; }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          photoList.push({ id: Date.now() + "_" + Math.random().toString(36).substr(2, 4), base64: canvas.toDataURL("image/jpeg", 0.75) });
+          renderPhotos();
+          autoSaveDraft();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
     input.value = "";
   }
 
-  function compressAndStorePhoto(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const MAX_WIDTH = 1200;
-        let width = img.width, height = img.height;
-        if (width > MAX_WIDTH) {
-          height = Math.round((height * MAX_WIDTH) / width);
-          width = MAX_WIDTH;
-        }
-        canvas.width = width; canvas.height = height;
-        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-
-        const photoObj = {
-          id: Date.now() + "_" + Math.random().toString(36).substr(2, 5),
-          base64: canvas.toDataURL("image/jpeg", 0.72),
-          timestamp: new Date().toLocaleString()
-        };
-
-        photoList.push(photoObj);
-        renderPhotoStream();
-        autoSaveCurrentDraft();
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function renderPhotoStream() {
-    const container = document.getElementById("photoStreamContainer");
+  function renderPhotos() {
+    const container = document.getElementById("photoContainer");
     container.innerHTML = "";
-    photoList.forEach((item, index) => {
+    photoList.forEach((p, idx) => {
       const div = document.createElement("div");
       div.className = "photo-thumb-wrap";
       div.innerHTML = `
-        <button type="button" class="btn-photo-del" onclick="deletePhoto(${index})">×</button>
-        <img src="${item.base64}" title="點擊放大" onclick="openFullscreenViewer('${item.base64}')">
+        <button type="button" class="btn-photo-del" onclick="photoList.splice(${idx}, 1); renderPhotos(); autoSaveDraft();">×</button>
+        <img src="${p.base64}">
       `;
       container.appendChild(div);
     });
-  }
-
-  function deletePhoto(idx) {
-    if (confirm("確定刪除此張照片？")) {
-      photoList.splice(idx, 1);
-      renderPhotoStream();
-      autoSaveCurrentDraft();
-    }
   }
 
   function fetchCurrentGPS() {
-    if (!navigator.geolocation) return alert("手機不支援 GPS 定位");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        document.getElementById("coordX").value = pos.coords.longitude.toFixed(6);
-        document.getElementById("coordY").value = pos.coords.latitude.toFixed(6);
-        autoSaveCurrentDraft();
-        alert("已成功取得 GPS 座標！");
-      },
-      (err) => alert("定位失敗: " + err.message),
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
+    if (!navigator.geolocation) return alert("不支援 GPS");
+    navigator.geolocation.getCurrentPosition(pos => {
+      document.getElementById("coordX").value = pos.coords.longitude.toFixed(6);
+      document.getElementById("coordY").value = pos.coords.latitude.toFixed(6);
+      autoSaveDraft();
+      alert("GPS 定位成功！");
+    }, err => alert("定位失敗: " + err.message));
   }
 
-  // ================= 匯出 CSV 與 獨立圖文 HTML =================
-  function exportSingleCSV() {
-    const d = collectFormData(currentEditingRecordId);
-    let csv = "\uFEFF專案名稱,調查溪流,構造物名稱,樁號,類別,勘查日期,勘查人員,座標X,座標Y,結構主體現況,基礎兩翼,通砂淤積現況,效能綜合評級,建議處理對策\n";
-    csv += `"${d.projectName}","${d.streamName}","${d.structureName}","${d.structureStation}","${d.structureType}","${d.surveyDate}","${d.surveyor}","${d.coordX}","${d.coordY}","${d.mainDamage}","${d.baseDamage}","${d.sandCondition}","${d.overallRating} 級","${d.actionPlan}"\n`;
-    downloadFile(csv, `體檢紀錄_${d.streamName}_${d.structureName}.csv`, "text/csv;charset=utf-8;");
-  }
-
-  function exportSingleHTML() {
-    const d = collectFormData(currentEditingRecordId);
-    let photoBlock = "";
-    if (photoList.length > 0) {
-      photoBlock += `<h3 style="color:#382c23; border-bottom:1px solid #dcd3c3; padding-bottom:4px; margin-top:16px;">現場照片紀錄 (${photoList.length} 張)</h3><div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:10px;">`;
-      photoList.forEach(p => {
-        photoBlock += `
-          <div style="border:1px solid #dcd3c3; padding:5px; border-radius:6px; background:#fff;">
-            <img src="${p.base64}" style="width:100%; height:140px; object-fit:cover; border-radius:4px;">
-          </div>
-        `;
-      });
-      photoBlock += `</div>`;
-    }
-
-    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>${d.structureName} 現場體檢紀錄卡</title>
-      <style>body{font-family:"標楷體","Noto Serif TC",serif; padding:20px; max-width:850px; margin:0 auto; background:#faf7f0; color:#2c2523;} table{width:100%; border-collapse:collapse; margin-top:10px;} th,td{border:1px solid #786d63; padding:6px 8px; font-size:14px;} th{background:#eee6d8; width:22%; text-align:center;}</style></head>
-      <body>
-        <h2 style="text-align:center; margin-bottom:2px;">水工構造物現場體檢紀錄卡</h2>
-        <p style="text-align:center; font-size:13px; margin-top:0; color:#6d6257;">計畫名稱：${d.projectName}</p>
-        <table>
-          <tr><th>調查溪流</th><td>${d.streamName}</td><th>構造物名稱</th><td>${d.structureName}</td></tr>
-          <tr><th>施設樁號</th><td>${d.structureStation}</td><th>類別</th><td>${d.structureType}</td></tr>
-          <tr><th>勘查日期</th><td>${d.surveyDate}</td><th>勘查人員</th><td>${d.surveyor}</td></tr>
-          <tr><th>GPS 座標</th><td colspan="3">X: ${d.coordX || "-"} , Y: ${d.coordY || "-"}</td></tr>
-          <tr><th>結構主體現況</th><td colspan="3">${d.mainDamage}</td></tr>
-          <tr><th>基礎與兩翼</th><td colspan="3">${d.baseDamage}</td></tr>
-          <tr><th>通砂與淤積現況</th><td colspan="3">${d.sandCondition}</td></tr>
-          <tr><th>效能綜合評級</th><td colspan="3"><b>${d.overallRating} 級</b></td></tr>
-          <tr><th>建議處理對策</th><td colspan="3"><b>${d.actionPlan}</b></td></tr>
-        </table>
-        ${photoBlock || "<p style='color:#786d63;'>（無照片紀錄）</p>"}
-      </body></html>`;
-
-    downloadFile(html, `體檢報告_${d.streamName}_${d.structureName}.html`, "text/html;charset=utf-8;");
-  }
-
-  function downloadFile(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    a.click();
-  }
-
-  // ================= 雲端同步上傳 (GAS API) =================
+  // 同步本戶至雲端
   async function syncCurrentToCloud() {
-    const sName = document.getElementById("structureName").value.trim();
-    if (!sName) return alert("請先填寫構造物名稱！");
-    const data = collectFormData(currentEditingRecordId);
+    const name = document.getElementById("interviewee").value.trim();
+    if (!name) return alert("⚠️ 同步失敗：受訪者姓名/商號為必填項，請填寫後再同步！");
+
+    if (!currentRecordId) currentRecordId = "INTV_" + Date.now();
+    const data = collectFormData(currentRecordId);
     data.photos = photoList;
 
     try {
-      await fetch(GAS_API_URL, {
-        method: "POST", mode: "no-cors",
+      const res = await fetch(GAS_API_URL, {
+        method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data)
       });
-      alert(`🎉 恭喜！「${data.structureName}」已順利同步至中央雲端！`);
-    } catch (e) {
-      alert("上傳失敗: " + e.message);
-    }
+      const result = await res.json();
+      if (result.status === "success") {
+        alert(`🎉 恭喜！「${data.interviewee}」訪談紀錄已同步至 Google 雲端！`);
+      } else {
+        alert("同步出錯：" + result.message);
+      }
+    } catch(e) { alert("同步失敗: " + e.message); }
   }
 
+  // 一鍵同步全部本機
   async function syncAllLocalToCloud() {
-    let allRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-    if (!allRecords.length) return alert("本機無存檔紀錄！");
-    if (!confirm(`確定將本機共 ${allRecords.length} 座構造物資料整批同步至雲端嗎？`)) return;
+    let all = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+    all = all.filter(r => r.interviewee && r.interviewee.trim() !== "");
 
-    for (let r of allRecords) {
+    if (!all.length) return alert("⚠️ 本機無有效訪談紀錄可供同步！");
+    if (!confirm(`確定將本機共 ${all.length} 戶有效訪談資料同步至雲端嗎？`)) return;
+
+    let successCount = 0;
+    for (let r of all) {
       r.photos = await getPhotosFromDB(r.id);
-      await fetch(GAS_API_URL, {
-        method: "POST", mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(r)
-      });
+      try {
+        const res = await fetch(GAS_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(r)
+        });
+        const json = await res.json();
+        if (json.status === "success") successCount++;
+      } catch(e){}
     }
-    alert("🎉 本機所有構造物資料已全數同步至中央雲端！");
+    alert(`🎉 同步完成！共成功同步 ${successCount} 戶訪談資料！`);
     closeLocalListModal();
   }
 
-  // ================= 後台總覽管理 =================
+  // 刷新雲端資料
   async function fetchCloudData() {
-    const container = document.getElementById("adminRecordsList");
-    container.innerHTML = "<p style='text-align:center; color:var(--oil-muted);'>正在獲取全體畫稿成果...</p>";
+    const container = document.getElementById("cloudRecordsContainer");
+    container.innerHTML = "<p style='text-align:center;'>正在抓取雲端訪談紀錄...</p>";
     try {
       const res = await fetch(GAS_API_URL);
       const result = await res.json();
-      globalCloudRecords = result.records || [];
-      renderAdminDashboard();
-    } catch (err) {
-      globalCloudRecords = JSON.parse(localStorage.getItem("ALL_STRUCTURE_RECORDS") || "[]");
-      renderAdminDashboard();
+      const list = result.records || [];
+      globalCloudRecords = list.filter(r => r.interviewee && r.interviewee.trim() !== "");
+      renderCloudDashboard();
+    } catch(e) {
+      let localAll = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
+      globalCloudRecords = localAll.filter(r => r.interviewee && r.interviewee.trim() !== "");
+      renderCloudDashboard();
     }
   }
 
-  function renderAdminDashboard() {
+  function renderCloudDashboard() {
+    globalCloudRecords = globalCloudRecords.filter(r => r.interviewee && r.interviewee.trim() !== "");
+
     document.getElementById("statTotalCount").innerText = globalCloudRecords.length;
-    const surveyors = new Set(globalCloudRecords.map(r => r.surveyor).filter(Boolean));
-    document.getElementById("statSurveyorCount").innerText = surveyors.size;
-    document.getElementById("statCountA").innerText = globalCloudRecords.filter(r => r.overallRating === "A").length;
-    document.getElementById("statCountCD").innerText = globalCloudRecords.filter(r => r.overallRating === "C" || r.overallRating === "D").length;
+    document.getElementById("stat003Count").innerText = globalCloudRecords.filter(r => (r.streamName || "").includes("中-003")).length;
+    document.getElementById("stat004Count").innerText = globalCloudRecords.filter(r => (r.streamName || "").includes("中-004")).length;
 
-    const surveyorSelect = document.getElementById("filterSurveyor");
-    surveyorSelect.innerHTML = '<option value="ALL">全部人員</option>';
-    surveyors.forEach(s => surveyorSelect.innerHTML += `<option value="${s}">${s}</option>`);
-
-    const streams = new Set(globalCloudRecords.map(r => r.streamName).filter(Boolean));
-    const streamSelect = document.getElementById("filterStream");
-    streamSelect.innerHTML = '<option value="ALL">全部溪流</option>';
-    streams.forEach(st => streamSelect.innerHTML += `<option value="${st}">${st}</option>`);
-
-    applyAdminFilters();
-  }
-
-  function applyAdminFilters() {
-    const fSurveyor = document.getElementById("filterSurveyor").value;
-    const fStream = document.getElementById("filterStream").value;
-    const fRating = document.getElementById("filterRating").value;
-
-    const filtered = globalCloudRecords.filter(r => {
-      const matchS = fSurveyor === "ALL" || r.surveyor === fSurveyor;
-      const matchSt = fStream === "ALL" || r.streamName === fStream;
-      const matchR = fRating === "ALL" || r.overallRating === fRating;
-      return matchS && matchSt && matchR;
-    });
-
-    const container = document.getElementById("adminRecordsList");
+    const container = document.getElementById("cloudRecordsContainer");
     container.innerHTML = "";
-
-    if (!filtered.length) {
-      container.innerHTML = "<p style='text-align:center; color:var(--oil-muted);'>查無符合條件的體檢紀錄</p>";
+    if (!globalCloudRecords.length) {
+      container.innerHTML = "<p style='text-align:center; color:#888;'>尚無有效雲端訪談資料</p>";
       return;
     }
 
-    filtered.forEach((r, idx) => {
+    globalCloudRecords.forEach((r, idx) => {
       const div = document.createElement("div");
       div.className = "panel-card";
-      div.style.cssText = "padding:14px; margin-bottom:12px;";
-      const pCount = (r.photos || []).length;
+      div.style.cssText = "padding:12px; margin-bottom:10px;";
       div.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ece4d5; padding-bottom:6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ede4d6; padding-bottom:6px;">
           <div>
-            <b style="font-size:1.05rem; color:#382c23;">${idx+1}. ${r.structureName}</b>
-            <span style="font-size:0.8rem; background:#f4ede1; padding:3px 8px; border-radius:6px; margin-left:6px; color:#5c4f44;">${r.streamName}</span>
-            <span class="grade-badge grade-${r.overallRating}" style="margin-left:6px;">${r.overallRating} 級</span>
+            <b>${idx+1}. ${r.interviewee}</b> (${r.streamName || "未指定溪流"})
+            <span style="font-size:0.8rem; background:#eee; padding:2px 6px; border-radius:4px; margin-left:6px;">${r.targetType || "住戶"}</span>
           </div>
-          <button type="button" class="btn-brush" onclick="viewRecordDetails('${r.id}')">🔍 檢視圖文</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn-brush" onclick="viewDetailCard('${r.id}')">🔍 查看詳細訪談卡</button>
+            <button type="button" class="btn-brush" style="background:#557862; color:#fff;" onclick="openEditModal('${r.id}')">✏️ 修改內容</button>
+          </div>
         </div>
-        <div style="font-size:0.88rem; color:#5c4f44; margin-top:8px;">
-          <span><b>勘查人員：</b>${r.surveyor || "未填"}</span> | 
-          <span><b>樁號：</b>${r.structureStation || "-"}</span> | 
-          <span><b>建議對策：</b>${r.actionPlan || "-"}</span> | 
-          <span><b>照片：</b>${pCount} 張</span>
-          <br><small style="color:#8a7c70;">主體: ${r.mainDamage} | 基礎: ${r.baseDamage} | 通砂: ${r.sandCondition}</small>
+        <div style="font-size:0.88rem; color:#5c4f44; margin-top:6px;">
+          <span><b>電話：</b>${r.phone || "-"}</span> | 
+          <span><b>門牌：</b>${r.address || "-"}</span> | 
+          <span><b>訪談員：</b>${r.surveyor || "-"}</span> | 
+          <span><b>日期：</b>${r.surveyDate || "-"}</span>
+          <br><small style="color:#786d63;">歷次災害: ${r.disasterHistory || "無"} | 權屬: ${r.landRight || "未填"}</small>
         </div>
       `;
       container.appendChild(div);
     });
   }
 
-  async function viewRecordDetails(recordId) {
-    let r = globalCloudRecords.find(x => x.id === recordId);
+  function openEditModal(recordId) {
+    const r = globalCloudRecords.find(x => String(x.id).trim() === String(recordId).trim());
+    if (!r) return;
+    document.getElementById("edit_id").value = r.id;
+    document.getElementById("edit_interviewee").value = r.interviewee || "";
+    document.getElementById("edit_phone").value = r.phone || "";
+    document.getElementById("edit_surveyDate").value = r.surveyDate || "";
+    document.getElementById("edit_surveyor").value = r.surveyor || "";
+    document.getElementById("edit_address").value = r.address || "";
+    document.getElementById("edit_landRight").value = r.landRight || "其他";
+    document.getElementById("edit_landRightNote").value = r.landRightNote || "";
+    document.getElementById("edit_targetType").value = r.targetType || "住宅/聚落住戶";
+    document.getElementById("edit_startYear").value = r.startYear || "";
+    document.getElementById("edit_impactSummary").value = r.impactSummary || "";
+    document.getElementById("edit_interviewDetail").value = r.interviewDetail || "";
+    document.getElementById("edit_engineeringFeedback").value = r.engineeringFeedback || "成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升";
+    document.getElementById("editModal").style.display = "flex";
+  }
+
+  function closeEditModal() { document.getElementById("editModal").style.display = "none"; }
+
+  async function saveEditedRecordToCloud() {
+    const id = document.getElementById("edit_id").value;
+    const r = globalCloudRecords.find(x => String(x.id).trim() === String(id).trim());
     if (!r) return;
 
-    document.getElementById("detailModalTitle").innerText = `🔍 ${r.structureName} 現場調查詳情卡`;
-    let photos = r.photos || [];
-    if (!photos.length) photos = await getPhotosFromDB(r.id);
+    r.interviewee = document.getElementById("edit_interviewee").value.trim();
+    if (!r.interviewee) return alert("受訪者姓名不能為空！");
 
-    let photoHTML = "";
-    photos.forEach(p => {
-      photoHTML += `
-        <div style="border:1px solid #dcd3c3; padding:5px; border-radius:6px; background:#fff;">
-          <img src="${p.base64}" style="width:100%; height:120px; object-fit:cover; border-radius:4px; cursor:zoom-in;" onclick="openFullscreenViewer('${p.base64}')">
-        </div>
-      `;
+    r.phone = document.getElementById("edit_phone").value;
+    r.surveyDate = document.getElementById("edit_surveyDate").value;
+    r.surveyor = document.getElementById("edit_surveyor").value;
+    r.address = document.getElementById("edit_address").value;
+    r.landRight = document.getElementById("edit_landRight").value;
+    r.landRightNote = document.getElementById("edit_landRightNote").value;
+    r.targetType = document.getElementById("edit_targetType").value;
+    r.startYear = document.getElementById("edit_startYear").value;
+    r.impactSummary = document.getElementById("edit_impactSummary").value;
+    r.interviewDetail = document.getElementById("edit_interviewDetail").value;
+    r.engineeringFeedback = document.getElementById("edit_engineeringFeedback").value;
+
+    try {
+      const res = await fetch(GAS_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(r)
+      });
+      const result = await res.json();
+      if (result.status === "success") {
+        alert(`✅ 已成功更新「${r.interviewee}」的訪談內容並同步至 Google 試算表！`);
+        closeEditModal();
+        renderCloudDashboard();
+      } else {
+        alert("更新出錯：" + result.message);
+      }
+    } catch(e) {
+      alert("更新失敗: " + e.message);
+    }
+  }
+
+  async function viewDetailCard(recordId) {
+    let r = globalCloudRecords.find(x => String(x.id).trim() === String(recordId).trim());
+    if (!r) return;
+    currentViewingRecord = r;
+
+    document.getElementById("detailModalTitle").innerText = `📄 ${r.interviewee} 現地訪談調查表`;
+    let photos = r.photos;
+    if (!photos || (Array.isArray(photos) && !photos.length)) {
+      photos = await getPhotosFromDB(r.id);
+      r.photos = photos;
+    }
+
+    let pHTML = "";
+    (Array.isArray(photos) ? photos : Object.values(photos)).forEach(p => {
+      pHTML += `<div style="border:1px solid #ddd; padding:4px; border-radius:6px;"><img src="${p.base64}" style="width:100%; height:120px; object-fit:cover; border-radius:4px;"></div>`;
     });
 
     document.getElementById("detailModalBody").innerHTML = `
-      <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.9rem;">
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0; width:25%;"><b>調查溪流</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.streamName}</td><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0; width:25%;"><b>設施樁號</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.structureStation}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>勘查人員</b></td><td style="padding:6px; border:1px solid #dcd3c3;">${r.surveyor}</td><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>效能綜合評級</b></td><td style="padding:6px; border:1px solid #dcd3c3;"><b>${r.overallRating} 級</b></td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>GPS 座標</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">X: ${r.coordX || "-"} , Y: ${r.coordY || "-"}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>結構主體現況</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.mainDamage}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>基礎與兩翼</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.baseDamage}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>通砂淤積狀態</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;">${r.sandCondition}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #dcd3c3; background:#faf7f0;"><b>建議處理對策</b></td><td colspan="3" style="padding:6px; border:1px solid #dcd3c3;"><b>${r.actionPlan}</b></td></tr>
+      <table style="width:100%; border-collapse:collapse; font-size:0.92rem; margin-bottom:12px;">
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb; width:25%;"><b>受訪者姓名</b></td><td style="padding:6px; border:1px solid #ddd;">${r.interviewee}</td><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb; width:25%;"><b>聯絡電話</b></td><td style="padding:6px; border:1px solid #ddd;">${r.phone || "-"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>調查溪流</b></td><td style="padding:6px; border:1px solid #ddd;">${r.streamName}</td><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>調查日期</b></td><td style="padding:6px; border:1px solid #ddd;">${r.surveyDate}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>訪談人員</b></td><td style="padding:6px; border:1px solid #ddd;">${r.surveyor}</td><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>居住/耕作年資</b></td><td style="padding:6px; border:1px solid #ddd;">${r.seniority} (${r.startYear || "-"})</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>座落地號門牌</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.address || "-"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>土地權屬關係</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.landRight} (${r.landRightNote || "-"})</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>保全對象類型</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.targetType} (${r.targetTypeNote || "-"})</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>歷次重大災害</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.disasterHistory || "無"} (${r.disasterNote || ""})</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>現場受災衝擊</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.impactSummary || "無"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>口述受災詳細</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.interviewDetail || "無"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>既有水保工程成效評估</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.engineeringFeedback || "未填寫"}</td></tr>
       </table>
-      <div style="font-weight:bold; margin-bottom:6px; color:#382c23;">📸 現勘照片紀錄 (${photos.length} 張)：</div>
-      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:8px;">
-        ${photoHTML || "<p style='color:var(--oil-muted);'>（無照片紀錄）</p>"}
+      <b>📸 現場訪談照片：</b>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px; margin-top:6px;">
+        ${pHTML || "<p style='color:#888;'>（無照片）</p>"}
       </div>
     `;
-
     document.getElementById("detailModal").style.display = "flex";
   }
 
   function closeDetailModal() { document.getElementById("detailModal").style.display = "none"; }
 
-  function exportAdminFilteredCSV() {
-    let csv = "\uFEFF專案名稱,調查溪流,構造物名稱,樁號,類別,勘查日期,勘查人員,座標X,座標Y,結構主體現況,基礎兩翼,通砂淤積現況,效能綜合評級,建議處理對策,上傳時間\n";
-    globalCloudRecords.forEach(d => {
-      csv += `"${d.projectName}","${d.streamName}","${d.structureName}","${d.structureStation}","${d.structureType}","${d.surveyDate}","${d.surveyor}","${d.coordX}","${d.coordY}","${d.mainDamage}","${d.baseDamage}","${d.sandCondition}","${d.overallRating} 級","${d.actionPlan}","${d.updatedAt || ""}"\n`;
-    });
-    downloadFile(csv, `水工構造物體檢成果總表_${new Date().toISOString().split('T')[0]}.csv`, "text/csv;charset=utf-8;");
+  function downloadInterviewWord() {
+    if (!currentViewingRecord) return alert("查無當前訪談資料！");
+    const r = currentViewingRecord;
+
+    let pImgs = "";
+    let photos = r.photos;
+    if (photos) {
+      (Array.isArray(photos) ? photos : Object.values(photos)).forEach(p => {
+        pImgs += `<img src="${p.base64}" width="280" style="margin:6px; border:1px solid #999;">`;
+      });
+    }
+
+    const docContent = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset='utf-8'><title>${r.interviewee} 訪談調查表</title>
+      <style>
+        body { font-family: "標楷體", "Times New Roman", serif; font-size: 12pt; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 6px 8px; font-size: 11pt; }
+        th { background-color: #f2f2f2; text-align: center; }
+      </style>
+      </head>
+      <body>
+        <h2 style="text-align:center; font-family:'標楷體'; margin-bottom:2px;">特定水土保持區檢討作業—保全對象現地訪談調查表</h2>
+        <p style="text-align:center; font-size:10.5pt; margin-top:0;">計畫名稱：${r.projectName}</p>
+        <table>
+          <tr><th width="20%">專案名稱</th><td width="30%">${r.projectName}</td><th width="20%">調查日期</th><td width="30%">${r.surveyDate}</td></tr>
+          <tr><th>受訪者姓名</th><td>${r.interviewee}</td><th>聯絡電話</th><td>${r.phone || "-"}</td></tr>
+          <tr><th>標的物座落地</th><td colspan="3">${r.address || "-"}</td></tr>
+          <tr><th>特定區溪流</th><td>${r.streamName}</td><th>訪談調查人員</th><td>${r.surveyor}</td></tr>
+          <tr><th>土地權屬關係</th><td colspan="3">${r.landRight} ${r.landRightNote ? "("+r.landRightNote+")" : ""}</td></tr>
+          <tr><th>保全對象類型</th><td colspan="3">${r.targetType} ${r.targetTypeNote ? "("+r.targetTypeNote+")" : ""}</td></tr>
+          <tr><th>居住/耕作年資</th><td colspan="3">${r.seniority} (自民國 ${r.startYear || "__"} 年起居住)</td></tr>
+          <tr><th>經歷重大災害</th><td colspan="3">${r.disasterHistory || "無"} ${r.disasterNote ? "("+r.disasterNote+")" : ""}</td></tr>
+          <tr><th>現場受災衝擊</th><td colspan="3">${r.impactSummary || "無"}</td></tr>
+          <tr><th>受災詳細過程</th><td colspan="3">${r.interviewDetail || "無"}</td></tr>
+          <tr><th>設施成效評估</th><td colspan="3">${r.engineeringFeedback || "未填寫"}</td></tr>
+          <tr><th>GPS 座標</th><td colspan="3">X (經度): ${r.coordX || "-"} , Y (緯度): ${r.coordY || "-"}</td></tr>
+        </table>
+        <h3 style="font-family:'標楷體'; margin-top:16px;">訪談現場照片記錄：</h3>
+        <div>${pImgs || "<p>（無照片）</p>"}</div>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff' + docContent], { type: 'application/msword;charset=utf-8' });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `附件六_保全對象訪談紀錄表_${r.streamName}_${r.interviewee}.doc`;
+    a.click();
   }
 </script>
 </body>
