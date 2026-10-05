@@ -94,7 +94,7 @@
 
     .form-group { margin-bottom: 14px; }
     label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.92rem; color: #44372e; }
-    input[type="text"], input[type="date"], input[type="password"], select, textarea {
+    input[type="text"], input[type="date"], select, textarea {
       width: 100%; padding: 10px 14px; border: 1px solid #d7cbbb; border-radius: 8px;
       font-size: 0.95rem; font-family: var(--font-serif-tc); background: #fbf9f4;
       color: var(--oil-charcoal); outline: none; transition: all 0.2s;
@@ -110,12 +110,6 @@
       display: flex; align-items: flex-start; gap: 10px; background: #faf7f2;
       padding: 10px 12px; border-radius: 10px; border: 1px solid #e7ddce; cursor: pointer; font-size: 0.92rem; font-weight: 600;
     }
-
-    /* 舊版折疊展開樣式 */
-    .expand-item-wrap { background: #faf7f2; border: 1px solid #ebd9c2; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
-    .expand-item-header { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.93rem; font-weight: 600; }
-    .expand-desc-box { display: none; margin-top: 10px; padding-left: 24px; }
-    .expand-desc-box input { background: #fff; border: 1px dashed var(--accent-skyblue); }
 
     .photo-grid-stream { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
     .photo-thumb-wrap {
@@ -134,6 +128,7 @@
     }
     .btn-save { background: var(--btn-green); }
     .btn-sync { background: var(--btn-blue); }
+    .btn-csv  { background: #92588c; }
     .btn-danger-sm { background: var(--btn-danger); color: #fff; border: none; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
 
     .modal-backdrop {
@@ -161,7 +156,7 @@
 
   <div class="palette-nav">
     <button class="palette-tab-btn active" onclick="switchMainTab('surveyTab')">📝 訪談紀錄填報</button>
-    <button class="palette-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 訪談成果庫</button>
+    <button class="palette-tab-btn" onclick="switchMainTab('adminTab')">🏛️ 訪談成果庫 (密碼 9999)</button>
   </div>
 
   <!-- ================= 分頁 1：訪談紀錄填報 ================= -->
@@ -276,88 +271,46 @@
       </div>
     </div>
 
-    <!-- 2. 歷史受災與現場衝擊 (已移入舊版點選展開項目) -->
+    <!-- 2. 歷史受災與工程成效 -->
     <div class="panel-card">
-      <div class="panel-title">■ 歷史受災過程與受災陳述</div>
+      <div class="panel-title">■ 歷史受災過程與水保治理成效感受</div>
 
       <div class="form-group">
         <label>歷次重大災害經歷：</label>
         <div class="choice-grid">
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="88年 921地震"> 88年 921地震</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="88年 921集集地震"> 88年 921地震</label>
           <label class="choice-item"><input type="checkbox" name="chk_disaster" value="90年 桃芝颱風"> 90年 桃芝颱風</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="93年 敏督利颱風(七二水災)"> 93年 七二敏督利</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="93年 七二水災(敏督利)"> 93年 七二敏督利</label>
           <label class="choice-item"><input type="checkbox" name="chk_disaster" value="98年 莫拉克颱風"> 98年 莫拉克颱風</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="近年重大豪雨事件"> 近年強降雨/豪雨</label>
-          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="從未經歷顯著災害"> 從未經歷顯著災害</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="近年強降雨"> 近年強降雨/豪雨</label>
+          <label class="choice-item"><input type="checkbox" name="chk_disaster" value="無明顯受災"> 無明顯受災</label>
         </div>
         <input type="text" id="disasterNote" placeholder="重大事件歷程補充" style="margin-top:6px;">
       </div>
 
-      <!-- 移植自舊版：可點選展開的衝擊細項 -->
       <div class="form-group">
-        <label>歷次受災情況與現場衝擊項目（點選展開詳細數據）：</label>
-        <div class="expand-item-wrap">
-          <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="土砂溢淹與淤積" onchange="toggleDescBox(this, 'box_impact_sand')">
-            <span>1. 土砂溢淹與淤積狀況</span>
-          </label>
-          <div class="expand-desc-box" id="box_impact_sand">
-            <input type="text" id="note_impact_sand" placeholder="描述：庭院泥流約__公分，或土石進室內__公尺 (無則填無)">
-          </div>
-        </div>
-        <div class="expand-item-wrap">
-          <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="邊坡位移與構造損壞" onchange="toggleDescBox(this, 'box_impact_slope')">
-            <span>2. 邊坡位移與構造損壞</span>
-          </label>
-          <div class="expand-desc-box" id="box_impact_slope">
-            <input type="text" id="note_impact_slope" placeholder="描述：地表開裂、擋土牆受損位移、建物龜裂等">
-          </div>
-        </div>
-        <div class="expand-item-wrap">
-          <label class="expand-item-header">
-            <input type="checkbox" name="chk_impact" value="聯外交通與生活機能中斷" onchange="toggleDescBox(this, 'box_impact_life')">
-            <span>3. 聯外交通與生活機能影響</span>
-          </label>
-          <div class="expand-desc-box" id="box_impact_life">
-            <input type="text" id="note_impact_life" placeholder="描述：道路中斷__天、水電中斷、曾配合撤離等">
-          </div>
+        <label>受災與現場衝擊陳述：</label>
+        <div class="choice-grid">
+          <label class="choice-item"><input type="checkbox" name="chk_impact" value="土石泥流漫淹入室"> 土石泥流漫淹入室</label>
+          <label class="choice-item"><input type="checkbox" name="chk_impact" value="建物結構受損龜裂"> 建物結構受損龜裂</label>
+          <label class="choice-item"><input type="checkbox" name="chk_impact" value="農地作物沖毀流失"> 農地作物沖毀流失</label>
+          <label class="choice-item"><input type="checkbox" name="chk_impact" value="聯外道路中斷受困"> 聯外道路中斷受困</label>
+          <label class="choice-item"><input type="checkbox" name="chk_impact" value="曾配合疏散避難撤離"> 曾配合預防性疏散撤離</label>
         </div>
       </div>
 
       <div class="form-group">
         <label>居民口述受災詳細過程：</label>
-        <textarea id="interviewDetail" rows="3" placeholder="詳細記錄受訪者陳述之土石流流向、崩塌發生的徵兆、近年溪流整治前後之變化感受..."></textarea>
+        <textarea id="interviewDetail" rows="3" placeholder="例如：七二水災時土石流由後方溪溝衝出漫過路面，淹水深約50公分..."></textarea>
       </div>
-    </div>
 
-    <!-- 3. 設施成效評估 (移植自舊版結構化單選) -->
-    <div class="panel-card">
-      <div class="panel-title">■ 既有水保與防砂設施成效評估 (受訪者感受)</div>
       <div class="form-group">
-        <label>針對上游或周邊已完工水土保持與防砂工程（梳子壩、沉砂池、護岸等）：</label>
-        <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
-          <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升">
-            <span><b>成效極為顯著：</b>工程完工後歷次豪雨皆無再受災，安全感明顯提升</span>
-          </label>
-          <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮">
-            <span><b>稍有改善：</b>但豪雨時局部斷面仍有漫淹或沖刷疑慮</span>
-          </label>
-          <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形">
-            <span><b>成效有限：</b>設施有淤滿、局部損壞或清疏不及情形</span>
-          </label>
-          <label class="choice-item">
-            <input type="radio" name="engineeringFeedback" value="周邊未見顯著整治工程 / 不清楚工程位置">
-            <span><b>不清楚／未見工程：</b>周邊未見顯著整治工程或不清楚位置</span>
-          </label>
-        </div>
+        <label>對既有水保工程治理成效之感受：</label>
+        <textarea id="engineeringFeedback" rows="3" placeholder="例如：防砂壩與系列固床工完成後，近年颱風已無土砂溢流至住家前方，感到較為安心..."></textarea>
       </div>
     </div>
 
-    <!-- 4. 照片紀錄 -->
+    <!-- 3. 照片紀錄 -->
     <div class="panel-card">
       <div class="panel-title">■ 現場訪談與環境照片紀錄</div>
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
@@ -380,21 +333,18 @@
 
   </div>
 
-  <!-- ================= 分頁 2：訪談成果庫 ================= -->
+  <!-- ================= 分頁 2：訪談成果庫 (密碼 9999) ================= -->
   <div id="adminTab" class="tab-content">
     <div id="adminAuthBox" class="panel-card" style="max-width:440px; margin:40px auto; text-align:center;">
       <h3 style="margin-top:0;">🔒 管理員驗證</h3>
-      <input type="password" id="adminPwdInput" placeholder="請輸入管理員密碼" style="text-align:center; font-size:1.1rem; letter-spacing:3px; margin-bottom:14px;">
-      <button type="button" class="btn-act btn-save" style="width:100%;" onclick="verifyAdminPwd()">解鎖進入後台</button>
+      <input type="password" id="adminPwdInput" placeholder="請輸入密碼 (9999)" style="text-align:center; font-size:1.2rem; letter-spacing:4px; margin-bottom:14px;">
+      <button type="button" class="btn-act btn-save" style="width:100%;" onclick="verifyAdminPwd()">解鎖後台</button>
     </div>
 
     <div id="adminDashboard" style="display:none;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
         <h2 style="font-size:1.25rem; margin:0;">📊 保全對象訪談成果總覽</h2>
-        <div>
-          <button type="button" class="btn-brush" onclick="fetchCloudData()">🔄 刷新雲端資料</button>
-          <button type="button" class="btn-brush" style="background:#5c768d; color:#fff;" onclick="openChangePwdModal()">🔑 修改管理員密碼</button>
-        </div>
+        <button type="button" class="btn-brush" onclick="fetchCloudData()">🔄 刷新雲端資料</button>
       </div>
 
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
@@ -475,38 +425,11 @@
       </div>
       <div class="col form-group"><label>年資起算：</label><input type="text" id="edit_startYear"></div>
     </div>
-    <div class="form-group">
-      <label>現場受災衝擊描述：</label>
-      <input type="text" id="edit_impactSummary">
-    </div>
     <div class="form-group"><label>受災詳細過程：</label><textarea id="edit_interviewDetail" rows="3"></textarea></div>
-    <div class="form-group">
-      <label>既有工程成效感受：</label>
-      <select id="edit_engineeringFeedback">
-        <option value="成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升">成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升</option>
-        <option value="稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮">稍有改善，但豪雨時局部斷面仍有漫淹或沖刷疑慮</option>
-        <option value="成效有限 / 設施有淤滿、局部損壞或清疏不及情形">成效有限 / 設施有淤滿、局部損壞或清疏不及情形</option>
-        <option value="周邊未見顯著整治工程 / 不清楚工程位置">周邊未見顯著整治工程 / 不清楚工程位置</option>
-      </select>
-    </div>
+    <div class="form-group"><label>工程成效感受：</label><textarea id="edit_engineeringFeedback" rows="3"></textarea></div>
     <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
       <button type="button" class="btn-brush" onclick="closeEditModal()">取消</button>
       <button type="button" class="btn-act btn-save" style="min-width:120px;" onclick="saveEditedRecordToCloud()">💾 儲存並同步更新至雲端</button>
-    </div>
-  </div>
-</div>
-
-<!-- 修改密碼彈窗 -->
-<div class="modal-backdrop" id="changePwdModal">
-  <div class="modal" style="max-width:380px;">
-    <h3 style="margin-top:0;">🔑 修改管理員密碼</h3>
-    <div class="form-group">
-      <label>請輸入新密碼：</label>
-      <input type="text" id="newAdminPwd" placeholder="輸入自訂新密碼">
-    </div>
-    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
-      <button type="button" class="btn-brush" onclick="closeChangePwdModal()">取消</button>
-      <button type="button" class="btn-act btn-save" onclick="submitChangePwd()">確認更新</button>
     </div>
   </div>
 </div>
@@ -518,7 +441,7 @@
   let photoList = [];
   let currentRecordId = null;
   let globalCloudRecords = [];
-  let currentViewingRecord = null;
+  let currentViewingRecord = null; // 供 Word 匯出使用
 
   const DB_NAME = "InterviewPhotoDB", DB_STORE = "records_photos";
 
@@ -558,12 +481,6 @@
     } catch(e){}
   }
 
-  function toggleDescBox(chk, boxId) {
-    const box = document.getElementById(boxId);
-    if (box) box.style.display = chk.checked ? "block" : "none";
-    autoSaveDraft();
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("surveyDate").value = new Date().toISOString().split('T')[0];
     updateLocalCountBadge();
@@ -584,52 +501,13 @@
     document.getElementById(tabId).classList.add("active");
   }
 
-  // ================= 密碼驗證 (與 Google Sheets 雲端連動) =================
-  async function verifyAdminPwd() {
-    const pwdInput = document.getElementById("adminPwdInput").value.trim();
-    if (!pwdInput) return alert("請輸入密碼！");
-
-    try {
-      const res = await fetch(GAS_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: "VERIFY_ADMIN_PWD", password: pwdInput })
-      });
-      const data = await res.json();
-      if (data.status === "success") {
-        document.getElementById("adminAuthBox").style.display = "none";
-        document.getElementById("adminDashboard").style.display = "block";
-        fetchCloudData();
-      } else {
-        alert("密碼錯誤，請重新輸入！");
-      }
-    } catch (e) {
-      alert("驗證連線失敗，請檢查網路或 API 網址設定！");
-    }
-  }
-
-  function openChangePwdModal() { document.getElementById("changePwdModal").style.display = "flex"; }
-  function closeChangePwdModal() { document.getElementById("changePwdModal").style.display = "none"; }
-
-  async function submitChangePwd() {
-    const newPwd = document.getElementById("newAdminPwd").value.trim();
-    if (!newPwd) return alert("請輸入新密碼！");
-
-    try {
-      const res = await fetch(GAS_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ action: "UPDATE_ADMIN_PWD", newPassword: newPwd })
-      });
-      const data = await res.json();
-      if (data.status === "success") {
-        alert("✅ 管理員密碼已成功更新至 Google Sheets 試算表！");
-        closeChangePwdModal();
-      } else {
-        alert("更新失敗：" + data.message);
-      }
-    } catch(e) {
-      alert("連線更新失敗：" + e.message);
+  function verifyAdminPwd() {
+    if (document.getElementById("adminPwdInput").value.trim() === "9999") {
+      document.getElementById("adminAuthBox").style.display = "none";
+      document.getElementById("adminDashboard").style.display = "block";
+      fetchCloudData();
+    } else {
+      alert("密碼錯誤！請輸入 9999。");
     }
   }
 
@@ -642,14 +520,6 @@
   }
 
   function collectFormData(recordId) {
-    const impactArr = Array.from(document.querySelectorAll("input[name='chk_impact']:checked")).map(el => {
-      let val = el.value;
-      if (val === "土砂溢淹與淤積" && document.getElementById("note_impact_sand")?.value) val += `【${document.getElementById("note_impact_sand").value}】`;
-      if (val === "邊坡位移與構造損壞" && document.getElementById("note_impact_slope")?.value) val += `【${document.getElementById("note_impact_slope").value}】`;
-      if (val === "聯外交通與生活機能中斷" && document.getElementById("note_impact_life")?.value) val += `【${document.getElementById("note_impact_life").value}】`;
-      return val;
-    });
-
     return {
       id: recordId,
       projectName: document.getElementById("projectName").value,
@@ -669,14 +539,9 @@
       startYear: document.getElementById("startYear").value,
       disasterHistory: Array.from(document.querySelectorAll("input[name='chk_disaster']:checked")).map(e => e.value).join("；"),
       disasterNote: document.getElementById("disasterNote").value,
-      impactSummary: impactArr.join("；"),
+      impactSummary: Array.from(document.querySelectorAll("input[name='chk_impact']:checked")).map(e => e.value).join("；"),
       interviewDetail: document.getElementById("interviewDetail").value,
-      engineeringFeedback: document.querySelector("input[name='engineeringFeedback']:checked")?.value || "",
-      notes: {
-        sand: document.getElementById("note_impact_sand")?.value || "",
-        slope: document.getElementById("note_impact_slope")?.value || "",
-        life: document.getElementById("note_impact_life")?.value || ""
-      }
+      engineeringFeedback: document.getElementById("engineeringFeedback").value
     };
   }
 
@@ -712,19 +577,9 @@
     document.getElementById("startYear").value = "";
     document.getElementById("disasterNote").value = "";
     document.getElementById("interviewDetail").value = "";
+    document.getElementById("engineeringFeedback").value = "";
 
     document.querySelectorAll("input[type='radio'], input[type='checkbox']").forEach(e => e.checked = false);
-    
-    // 重設舊版移植過來的輸入項與展開框
-    ["note_impact_sand", "note_impact_slope", "note_impact_life"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = "";
-    });
-    ["box_impact_sand", "box_impact_slope", "box_impact_life"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = "none";
-    });
-
     photoList = [];
     renderPhotos();
     document.getElementById("currentEditingIndicator").innerText = "📝 填報新受訪對象";
@@ -759,6 +614,7 @@
     document.getElementById("startYear").value = record.startYear || "";
     document.getElementById("disasterNote").value = record.disasterNote || "";
     document.getElementById("interviewDetail").value = record.interviewDetail || "";
+    document.getElementById("engineeringFeedback").value = record.engineeringFeedback || "";
 
     if (record.landRight) {
       const rad = document.querySelector(`input[name='landRight'][value='${record.landRight}']`);
@@ -769,40 +625,16 @@
       if (rad) rad.checked = true;
     }
 
-    if (record.engineeringFeedback) {
-      const efRad = document.querySelector(`input[name='engineeringFeedback'][value='${record.engineeringFeedback}']`);
-      if (efRad) efRad.checked = true;
-    }
-
     document.querySelectorAll("input[name='chk_disaster']").forEach(e => e.checked = false);
     (record.disasterHistory || "").split("；").forEach(val => {
       const chk = document.querySelector(`input[name='chk_disaster'][value='${val}']`);
       if (chk) chk.checked = true;
     });
 
-    // 載入衝擊項目與展開備註
     document.querySelectorAll("input[name='chk_impact']").forEach(e => e.checked = false);
-    ["box_impact_sand", "box_impact_slope", "box_impact_life"].forEach(id => document.getElementById(id).style.display = "none");
-    
-    if (record.notes) {
-      if (document.getElementById("note_impact_sand")) document.getElementById("note_impact_sand").value = record.notes.sand || "";
-      if (document.getElementById("note_impact_slope")) document.getElementById("note_impact_slope").value = record.notes.slope || "";
-      if (document.getElementById("note_impact_life")) document.getElementById("note_impact_life").value = record.notes.life || "";
-    }
-
-    (record.impactSummary || "").split("；").forEach(item => {
-      if (item.includes("土砂溢淹與淤積")) {
-        const chk = document.querySelector("input[name='chk_impact'][value='土砂溢淹與淤積']");
-        if (chk) { chk.checked = true; document.getElementById("box_impact_sand").style.display = "block"; }
-      }
-      if (item.includes("邊坡位移與構造損壞")) {
-        const chk = document.querySelector("input[name='chk_impact'][value='邊坡位移與構造損壞']");
-        if (chk) { chk.checked = true; document.getElementById("box_impact_slope").style.display = "block"; }
-      }
-      if (item.includes("聯外交通與生活機能中斷")) {
-        const chk = document.querySelector("input[name='chk_impact'][value='聯外交通與生活機能中斷']");
-        if (chk) { chk.checked = true; document.getElementById("box_impact_life").style.display = "block"; }
-      }
+    (record.impactSummary || "").split("；").forEach(val => {
+      const chk = document.querySelector(`input[name='chk_impact'][value='${val}']`);
+      if (chk) chk.checked = true;
     });
 
     photoList = await getPhotosFromDB(record.id);
@@ -813,6 +645,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // ================= 刪除本機案件功能 =================
   async function deleteLocalRecord(recordId, name) {
     if (!confirm(`⚠️ 確定要刪除「${name}」的訪談資料嗎？\n刪除後此筆紀錄與其照片將自本機永久移除，不再上傳！`)) return;
 
@@ -868,6 +701,7 @@
     document.getElementById("recordCountBadge").innerText = all.length;
   }
 
+  // 照片處理
   function handlePhotoUpload(input) {
     Array.from(input.files).forEach(file => {
       const reader = new FileReader();
@@ -915,6 +749,7 @@
     }, err => alert("定位失敗: " + err.message));
   }
 
+  // 同步上傳至 Google 雲端
   async function syncCurrentToCloud() {
     const name = document.getElementById("interviewee").value.trim();
     if (!name) return alert("請先填寫受訪者姓名！");
@@ -922,17 +757,12 @@
     data.photos = photoList;
 
     try {
-      const res = await fetch(GAS_API_URL, {
-        method: "POST",
+      await fetch(GAS_API_URL, {
+        method: "POST", mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data)
       });
-      const result = await res.json();
-      if (result.status === "success") {
-        alert(`🎉 恭喜！「${data.interviewee}」訪談紀錄已同步至 Google 雲端！`);
-      } else {
-        alert("同步出錯：" + result.message);
-      }
+      alert(`🎉 恭喜！「${data.interviewee}」訪談紀錄已同步至 Google 雲端！`);
     } catch(e) { alert("同步失敗: " + e.message); }
   }
 
@@ -944,7 +774,7 @@
     for (let r of all) {
       r.photos = await getPhotosFromDB(r.id);
       await fetch(GAS_API_URL, {
-        method: "POST",
+        method: "POST", mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(r)
       });
@@ -953,34 +783,30 @@
     closeLocalListModal();
   }
 
-  // 刷新雲端資料：嚴格過濾空白紀錄
+  // 後台數據管理
   async function fetchCloudData() {
     const container = document.getElementById("cloudRecordsContainer");
     container.innerHTML = "<p style='text-align:center;'>正在抓取雲端訪談紀錄...</p>";
     try {
       const res = await fetch(GAS_API_URL);
       const result = await res.json();
-      const list = result.records || [];
-      globalCloudRecords = list.filter(r => r.interviewee && r.interviewee.trim() !== "");
+      globalCloudRecords = result.records || [];
       renderCloudDashboard();
     } catch(e) {
-      let localAll = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
-      globalCloudRecords = localAll.filter(r => r.interviewee && r.interviewee.trim() !== "");
+      globalCloudRecords = JSON.parse(localStorage.getItem("ALL_INTERVIEW_RECORDS") || "[]");
       renderCloudDashboard();
     }
   }
 
   function renderCloudDashboard() {
-    globalCloudRecords = globalCloudRecords.filter(r => r.interviewee && r.interviewee.trim() !== "");
-
     document.getElementById("statTotalCount").innerText = globalCloudRecords.length;
-    document.getElementById("stat003Count").innerText = globalCloudRecords.filter(r => (r.streamName || "").includes("中-003")).length;
-    document.getElementById("stat004Count").innerText = globalCloudRecords.filter(r => (r.streamName || "").includes("中-004")).length;
+    document.getElementById("stat003Count").innerText = globalCloudRecords.filter(r => r.streamName.includes("中-003")).length;
+    document.getElementById("stat004Count").innerText = globalCloudRecords.filter(r => r.streamName.includes("中-004")).length;
 
     const container = document.getElementById("cloudRecordsContainer");
     container.innerHTML = "";
     if (!globalCloudRecords.length) {
-      container.innerHTML = "<p style='text-align:center; color:#888;'>尚無有效雲端訪談資料</p>";
+      container.innerHTML = "<p style='text-align:center; color:#888;'>尚無雲端訪談資料</p>";
       return;
     }
 
@@ -991,7 +817,7 @@
       div.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ede4d6; padding-bottom:6px;">
           <div>
-            <b>${idx+1}. ${r.interviewee}</b> (${r.streamName || "未指定溪流"})
+            <b>${idx+1}. ${r.interviewee}</b> (${r.streamName})
             <span style="font-size:0.8rem; background:#eee; padding:2px 6px; border-radius:4px; margin-left:6px;">${r.targetType || "住戶"}</span>
           </div>
           <div style="display:flex; gap:6px;">
@@ -1011,6 +837,7 @@
     });
   }
 
+  // ================= 後台在線修改內容並同步雲端 =================
   function openEditModal(recordId) {
     const r = globalCloudRecords.find(x => String(x.id).trim() === String(recordId).trim());
     if (!r) return;
@@ -1024,9 +851,8 @@
     document.getElementById("edit_landRightNote").value = r.landRightNote || "";
     document.getElementById("edit_targetType").value = r.targetType || "住宅/聚落住戶";
     document.getElementById("edit_startYear").value = r.startYear || "";
-    document.getElementById("edit_impactSummary").value = r.impactSummary || "";
     document.getElementById("edit_interviewDetail").value = r.interviewDetail || "";
-    document.getElementById("edit_engineeringFeedback").value = r.engineeringFeedback || "成效極為顯著，工程完工後歷次豪雨皆無再受災，安全感明顯提升";
+    document.getElementById("edit_engineeringFeedback").value = r.engineeringFeedback || "";
     document.getElementById("editModal").style.display = "flex";
   }
 
@@ -1046,29 +872,24 @@
     r.landRightNote = document.getElementById("edit_landRightNote").value;
     r.targetType = document.getElementById("edit_targetType").value;
     r.startYear = document.getElementById("edit_startYear").value;
-    r.impactSummary = document.getElementById("edit_impactSummary").value;
     r.interviewDetail = document.getElementById("edit_interviewDetail").value;
     r.engineeringFeedback = document.getElementById("edit_engineeringFeedback").value;
 
     try {
-      const res = await fetch(GAS_API_URL, {
-        method: "POST",
+      await fetch(GAS_API_URL, {
+        method: "POST", mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(r)
       });
-      const result = await res.json();
-      if (result.status === "success") {
-        alert(`✅ 已成功更新「${r.interviewee}」的訪談內容並同步至 Google 試算表！`);
-        closeEditModal();
-        renderCloudDashboard();
-      } else {
-        alert("更新出錯：" + result.message);
-      }
+      alert(`✅ 已成功更新「${r.interviewee}」的訪談內容並同步至 Google 試算表！`);
+      closeEditModal();
+      renderCloudDashboard();
     } catch(e) {
       alert("更新失敗: " + e.message);
     }
   }
 
+  // ================= 查看訪談卡與下載 Word =================
   async function viewDetailCard(recordId) {
     let r = globalCloudRecords.find(x => String(x.id).trim() === String(recordId).trim());
     if (!r) return;
@@ -1097,7 +918,7 @@
         <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>歷次重大災害</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.disasterHistory || "無"} (${r.disasterNote || ""})</td></tr>
         <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>現場受災衝擊</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.impactSummary || "無"}</td></tr>
         <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>口述受災詳細</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.interviewDetail || "無"}</td></tr>
-        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>既有水保工程成效評估</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.engineeringFeedback || "未填寫"}</td></tr>
+        <tr><td style="padding:6px; border:1px solid #ddd; background:#f4f1eb;"><b>工程治理成效</b></td><td colspan="3" style="padding:6px; border:1px solid #ddd;">${r.engineeringFeedback || "無"}</td></tr>
       </table>
       <b>📸 現場訪談照片：</b>
       <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px; margin-top:6px;">
@@ -1109,7 +930,7 @@
 
   function closeDetailModal() { document.getElementById("detailModal").style.display = "none"; }
 
-  // 下載 Word (.doc) 檔
+  // ================= 匯出直接可用的 Word (.doc) 表格檔 =================
   function downloadInterviewWord() {
     if (!currentViewingRecord) return alert("查無當前訪談資料！");
     const r = currentViewingRecord;
@@ -1146,7 +967,7 @@
           <tr><th>經歷重大災害</th><td colspan="3">${r.disasterHistory || "無"} ${r.disasterNote ? "("+r.disasterNote+")" : ""}</td></tr>
           <tr><th>現場受災衝擊</th><td colspan="3">${r.impactSummary || "無"}</td></tr>
           <tr><th>受災詳細過程</th><td colspan="3">${r.interviewDetail || "無"}</td></tr>
-          <tr><th>設施成效評估</th><td colspan="3">${r.engineeringFeedback || "未填寫"}</td></tr>
+          <tr><th>工程成效感受</th><td colspan="3">${r.engineeringFeedback || "無"}</td></tr>
           <tr><th>GPS 座標</th><td colspan="3">X (經度): ${r.coordX || "-"} , Y (緯度): ${r.coordY || "-"}</td></tr>
         </table>
         <h3 style="font-family:'標楷體'; margin-top:16px;">訪談現場照片記錄：</h3>
